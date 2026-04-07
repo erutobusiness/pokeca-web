@@ -19,6 +19,8 @@ export function analyze_matchup(deck_a_json, deck_b_json, trials) {
 }
 
 /**
+ * フルデッキデータを使ったメタ対戦分析
+ * meta_decks_json: [{"id":"garchomp","deck":{cards:[...],setup_turns:...}}]
  * @param {string} my_deck_json
  * @param {string} meta_decks_json
  * @param {number} trials

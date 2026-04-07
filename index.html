@@ -38,44 +38,38 @@ tailwind.config = {
   </header>
 
   <!-- Deck Analysis -->
+  <!-- Tab Navigation -->
   <section class="mb-10">
-    <h2 class="bg-primary text-deep font-bold text-lg px-4 py-2 rounded-lg mb-4">自分のデッキを分析</h2>
+    <h2 class="bg-primary text-deep font-bold text-lg px-4 py-2 rounded-lg mb-4">デッキ分析</h2>
 
-    <div class="bg-surface rounded-xl p-5 shadow-lg">
-      <!-- Deck Code Input -->
+    <div class="flex gap-1 mb-4">
+      <button onclick="switchTab('meta')" id="tab-meta" class="px-4 py-1.5 rounded-t-lg text-sm font-semibold bg-surface text-primary border-b-2 border-primary">vs 環境</button>
+      <button onclick="switchTab('1v1')" id="tab-1v1" class="px-4 py-1.5 rounded-t-lg text-sm font-semibold bg-surface/50 text-slate-400 border-b-2 border-transparent hover:text-slate-200">1v1 対戦</button>
+    </div>
+
+    <!-- vs Meta Tab -->
+    <div id="panel-meta" class="bg-surface rounded-xl p-5 shadow-lg">
       <div class="mb-4">
-        <label class="block text-sm text-slate-400 mb-1">デッキコード</label>
+        <label class="block text-sm text-slate-400 mb-1">自分のデッキコード</label>
         <div class="flex gap-2">
           <input type="text" id="deck-code-input" placeholder="XXXXXX-XXXXXX-XXXXXX"
-            class="flex-1 bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary"
-            pattern="[A-Za-z0-9]{6}-[A-Za-z0-9]{6}-[A-Za-z0-9]{6}">
+            class="flex-1 bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary">
           <button onclick="analyzeFromCode()" id="analyze-btn"
             class="bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2 rounded-lg transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
             分析
           </button>
         </div>
-        <p class="text-xs text-slate-500 mt-1">公式デッキ構築サイトのデッキコードを入力</p>
       </div>
-
-      <!-- Or Separator -->
       <div class="flex items-center gap-3 my-4">
         <div class="flex-1 h-px bg-slate-700"></div>
         <span class="text-xs text-slate-500">または環境デッキを選択</span>
         <div class="flex-1 h-px bg-slate-700"></div>
       </div>
-
-      <!-- Meta Deck Selector -->
-      <div class="mb-4">
-        <select id="meta-deck-select" onchange="selectMetaDeck()"
-          class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary">
-          <option value="">環境デッキから選択...</option>
-        </select>
-      </div>
-
-      <!-- Status -->
+      <select id="meta-deck-select" onchange="selectMetaDeck()"
+        class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary mb-4">
+        <option value="">環境デッキから選択...</option>
+      </select>
       <div id="analysis-status" class="text-sm text-slate-400 hidden"></div>
-
-      <!-- Results -->
       <div id="analysis-results" class="hidden mt-4">
         <h3 class="text-primary font-semibold mb-3">環境マッチアップ</h3>
         <div id="matchup-bars"></div>
@@ -84,6 +78,36 @@ tailwind.config = {
           <div class="text-2xl font-bold text-primary" id="fitness-score"></div>
         </div>
       </div>
+    </div>
+
+    <!-- 1v1 Tab -->
+    <div id="panel-1v1" class="bg-surface rounded-xl p-5 shadow-lg hidden">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm text-slate-400 mb-1">デッキA</label>
+          <input type="text" id="deck-a-code" placeholder="XXXXXX-XXXXXX-XXXXXX"
+            class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary">
+          <select id="deck-a-select" onchange="document.getElementById('deck-a-code').value=''"
+            class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary mt-2">
+            <option value="">または環境デッキ...</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-slate-400 mb-1">デッキB</label>
+          <input type="text" id="deck-b-code" placeholder="XXXXXX-XXXXXX-XXXXXX"
+            class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary">
+          <select id="deck-b-select" onchange="document.getElementById('deck-b-code').value=''"
+            class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary mt-2">
+            <option value="">または環境デッキ...</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="analyze1v1()" id="analyze-1v1-btn"
+        class="w-full bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2 rounded-lg transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+        対戦分析
+      </button>
+      <div id="status-1v1" class="text-sm text-slate-400 mt-2 hidden"></div>
+      <div id="result-1v1" class="hidden mt-4"></div>
     </div>
   </section>
 
@@ -141,6 +165,8 @@ window.showMatchup = showMatchup;
 window.closePopup = closePopup;
 window.analyzeFromCode = analyzeFromCode;
 window.selectMetaDeck = selectMetaDeck;
+window.switchTab = switchTab;
+window.analyze1v1 = analyze1v1;
 
 async function main() {
   // Load data and wasm in parallel
@@ -302,15 +328,6 @@ function closePopup() {
   document.getElementById('overlay').classList.add('hidden');
 }
 
-function populateMetaDeckSelect() {
-  const select = document.getElementById('meta-deck-select');
-  DATA.deckIds.forEach(id => {
-    const opt = document.createElement('option');
-    opt.value = id;
-    opt.textContent = DATA.deckInfo[id]?.name || id;
-    select.appendChild(opt);
-  });
-}
 
 // =========================================================================
 // Deck Code Analysis
@@ -446,11 +463,29 @@ async function analyzeFromCode() {
 
 function selectMetaDeck() {
   const id = document.getElementById('meta-deck-select').value;
-  if (!id || !DATA.deckProfiles?.[id]) return;
-  runAnalysis(DATA.deckProfiles[id]);
+  if (!id) return;
+
+  // メタデッキ同士は事前計算勝率を使う（Pythonフルエンジンの正確な結果）
+  const precomputed = DATA.winrateMatrix[id];
+  if (precomputed) {
+    const results = DATA.deckIds
+      .filter(did => did !== id)
+      .map(did => ({ id: did, winrate: precomputed[did] ?? 0.5 }));
+
+    showStatus(`事前計算済み勝率を表示中（${DATA.metadata.engine}エンジン, trials=${DATA.metadata.trials}）`, 'success');
+    const profile = DATA.deckFullConfigs?.[id] || {name: DATA.deckInfo[id]?.name};
+    renderAnalysisResults(profile, results);
+    return;
+  }
+
+  // 事前計算がなければWasmで計算（フルデッキデータ使用）
+  const fullConfig = DATA.deckFullConfigs?.[id];
+  if (fullConfig) {
+    runAnalysis(fullConfig);
+  }
 }
 
-async function runAnalysis(profile) {
+async function runAnalysis(deckData) {
   if (!WASM_READY) {
     showStatus('Wasmエンジンが利用できません。事前計算データのみ表示中。', 'error');
     return;
@@ -463,12 +498,16 @@ async function runAnalysis(profile) {
   await new Promise(r => setTimeout(r, 10));
 
   try {
-    const metaEntries = DATA.deckIds.map(id => ({
-      id,
-      profile: DATA.deckProfiles[id],
-    })).filter(e => e.profile);
+    // メタデッキ: フルデッキデータがあればそれを使う
+    const metaEntries = DATA.deckIds.map(id => {
+      const entry = { id };
+      if (DATA.deckFullConfigs?.[id]) {
+        entry.deck = DATA.deckFullConfigs[id];
+      }
+      return entry;
+    });
 
-    const myJson = JSON.stringify(profile);
+    const myJson = JSON.stringify(deckData);
     const metaJson = JSON.stringify(metaEntries);
     const start = performance.now();
     const resultsJson = analyze_vs_meta(myJson, metaJson, trials);
@@ -476,7 +515,7 @@ async function runAnalysis(profile) {
 
     const results = JSON.parse(resultsJson);
     showStatus(`完了 (${elapsed.toFixed(0)}ms, ${metaEntries.length * trials}ゲーム)`, 'success');
-    renderAnalysisResults(profile, results);
+    renderAnalysisResults(deckData, results);
   } catch (e) {
     showStatus(`シミュレーションエラー: ${e}`, 'error');
   }
@@ -490,12 +529,86 @@ function showStatus(msg, type) {
   el.textContent = msg;
 }
 
-function renderAnalysisResults(profile, results) {
+// =========================================================================
+// マッチアップ理由生成
+// =========================================================================
+
+const TYPE_NAMES = {fire:'炎',water:'水',grass:'草',lightning:'雷',psychic:'超',fighting:'闘',dark:'悪',steel:'鋼',dragon:'龍',colorless:'無'};
+
+function analyzeMatchupReason(myDeck, oppId) {
+  const oppDeck = DATA.deckFullConfigs?.[oppId];
+  const oppInfo = DATA.deckInfo?.[oppId];
+  if (!oppDeck || !oppInfo) return '';
+
+  const reasons = [];
+
+  // 自分のアタッカー情報
+  const myAttackers = (myDeck.cards || []).filter(c => c.kind === 'pokemon' && c.attacks?.some(a => a.damage > 0));
+  const oppAttackers = (oppDeck.cards || []).filter(c => c.kind === 'pokemon' && c.attacks?.some(a => a.damage > 0));
+
+  if (!myAttackers.length || !oppAttackers.length) return '';
+
+  const myMain = myAttackers.reduce((best, c) => (!best || (c.attacks[0]?.damage||0) > (best.attacks[0]?.damage||0)) ? c : best, null);
+  const oppMain = oppAttackers.reduce((best, c) => (!best || (c.attacks[0]?.damage||0) > (best.attacks[0]?.damage||0)) ? c : best, null);
+
+  if (!myMain || !oppMain) return '';
+
+  const myDmg = myMain.attacks[0]?.damage || 0;
+  const oppDmg = oppMain.attacks[0]?.damage || 0;
+  const myHp = myMain.hp;
+  const oppHp = oppMain.hp;
+
+  // タイプ相性
+  const myType = myMain.attack_type || '';
+  const oppWeak = oppMain.weakness || '';
+  const oppType = oppMain.attack_type || '';
+  const myWeak = myMain.weakness || '';
+
+  if (myType && myType === oppWeak) {
+    reasons.push(`弱点: ${TYPE_NAMES[myType]||myType}攻撃が相手の弱点(x2)`);
+  }
+  if (oppType && oppType === myWeak) {
+    reasons.push(`弱点被り: 相手の${TYPE_NAMES[oppType]||oppType}攻撃がこちらの弱点`);
+  }
+
+  // KO効率
+  const myEffDmg = (myType && myType === oppWeak) ? myDmg * 2 : myDmg;
+  const oppEffDmg = (oppType && oppType === myWeak) ? oppDmg * 2 : oppDmg;
+  const hitsToKoOpp = Math.ceil(oppHp / Math.max(myEffDmg, 1));
+  const hitsToKoMe = Math.ceil(myHp / Math.max(oppEffDmg, 1));
+
+  if (hitsToKoOpp === 1) reasons.push(`1発KO: ${myDmg}dmg → HP${oppHp}`);
+  else reasons.push(`${hitsToKoOpp}発KO: ${myEffDmg}dmg → HP${oppHp}`);
+
+  if (hitsToKoMe === 1) reasons.push(`被1発KO: ${oppDmg}dmg → HP${myHp}`);
+
+  // サイドレース
+  const myPrize = myMain.prize_cost || 2;
+  const oppPrize = oppMain.prize_cost || 2;
+  const needKOs = Math.ceil(6 / oppPrize);
+  const theyNeedKOs = Math.ceil(6 / myPrize);
+  if (needKOs !== theyNeedKOs) {
+    reasons.push(`サイドレース: こちら${needKOs}体KO必要, 相手${theyNeedKOs}体`);
+  }
+
+  // setup差
+  const mySetup = myDeck.setup_turns || 0;
+  const oppSetup = oppDeck.setup_turns || 0;
+  if (mySetup < oppSetup) reasons.push(`速度有利: setup ${mySetup}T vs ${oppSetup}T`);
+  else if (mySetup > oppSetup) reasons.push(`速度不利: setup ${mySetup}T vs ${oppSetup}T`);
+
+  // 特殊効果
+  if (myMain.has_immunity) reasons.push('ex無効特性持ち');
+  if (myMain.attacks[0]?.bench_snipe > 0) reasons.push(`ベンチ狙撃${myMain.attacks[0].bench_snipe}`);
+
+  return reasons.slice(0, 3).join(' / ');
+}
+
+function renderAnalysisResults(deckData, results) {
   const container = document.getElementById('analysis-results');
   const barsContainer = document.getElementById('matchup-bars');
   container.classList.remove('hidden');
 
-  // Sort by winrate
   results.sort((a, b) => b.winrate - a.winrate);
 
   let barsHtml = '';
@@ -515,13 +628,18 @@ function renderAnalysisResults(profile, results) {
     else if (r.winrate < 0.45) { barColor = 'bg-red-500'; textColor = 'text-red-400'; }
     else { barColor = 'bg-amber-500'; textColor = 'text-amber-400'; }
 
+    const reason = analyzeMatchupReason(deckData, r.id);
+
     barsHtml += `
-      <div class="flex items-center gap-2 mb-1.5">
-        <span class="text-xs text-slate-400 w-24 truncate text-right">${name}</span>
-        <div class="flex-1 h-5 bg-slate-700/50 rounded overflow-hidden">
-          <div class="h-full ${barColor}/30 bar-chart-bar rounded" style="width:${barWidth}%"></div>
+      <div class="mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-400 w-24 truncate text-right">${name}</span>
+          <div class="flex-1 h-5 bg-slate-700/50 rounded overflow-hidden">
+            <div class="h-full ${barColor}/30 bar-chart-bar rounded" style="width:${barWidth}%"></div>
+          </div>
+          <span class="text-xs font-semibold w-14 text-right ${textColor}">${pct}%</span>
         </div>
-        <span class="text-xs font-semibold w-14 text-right ${textColor}">${pct}%</span>
+        ${reason ? `<div class="ml-28 text-[10px] text-slate-500 mt-0.5">${reason}</div>` : ''}
       </div>
     `;
   }
@@ -530,6 +648,153 @@ function renderAnalysisResults(profile, results) {
 
   const fitness = totalWeight > 0 ? totalWeightedWr / totalWeight : 0;
   document.getElementById('fitness-score').textContent = `${(fitness * 100).toFixed(1)}%`;
+}
+
+// =========================================================================
+// Tab switching
+// =========================================================================
+
+function switchTab(tab) {
+  document.getElementById('panel-meta').classList.toggle('hidden', tab !== 'meta');
+  document.getElementById('panel-1v1').classList.toggle('hidden', tab !== '1v1');
+  document.getElementById('tab-meta').classList.toggle('border-primary', tab === 'meta');
+  document.getElementById('tab-meta').classList.toggle('text-primary', tab === 'meta');
+  document.getElementById('tab-meta').classList.toggle('border-transparent', tab !== 'meta');
+  document.getElementById('tab-meta').classList.toggle('text-slate-400', tab !== 'meta');
+  document.getElementById('tab-1v1').classList.toggle('border-primary', tab === '1v1');
+  document.getElementById('tab-1v1').classList.toggle('text-primary', tab === '1v1');
+  document.getElementById('tab-1v1').classList.toggle('border-transparent', tab !== '1v1');
+  document.getElementById('tab-1v1').classList.toggle('text-slate-400', tab !== '1v1');
+}
+// =========================================================================
+// 1v1 Analysis
+// =========================================================================
+
+async function analyze1v1() {
+  const btn = document.getElementById('analyze-1v1-btn');
+  btn.disabled = true;
+
+  try {
+    const deckA = await resolveDeck('a');
+    const deckB = await resolveDeck('b');
+    if (!deckA || !deckB) return;
+
+    if (!WASM_READY) {
+      show1v1Status('Wasmエンジンが利用できません', 'error');
+      return;
+    }
+
+    show1v1Status('シミュレーション中...', 'loading');
+    await new Promise(r => setTimeout(r, 10));
+
+    const trials = 2000;
+    const start = performance.now();
+    const wr = analyze_matchup(JSON.stringify(deckA.data), JSON.stringify(deckB.data), trials);
+    const elapsed = performance.now() - start;
+
+    const wrPct = (wr * 100).toFixed(1);
+    const wrBPct = ((1 - wr) * 100).toFixed(1);
+    show1v1Status(`完了 (${elapsed.toFixed(0)}ms, ${trials}ゲーム)`, 'success');
+
+    // 理由生成
+    const reasons1v1 = analyze1v1Reasons(deckA.data, deckB.data);
+
+    const winColor = wr > 0.5 ? 'text-emerald-400' : 'text-red-400';
+    document.getElementById('result-1v1').classList.remove('hidden');
+    document.getElementById('result-1v1').innerHTML = `
+      <div class="text-center">
+        <div class="flex justify-center items-center gap-4 mb-2">
+          <span class="text-sm font-semibold">${deckA.name}</span>
+          <span class="text-slate-500">vs</span>
+          <span class="text-sm font-semibold">${deckB.name}</span>
+        </div>
+        <div class="text-4xl font-bold ${winColor} my-3">
+          ${wrPct}% <span class="text-slate-500 text-2xl">-</span> ${wrBPct}%
+        </div>
+        <div class="text-xs text-slate-500 mt-2">${trials}回シミュレーション</div>
+        ${reasons1v1 ? `<div class="mt-3 p-3 bg-deep/40 rounded-lg text-left text-xs text-slate-400 space-y-1">${reasons1v1}</div>` : ''}
+      </div>
+    `;
+  } catch (e) {
+    show1v1Status(`エラー: ${e.message || e}`, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+async function resolveDeck(side) {
+  const codeEl = document.getElementById(`deck-${side}-code`);
+  const selectEl = document.getElementById(`deck-${side}-select`);
+  const code = codeEl.value.trim();
+  const selectId = selectEl.value;
+
+  if (code && /^[A-Za-z0-9]{6}-[A-Za-z0-9]{6}-[A-Za-z0-9]{6}$/.test(code)) {
+    show1v1Status(`デッキ${side.toUpperCase()}を取得中...`, 'loading');
+    const cards = await fetchDeckFromCode(code);
+    const profile = buildProfileFromCards(cards);
+    return { name: `カスタム(${code.substring(0,6)})`, data: profile };
+  } else if (selectId && DATA.deckFullConfigs?.[selectId]) {
+    return { name: DATA.deckInfo[selectId]?.name || selectId, data: DATA.deckFullConfigs[selectId] };
+  } else {
+    show1v1Status(`デッキ${side.toUpperCase()}: コードまたは環境デッキを指定してください`, 'error');
+    return null;
+  }
+}
+
+function analyze1v1Reasons(deckA, deckB) {
+  const getMain = (deck) => {
+    const pokes = (deck.cards || []).filter(c => c.kind === 'pokemon' && c.attacks?.some(a => a.damage > 0));
+    return pokes.reduce((best, c) => (!best || (c.attacks[0]?.damage||0) > (best.attacks[0]?.damage||0)) ? c : best, null);
+  };
+  const a = getMain(deckA);
+  const b = getMain(deckB);
+  if (!a || !b) return '';
+
+  const lines = [];
+  const aDmg = a.attacks[0]?.damage || 0;
+  const bDmg = b.attacks[0]?.damage || 0;
+
+  // 弱点
+  if (a.attack_type && a.attack_type === b.weakness) lines.push(`<div>A側有利: ${TYPE_NAMES[a.attack_type]||a.attack_type}攻撃がB側の弱点(x2ダメージ)</div>`);
+  if (b.attack_type && b.attack_type === a.weakness) lines.push(`<div>B側有利: ${TYPE_NAMES[b.attack_type]||b.attack_type}攻撃がA側の弱点(x2ダメージ)</div>`);
+
+  // KO効率
+  const aEff = (a.attack_type && a.attack_type === b.weakness) ? aDmg*2 : aDmg;
+  const bEff = (b.attack_type && b.attack_type === a.weakness) ? bDmg*2 : bDmg;
+  lines.push(`<div>A→B: ${aEff}dmg, ${Math.ceil(b.hp/Math.max(aEff,1))}発KO (HP${b.hp})</div>`);
+  lines.push(`<div>B→A: ${bEff}dmg, ${Math.ceil(a.hp/Math.max(bEff,1))}発KO (HP${a.hp})</div>`);
+
+  // サイドレース
+  const aNeeds = Math.ceil(6 / (b.prize_cost||2));
+  const bNeeds = Math.ceil(6 / (a.prize_cost||2));
+  if (aNeeds !== bNeeds) lines.push(`<div>サイドレース: A側${aNeeds}体KO必要, B側${bNeeds}体</div>`);
+
+  // setup
+  const aSetup = deckA.setup_turns || 0;
+  const bSetup = deckB.setup_turns || 0;
+  if (aSetup !== bSetup) lines.push(`<div>セットアップ: A=${aSetup}T, B=${bSetup}T</div>`);
+
+  return lines.join('');
+}
+
+function show1v1Status(msg, type) {
+  const el = document.getElementById('status-1v1');
+  el.classList.remove('hidden');
+  const colors = { loading: 'text-slate-400', error: 'text-red-400', success: 'text-emerald-400' };
+  el.className = `text-sm mt-2 ${colors[type] || 'text-slate-400'}`;
+  el.textContent = msg;
+}
+
+function populateMetaDeckSelect() {
+  for (const selectId of ['meta-deck-select', 'deck-a-select', 'deck-b-select']) {
+    const select = document.getElementById(selectId);
+    if (!select) continue;
+    DATA.deckIds.forEach(id => {
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.textContent = DATA.deckInfo[id]?.name || id;
+      select.appendChild(opt);
+    });
+  }
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
