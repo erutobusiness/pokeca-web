@@ -4,127 +4,188 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>デッキ強度分析 - ポケカメタ分析</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; padding: 20px; max-width: 1400px; margin: 0 auto; }
-  h1 { color: #e94560; margin-bottom: 5px; }
-  .subtitle { color: #888; font-size: 0.9em; margin-bottom: 20px; }
-  h2 { color: #0f3460; background: #e94560; padding: 8px 16px; border-radius: 4px; margin: 24px 0 12px; font-size: 1.1em; }
-  .meta { color: #666; font-size: 0.8em; margin-bottom: 20px; }
-
-  /* ランキング */
-  .ranking { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
-  .rank-card { background: #16213e; border-radius: 8px; padding: 10px 14px; cursor: pointer; transition: transform 0.1s; border: 2px solid transparent; }
-  .rank-card:hover { transform: translateY(-2px); border-color: #e94560; }
-  .rank-card.selected { border-color: #e94560; background: #1a2744; }
-  .rank-card .rank { font-size: 1.3em; color: #e94560; font-weight: bold; }
-  .rank-card .deck-name { font-size: 0.95em; margin: 2px 0; }
-  .rank-card .stats { font-size: 0.78em; color: #888; }
-  .bar { height: 5px; background: #333; border-radius: 3px; margin-top: 3px; }
-  .bar-fill { height: 100%; border-radius: 3px; }
-
-  /* デッキ詳細 */
-  .deck-detail { background: #16213e; border-radius: 8px; padding: 16px; margin: 12px 0; display: none; }
-  .deck-detail.visible { display: block; }
-  .deck-detail h3 { color: #e94560; margin-bottom: 8px; }
-  .attackers { display: flex; gap: 12px; flex-wrap: wrap; }
-  .attacker { background: #1a2744; border-radius: 6px; padding: 8px 12px; min-width: 150px; }
-  .attacker .name { font-weight: bold; font-size: 0.9em; }
-  .attacker .stat { font-size: 0.8em; color: #888; }
-
-  /* マッチアップ表 */
-  .table-wrap { overflow-x: auto; margin: 10px 0; }
-  table { border-collapse: collapse; width: 100%; font-size: 0.85em; }
-  th, td { padding: 5px 8px; text-align: center; border: 1px solid #2a2a4a; }
-  th { background: #16213e; color: #e94560; position: sticky; top: 0; z-index: 1; font-size: 0.78em; }
-  td.name { text-align: left; font-weight: bold; white-space: nowrap; font-size: 0.82em; }
-  .win { background: rgba(46, 213, 115, 0.15); color: #2ed573; }
-  .lose { background: rgba(255, 71, 87, 0.15); color: #ff4757; }
-  .even { background: rgba(255, 234, 167, 0.08); color: #ffa502; }
-  .mirror { background: #1a1a2e; color: #444; }
-  td.clickable { cursor: pointer; }
-  td.clickable:hover { outline: 2px solid #e94560; }
-
-  /* ポップアップ */
-  .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-           background: #16213e; border: 2px solid #e94560; border-radius: 8px; padding: 20px;
-           z-index: 100; min-width: 300px; max-width: 400px; }
-  .popup.visible { display: block; }
-  .popup h3 { color: #e94560; margin-bottom: 10px; }
-  .popup .close { position: absolute; top: 8px; right: 12px; cursor: pointer; color: #888; font-size: 1.2em; }
-  .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-             background: rgba(0,0,0,0.6); z-index: 99; }
-  .overlay.visible { display: block; }
-
-  /* CSP説明 */
-  .explanation { background: #16213e; border-radius: 8px; padding: 14px; margin: 12px 0; font-size: 0.85em; line-height: 1.6; }
-  .explanation code { background: #1a2744; padding: 2px 6px; border-radius: 3px; color: #e94560; }
-
-  @media (max-width: 768px) {
-    .ranking { grid-template-columns: repeat(2, 1fr); }
-    table { font-size: 0.75em; }
-    th, td { padding: 3px 5px; }
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#e94560',
+        surface: '#16213e',
+        deep: '#0f3460',
+        bg: '#1a1a2e',
+      }
+    }
   }
+}
+</script>
+<style>
+  .matchup-table th { position: sticky; top: 0; z-index: 1; }
+  .fade-in { animation: fadeIn 0.2s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  .bar-chart-bar { transition: width 0.5s ease-out; }
 </style>
 </head>
-<body>
+<body class="bg-bg text-slate-200 font-sans min-h-screen">
 
-<h1>デッキ強度分析</h1>
-<p class="subtitle">フルゲームエンジン + CSP近似ランキング</p>
-<div class="meta" id="meta"></div>
+<div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
 
-<h2>CSP近似ランキング</h2>
-<div class="explanation">
-  <code>CSP近似 = 使用率 x 環境適応度</code><br>
-  使用率が高いデッキは、勝率50%でも大会で多くのポイントを獲得する。
-  環境適応度は各マッチアップ勝率の加重平均。
+  <!-- Header -->
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold text-primary">デッキ強度分析</h1>
+    <p class="text-slate-400 text-sm mt-1">フルゲームエンジン + CSP近似ランキング</p>
+    <p class="text-slate-500 text-xs mt-2" id="meta"></p>
+  </header>
+
+  <!-- Deck Analysis -->
+  <section class="mb-10">
+    <h2 class="bg-primary text-deep font-bold text-lg px-4 py-2 rounded-lg mb-4">自分のデッキを分析</h2>
+
+    <div class="bg-surface rounded-xl p-5 shadow-lg">
+      <!-- Deck Code Input -->
+      <div class="mb-4">
+        <label class="block text-sm text-slate-400 mb-1">デッキコード</label>
+        <div class="flex gap-2">
+          <input type="text" id="deck-code-input" placeholder="XXXXXX-XXXXXX-XXXXXX"
+            class="flex-1 bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary"
+            pattern="[A-Za-z0-9]{6}-[A-Za-z0-9]{6}-[A-Za-z0-9]{6}">
+          <button onclick="analyzeFromCode()" id="analyze-btn"
+            class="bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2 rounded-lg transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+            分析
+          </button>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">公式デッキ構築サイトのデッキコードを入力</p>
+      </div>
+
+      <!-- Or Separator -->
+      <div class="flex items-center gap-3 my-4">
+        <div class="flex-1 h-px bg-slate-700"></div>
+        <span class="text-xs text-slate-500">または環境デッキを選択</span>
+        <div class="flex-1 h-px bg-slate-700"></div>
+      </div>
+
+      <!-- Meta Deck Selector -->
+      <div class="mb-4">
+        <select id="meta-deck-select" onchange="selectMetaDeck()"
+          class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary">
+          <option value="">環境デッキから選択...</option>
+        </select>
+      </div>
+
+      <!-- Status -->
+      <div id="analysis-status" class="text-sm text-slate-400 hidden"></div>
+
+      <!-- Results -->
+      <div id="analysis-results" class="hidden mt-4">
+        <h3 class="text-primary font-semibold mb-3">環境マッチアップ</h3>
+        <div id="matchup-bars"></div>
+        <div class="mt-3 p-3 bg-deep/40 rounded-lg">
+          <div class="text-xs text-slate-400">環境適応度（加重平均勝率）</div>
+          <div class="text-2xl font-bold text-primary" id="fitness-score"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CSP Ranking -->
+  <section class="mb-10">
+    <h2 class="bg-primary text-deep font-bold text-lg px-4 py-2 rounded-lg mb-4">CSP近似ランキング</h2>
+    <div class="bg-surface/50 rounded-lg p-4 mb-4 text-sm text-slate-300 leading-relaxed">
+      <code class="bg-deep/60 text-primary px-2 py-0.5 rounded text-xs">CSP近似 = 使用率 x 環境適応度</code><br class="mb-1">
+      使用率が高いデッキは、勝率50%でも大会で多くのポイントを獲得する。環境適応度は各マッチアップ勝率の加重平均。
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" id="ranking"></div>
+  </section>
+
+  <!-- Deck Detail -->
+  <section id="deck-detail" class="hidden mb-10"></section>
+
+  <!-- Matchup Table -->
+  <section class="mb-10">
+    <h2 class="bg-primary text-deep font-bold text-lg px-4 py-2 rounded-lg mb-4">マッチアップ勝率表</h2>
+    <p class="text-slate-500 text-xs mb-2">セルをクリックで詳細表示</p>
+    <div class="overflow-x-auto rounded-lg border border-slate-700/50">
+      <table class="w-full text-sm border-collapse matchup-table" id="matchup-table"></table>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center text-xs text-slate-600 py-4">
+    pokeca-engine-rs (WebAssembly) | <span id="engine-version">loading...</span>
+  </footer>
+
 </div>
-<div class="ranking" id="ranking"></div>
 
-<div class="deck-detail" id="deck-detail"></div>
+<!-- Modal Overlay -->
+<div id="overlay" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity duration-200" onclick="closePopup()"></div>
 
-<h2>マッチアップ勝率表</h2>
-<p class="meta">セルをクリックで詳細表示</p>
-<div class="table-wrap">
-  <table id="matchup-table"></table>
-</div>
-
-<div class="overlay" id="overlay" onclick="closePopup()"></div>
-<div class="popup" id="popup">
-  <span class="close" onclick="closePopup()">x</span>
+<!-- Modal Popup -->
+<div id="popup" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface border border-slate-600 rounded-xl shadow-2xl p-6 z-50 min-w-[320px] max-w-[440px] hidden">
+  <button onclick="closePopup()" class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-600/50 transition-colors text-slate-400 hover:text-slate-200" aria-label="閉じる">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
   <div id="popup-content"></div>
 </div>
 
-<script>
+<script type="module">
+import init, { analyze_matchup, analyze_vs_meta, engine_version } from './pkg/pokeca_engine_rs.js';
+
 let DATA = null;
+let WASM_READY = false;
+
+// Make functions available globally for onclick handlers
+window.showDeckDetail = showDeckDetail;
+window.showMatchup = showMatchup;
+window.closePopup = closePopup;
+window.analyzeFromCode = analyzeFromCode;
+window.selectMetaDeck = selectMetaDeck;
 
 async function main() {
-  const res = await fetch('data.json');
-  DATA = await res.json();
+  // Load data and wasm in parallel
+  const [dataRes] = await Promise.all([
+    fetch('data.json').then(r => r.json()),
+    init().then(() => { WASM_READY = true; }).catch(e => console.warn('Wasm init failed:', e)),
+  ]);
+  DATA = dataRes;
+
   renderMeta();
   renderRanking();
   renderTable();
+  populateMetaDeckSelect();
+
+  if (WASM_READY) {
+    document.getElementById('engine-version').textContent = engine_version();
+  } else {
+    document.getElementById('engine-version').textContent = 'Wasm未ロード（事前計算データで表示中）';
+  }
 }
 
 function renderMeta() {
   document.getElementById('meta').textContent =
-    `${DATA.metadata.deckCount}デッキ / ${DATA.metadata.engine}エンジン / trials=${DATA.metadata.trials}`;
+    `${DATA.metadata.deckCount}デッキ / ${DATA.metadata.engine}エンジン / trials=${DATA.metadata.trials} / ${DATA.metadata.generatedAt}`;
 }
 
 function renderRanking() {
   const div = document.getElementById('ranking');
+  div.innerHTML = '';
   DATA.cspRanking.forEach(entry => {
+    const barColor = entry.fitness > 0.5 ? 'bg-emerald-500' : (entry.fitness > 0.45 ? 'bg-amber-500' : 'bg-red-500');
     const card = document.createElement('div');
-    card.className = 'rank-card';
+    card.className = 'bg-surface rounded-xl p-3 cursor-pointer border-2 border-transparent hover:border-primary hover:-translate-y-0.5 transition-all duration-150 shadow-lg';
     card.dataset.deckId = entry.deckId;
-    const barColor = entry.fitness > 0.5 ? '#2ed573' : (entry.fitness > 0.45 ? '#ffa502' : '#ff4757');
     card.innerHTML = `
-      <span class="rank">#${entry.rank}</span>
-      <div class="deck-name">${entry.name}</div>
-      <div class="stats">
+      <div class="flex items-baseline gap-2 mb-1">
+        <span class="text-primary font-bold text-xl">#${entry.rank}</span>
+        <span class="text-sm font-semibold truncate">${entry.name}</span>
+      </div>
+      <div class="text-xs text-slate-400">
         share ${(entry.share*100).toFixed(1)}% / fit ${(entry.fitness*100).toFixed(1)}%
       </div>
-      <div class="bar"><div class="bar-fill" style="width:${Math.min(entry.fitness*100,100)}%;background:${barColor}"></div></div>
+      <div class="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
+        <div class="h-full rounded-full ${barColor}" style="width:${Math.min(entry.fitness*200,100)}%"></div>
+      </div>
     `;
     card.onclick = () => showDeckDetail(entry.deckId);
     div.appendChild(card);
@@ -132,44 +193,42 @@ function renderRanking() {
 }
 
 function showDeckDetail(deckId) {
-  // ハイライト
-  document.querySelectorAll('.rank-card').forEach(c => c.classList.remove('selected'));
-  document.querySelector(`[data-deck-id="${deckId}"]`)?.classList.add('selected');
-
+  document.querySelectorAll('#ranking > div').forEach(c => {
+    c.classList.toggle('border-primary', c.dataset.deckId === deckId);
+    c.classList.toggle('bg-deep/30', c.dataset.deckId === deckId);
+  });
   const info = DATA.deckInfo[deckId];
   const detail = document.getElementById('deck-detail');
-  if (!info) { detail.classList.remove('visible'); return; }
+  if (!info) { detail.classList.add('hidden'); return; }
 
-  let attackersHtml = info.attackers.map(a =>
-    `<div class="attacker">
-      <div class="name">${a.name}</div>
-      <div class="stat">HP ${a.hp} / ${a.damage}dmg / prize ${a.prizeCost}</div>
-      <div class="stat">type: ${a.attackType}</div>
-    </div>`
-  ).join('');
+  const attackersHtml = info.attackers.map(a => `
+    <div class="bg-deep/40 rounded-lg p-3 min-w-[160px]">
+      <div class="font-semibold text-sm">${a.name}</div>
+      <div class="text-xs text-slate-400 mt-1">HP ${a.hp} / ${a.damage}dmg / prize ${a.prizeCost}</div>
+      <div class="text-xs text-slate-500">type: ${a.attackType}</div>
+    </div>
+  `).join('');
 
-  // マッチアップサマリー
   const wr = DATA.winrateMatrix[deckId] || {};
   const matchups = Object.entries(wr)
     .filter(([k]) => k !== deckId)
     .map(([k, v]) => ({ id: k, name: DATA.deckInfo[k]?.name || k, wr: v }))
     .sort((a, b) => b.wr - a.wr);
 
-  let matchupHtml = matchups.map(m => {
-    const cls = m.wr > 0.55 ? 'win' : (m.wr < 0.45 ? 'lose' : 'even');
-    return `<span class="${cls}" style="padding:2px 6px;border-radius:3px;margin:2px;display:inline-block;font-size:0.8em">
-      vs ${m.name.substring(0,8)} ${(m.wr*100).toFixed(0)}%</span>`;
+  const matchupHtml = matchups.map(m => {
+    const cls = m.wr > 0.55 ? 'bg-emerald-500/20 text-emerald-400' : (m.wr < 0.45 ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/10 text-amber-400');
+    return `<span class="${cls} px-2 py-0.5 rounded text-xs inline-block m-0.5">vs ${m.name.substring(0,8)} ${(m.wr*100).toFixed(0)}%</span>`;
   }).join('');
 
   detail.innerHTML = `
-    <h3>${info.name}</h3>
-    <div style="margin-bottom:8px">
-      <span class="stat">setup: ${info.setupTurns}T / weakness: ${info.weakness} / type: ${info.pokemonType}</span>
+    <div class="bg-surface rounded-xl p-5 shadow-lg fade-in">
+      <h3 class="text-primary font-bold text-lg mb-3">${info.name}</h3>
+      <div class="text-xs text-slate-400 mb-3">setup: ${info.setupTurns}T / weakness: ${info.weakness} / type: ${info.pokemonType}</div>
+      <div class="flex gap-3 flex-wrap mb-4">${attackersHtml}</div>
+      <div>${matchupHtml}</div>
     </div>
-    <div class="attackers">${attackersHtml}</div>
-    <div style="margin-top:10px">${matchupHtml}</div>
   `;
-  detail.classList.add('visible');
+  detail.classList.remove('hidden');
 }
 
 function renderTable() {
@@ -177,26 +236,30 @@ function renderTable() {
   const ids = DATA.deckIds;
   const names = ids.map(id => DATA.deckInfo[id]?.name || id);
 
-  let html = '<tr><th></th>';
-  names.forEach(n => html += `<th>${n.substring(0,6)}</th>`);
-  html += '</tr>';
+  let html = '<thead><tr><th class="bg-surface text-slate-400 text-xs p-2 border border-slate-700/50"></th>';
+  names.forEach(n => html += `<th class="bg-surface text-primary text-xs p-2 border border-slate-700/50 font-medium">${n.substring(0,6)}</th>`);
+  html += '</tr></thead><tbody>';
 
   ids.forEach((rowId, i) => {
-    html += `<tr><td class="name">${names[i]}</td>`;
+    html += `<tr><td class="text-left font-semibold text-xs whitespace-nowrap p-2 bg-surface/50 border border-slate-700/50">${names[i]}</td>`;
     ids.forEach((colId, j) => {
       const wr = DATA.winrateMatrix[rowId]?.[colId];
       if (i === j) {
-        html += '<td class="mirror">-</td>';
+        html += '<td class="bg-bg text-slate-600 p-2 border border-slate-700/50 text-center">-</td>';
       } else if (wr !== undefined) {
         const pct = (wr*100).toFixed(0);
-        const cls = wr > 0.55 ? 'win' : (wr < 0.45 ? 'lose' : 'even');
-        html += `<td class="${cls} clickable" onclick="showMatchup('${rowId}','${colId}')">${pct}%</td>`;
+        let cls;
+        if (wr > 0.55) cls = 'bg-emerald-500/15 text-emerald-400';
+        else if (wr < 0.45) cls = 'bg-red-500/15 text-red-400';
+        else cls = 'bg-amber-500/10 text-amber-400';
+        html += `<td class="${cls} p-2 border border-slate-700/50 text-center cursor-pointer hover:ring-2 hover:ring-primary transition-shadow" onclick="showMatchup('${rowId}','${colId}')">${pct}%</td>`;
       } else {
-        html += '<td>-</td>';
+        html += '<td class="p-2 border border-slate-700/50 text-center text-slate-600">-</td>';
       }
     });
     html += '</tr>';
   });
+  html += '</tbody>';
   table.innerHTML = html;
 }
 
@@ -207,29 +270,266 @@ function showMatchup(aId, bId) {
   if (!a || !b || wr === undefined) return;
 
   const wrB = 1 - wr;
+  const winColor = wr > 0.5 ? 'text-emerald-400' : 'text-red-400';
   const content = document.getElementById('popup-content');
   content.innerHTML = `
-    <h3>${a.name} vs ${b.name}</h3>
-    <div style="font-size:2em;text-align:center;margin:12px 0;color:${wr>0.5?'#2ed573':'#ff4757'}">
-      ${(wr*100).toFixed(1)}% - ${(wrB*100).toFixed(1)}%
+    <h3 class="text-primary font-bold text-lg mb-4">${a.name} vs ${b.name}</h3>
+    <div class="text-center text-4xl font-bold my-4 ${winColor}">
+      ${(wr*100).toFixed(1)}% <span class="text-slate-500 text-2xl">-</span> ${(wrB*100).toFixed(1)}%
     </div>
-    <table style="width:100%;font-size:0.85em">
-      <tr><th></th><th>${a.name.substring(0,10)}</th><th>${b.name.substring(0,10)}</th></tr>
-      <tr><td>メインHP</td><td>${a.attackers[0]?.hp || '?'}</td><td>${b.attackers[0]?.hp || '?'}</td></tr>
-      <tr><td>ダメージ</td><td>${a.attackers[0]?.damage || '?'}</td><td>${b.attackers[0]?.damage || '?'}</td></tr>
-      <tr><td>prize</td><td>${a.attackers[0]?.prizeCost || '?'}</td><td>${b.attackers[0]?.prizeCost || '?'}</td></tr>
-      <tr><td>setup</td><td>${a.setupTurns}T</td><td>${b.setupTurns}T</td></tr>
-      <tr><td>弱点</td><td>${a.weakness}</td><td>${b.weakness}</td></tr>
+    <table class="w-full text-sm mt-4">
+      <thead><tr>
+        <th class="text-left text-slate-500 pb-2"></th>
+        <th class="text-center text-slate-300 pb-2">${a.name.substring(0,10)}</th>
+        <th class="text-center text-slate-300 pb-2">${b.name.substring(0,10)}</th>
+      </tr></thead>
+      <tbody class="text-slate-300">
+        <tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">メインHP</td><td class="text-center">${a.attackers[0]?.hp || '?'}</td><td class="text-center">${b.attackers[0]?.hp || '?'}</td></tr>
+        <tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">ダメージ</td><td class="text-center">${a.attackers[0]?.damage || '?'}</td><td class="text-center">${b.attackers[0]?.damage || '?'}</td></tr>
+        <tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">prize</td><td class="text-center">${a.attackers[0]?.prizeCost || '?'}</td><td class="text-center">${b.attackers[0]?.prizeCost || '?'}</td></tr>
+        <tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">setup</td><td class="text-center">${a.setupTurns}T</td><td class="text-center">${b.setupTurns}T</td></tr>
+        <tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">弱点</td><td class="text-center">${a.weakness}</td><td class="text-center">${b.weakness}</td></tr>
+      </tbody>
     </table>
   `;
-
-  document.getElementById('popup').classList.add('visible');
-  document.getElementById('overlay').classList.add('visible');
+  document.getElementById('popup').classList.remove('hidden');
+  document.getElementById('popup').classList.add('fade-in');
+  document.getElementById('overlay').classList.remove('hidden');
 }
 
 function closePopup() {
-  document.getElementById('popup').classList.remove('visible');
-  document.getElementById('overlay').classList.remove('visible');
+  document.getElementById('popup').classList.add('hidden');
+  document.getElementById('overlay').classList.add('hidden');
+}
+
+function populateMetaDeckSelect() {
+  const select = document.getElementById('meta-deck-select');
+  DATA.deckIds.forEach(id => {
+    const opt = document.createElement('option');
+    opt.value = id;
+    opt.textContent = DATA.deckInfo[id]?.name || id;
+    select.appendChild(opt);
+  });
+}
+
+// =========================================================================
+// Deck Code Analysis
+// =========================================================================
+
+async function fetchDeckFromCode(code) {
+  const url = `https://www.pokemon-card.com/deck/confirm.html/deckID/${code}/`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const html = await res.text();
+
+  // Parse hidden inputs for card IDs and counts
+  const categories = {};
+  const hiddenFields = {
+    deck_pke: 'pokemon', deck_gds: 'goods', deck_tool: 'tool',
+    deck_sup: 'supporter', deck_sta: 'stadium', deck_ene: 'energy',
+  };
+  for (const [field, cat] of Object.entries(hiddenFields)) {
+    const match = html.match(new RegExp(`name="${field}"[^>]*value="([^"]*)"`));
+    if (match && match[1]) {
+      categories[cat] = match[1].split('-').filter(Boolean).map(entry => {
+        const [id, count] = entry.split('_');
+        return { id, count: parseInt(count) || 1 };
+      });
+    }
+  }
+
+  // Parse card names from inline JS
+  const cardNames = {};
+  const nameRegex = /PCGDECK\.searchItemName\[(\d+)\]='([^']+)'/g;
+  let m;
+  while ((m = nameRegex.exec(html)) !== null) {
+    cardNames[m[1]] = m[2].replace(/\(.*\)$/, '').trim();
+  }
+
+  // Build card list
+  const cards = [];
+  for (const [cat, entries] of Object.entries(categories)) {
+    for (const entry of entries) {
+      cards.push({
+        id: entry.id,
+        name: cardNames[entry.id] || `card_${entry.id}`,
+        count: entry.count,
+        category: cat,
+      });
+    }
+  }
+  return cards;
+}
+
+function buildProfileFromCards(cards) {
+  // Simple profile builder: extract Pokemon as attackers
+  const attackers = [];
+  const pokemon = cards.filter(c => c.category === 'pokemon');
+  const energyCount = cards.filter(c => c.category === 'energy').reduce((s, c) => s + c.count, 0);
+  const supporterCount = cards.filter(c => c.category === 'supporter').reduce((s, c) => s + c.count, 0);
+
+  // Try to match against known cards in deckProfiles
+  const knownCards = {};
+  if (DATA.deckProfiles) {
+    for (const profile of Object.values(DATA.deckProfiles)) {
+      for (const atk of profile.attackers) {
+        knownCards[atk.name] = atk;
+      }
+    }
+  }
+
+  for (const poke of pokemon) {
+    const known = knownCards[poke.name];
+    if (known) {
+      attackers.push({ ...known, count: poke.count });
+    } else {
+      // Default values for unknown Pokemon
+      attackers.push({
+        name: poke.name,
+        hp: 100,
+        damage: 80,
+        energy_cost: 2,
+        prize_cost: 1,
+        attack_type: 'unknown',
+        count: poke.count,
+      });
+    }
+  }
+
+  // Sort by estimated power (HP * damage) descending, take top 6
+  attackers.sort((a, b) => (b.hp * b.damage) - (a.hp * a.damage));
+
+  return {
+    name: 'カスタムデッキ',
+    attackers: attackers.slice(0, 6),
+    setup_turns: attackers.some(a => a.hp >= 250) ? 2 : 1,
+    energy_accel: 0,
+    weakness: 'none',
+    composition: {
+      energy: energyCount || 10,
+      supporters: supporterCount || 12,
+      items: 16,
+      pokemon: pokemon.reduce((s, c) => s + c.count, 0),
+      stadiums: 2,
+    },
+    boss_count: 2,
+    belt_count: 0,
+    bench_size: 5,
+  };
+}
+
+async function analyzeFromCode() {
+  const code = document.getElementById('deck-code-input').value.trim();
+  if (!/^[A-Za-z0-9]{6}-[A-Za-z0-9]{6}-[A-Za-z0-9]{6}$/.test(code)) {
+    showStatus('デッキコードの形式が正しくありません（XXXXXX-XXXXXX-XXXXXX）', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('analyze-btn');
+  btn.disabled = true;
+  showStatus('デッキ情報を取得中...', 'loading');
+
+  try {
+    const cards = await fetchDeckFromCode(code);
+    if (cards.length === 0) throw new Error('カードリストの取得に失敗しました');
+
+    showStatus(`${cards.reduce((s,c) => s+c.count, 0)}枚のデッキを取得しました。分析中...`, 'loading');
+
+    const profile = buildProfileFromCards(cards);
+    await runAnalysis(profile);
+  } catch (e) {
+    showStatus(`エラー: ${e.message}`, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function selectMetaDeck() {
+  const id = document.getElementById('meta-deck-select').value;
+  if (!id || !DATA.deckProfiles?.[id]) return;
+  runAnalysis(DATA.deckProfiles[id]);
+}
+
+async function runAnalysis(profile) {
+  if (!WASM_READY) {
+    showStatus('Wasmエンジンが利用できません。事前計算データのみ表示中。', 'error');
+    return;
+  }
+
+  const trials = 500;
+  showStatus(`Wasmエンジンで${DATA.deckIds.length}デッキとの勝率を計算中（${trials}trials/pair）...`, 'loading');
+
+  // Run in next frame to allow UI update
+  await new Promise(r => setTimeout(r, 10));
+
+  try {
+    const metaEntries = DATA.deckIds.map(id => ({
+      id,
+      profile: DATA.deckProfiles[id],
+    })).filter(e => e.profile);
+
+    const myJson = JSON.stringify(profile);
+    const metaJson = JSON.stringify(metaEntries);
+    const start = performance.now();
+    const resultsJson = analyze_vs_meta(myJson, metaJson, trials);
+    const elapsed = performance.now() - start;
+
+    const results = JSON.parse(resultsJson);
+    showStatus(`完了 (${elapsed.toFixed(0)}ms, ${metaEntries.length * trials}ゲーム)`, 'success');
+    renderAnalysisResults(profile, results);
+  } catch (e) {
+    showStatus(`シミュレーションエラー: ${e}`, 'error');
+  }
+}
+
+function showStatus(msg, type) {
+  const el = document.getElementById('analysis-status');
+  el.classList.remove('hidden');
+  const colors = { loading: 'text-slate-400', error: 'text-red-400', success: 'text-emerald-400' };
+  el.className = `text-sm ${colors[type] || 'text-slate-400'}`;
+  el.textContent = msg;
+}
+
+function renderAnalysisResults(profile, results) {
+  const container = document.getElementById('analysis-results');
+  const barsContainer = document.getElementById('matchup-bars');
+  container.classList.remove('hidden');
+
+  // Sort by winrate
+  results.sort((a, b) => b.winrate - a.winrate);
+
+  let barsHtml = '';
+  let totalWeightedWr = 0;
+  let totalWeight = 0;
+
+  for (const r of results) {
+    const name = DATA.deckInfo[r.id]?.name || r.id;
+    const pct = (r.winrate * 100).toFixed(1);
+    const barWidth = Math.max(r.winrate * 100, 2);
+    const share = DATA.metaShares?.[r.id] || 0;
+    totalWeightedWr += r.winrate * share;
+    totalWeight += share;
+
+    let barColor, textColor;
+    if (r.winrate > 0.55) { barColor = 'bg-emerald-500'; textColor = 'text-emerald-400'; }
+    else if (r.winrate < 0.45) { barColor = 'bg-red-500'; textColor = 'text-red-400'; }
+    else { barColor = 'bg-amber-500'; textColor = 'text-amber-400'; }
+
+    barsHtml += `
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="text-xs text-slate-400 w-24 truncate text-right">${name}</span>
+        <div class="flex-1 h-5 bg-slate-700/50 rounded overflow-hidden">
+          <div class="h-full ${barColor}/30 bar-chart-bar rounded" style="width:${barWidth}%"></div>
+        </div>
+        <span class="text-xs font-semibold w-14 text-right ${textColor}">${pct}%</span>
+      </div>
+    `;
+  }
+
+  barsContainer.innerHTML = barsHtml;
+
+  const fitness = totalWeight > 0 ? totalWeightedWr / totalWeight : 0;
+  document.getElementById('fitness-score').textContent = `${(fitness * 100).toFixed(1)}%`;
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
