@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>デッキ強度分析 - ポケカメタ分析</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; padding: 20px; max-width: 1400px; margin: 0 auto; }
+  h1 { color: #e94560; margin-bottom: 5px; }
+  .subtitle { color: #888; font-size: 0.9em; margin-bottom: 20px; }
+  h2 { color: #0f3460; background: #e94560; padding: 8px 16px; border-radius: 4px; margin: 24px 0 12px; font-size: 1.1em; }
+  .meta { color: #666; font-size: 0.8em; margin-bottom: 20px; }
+
+  /* ランキング */
+  .ranking { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .rank-card { background: #16213e; border-radius: 8px; padding: 10px 14px; cursor: pointer; transition: transform 0.1s; border: 2px solid transparent; }
+  .rank-card:hover { transform: translateY(-2px); border-color: #e94560; }
+  .rank-card.selected { border-color: #e94560; background: #1a2744; }
+  .rank-card .rank { font-size: 1.3em; color: #e94560; font-weight: bold; }
+  .rank-card .deck-name { font-size: 0.95em; margin: 2px 0; }
+  .rank-card .stats { font-size: 0.78em; color: #888; }
+  .bar { height: 5px; background: #333; border-radius: 3px; margin-top: 3px; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+
+  /* デッキ詳細 */
+  .deck-detail { background: #16213e; border-radius: 8px; padding: 16px; margin: 12px 0; display: none; }
+  .deck-detail.visible { display: block; }
+  .deck-detail h3 { color: #e94560; margin-bottom: 8px; }
+  .attackers { display: flex; gap: 12px; flex-wrap: wrap; }
+  .attacker { background: #1a2744; border-radius: 6px; padding: 8px 12px; min-width: 150px; }
+  .attacker .name { font-weight: bold; font-size: 0.9em; }
+  .attacker .stat { font-size: 0.8em; color: #888; }
+
+  /* マッチアップ表 */
+  .table-wrap { overflow-x: auto; margin: 10px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85em; }
+  th, td { padding: 5px 8px; text-align: center; border: 1px solid #2a2a4a; }
+  th { background: #16213e; color: #e94560; position: sticky; top: 0; z-index: 1; font-size: 0.78em; }
+  td.name { text-align: left; font-weight: bold; white-space: nowrap; font-size: 0.82em; }
+  .win { background: rgba(46, 213, 115, 0.15); color: #2ed573; }
+  .lose { background: rgba(255, 71, 87, 0.15); color: #ff4757; }
+  .even { background: rgba(255, 234, 167, 0.08); color: #ffa502; }
+  .mirror { background: #1a1a2e; color: #444; }
+  td.clickable { cursor: pointer; }
+  td.clickable:hover { outline: 2px solid #e94560; }
+
+  /* ポップアップ */
+  .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+           background: #16213e; border: 2px solid #e94560; border-radius: 8px; padding: 20px;
+           z-index: 100; min-width: 300px; max-width: 400px; }
+  .popup.visible { display: block; }
+  .popup h3 { color: #e94560; margin-bottom: 10px; }
+  .popup .close { position: absolute; top: 8px; right: 12px; cursor: pointer; color: #888; font-size: 1.2em; }
+  .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+             background: rgba(0,0,0,0.6); z-index: 99; }
+  .overlay.visible { display: block; }
+
+  /* CSP説明 */
+  .explanation { background: #16213e; border-radius: 8px; padding: 14px; margin: 12px 0; font-size: 0.85em; line-height: 1.6; }
+  .explanation code { background: #1a2744; padding: 2px 6px; border-radius: 3px; color: #e94560; }
+
+  @media (max-width: 768px) {
+    .ranking { grid-template-columns: repeat(2, 1fr); }
+    table { font-size: 0.75em; }
+    th, td { padding: 3px 5px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>デッキ強度分析</h1>
+<p class="subtitle">フルゲームエンジン + CSP近似ランキング</p>
+<div class="meta" id="meta"></div>
+
+<h2>CSP近似ランキング</h2>
+<div class="explanation">
+  <code>CSP近似 = 使用率 x 環境適応度</code><br>
+  使用率が高いデッキは、勝率50%でも大会で多くのポイントを獲得する。
+  環境適応度は各マッチアップ勝率の加重平均。
+</div>
+<div class="ranking" id="ranking"></div>
+
+<div class="deck-detail" id="deck-detail"></div>
+
+<h2>マッチアップ勝率表</h2>
+<p class="meta">セルをクリックで詳細表示</p>
+<div class="table-wrap">
+  <table id="matchup-table"></table>
+</div>
+
+<div class="overlay" id="overlay" onclick="closePopup()"></div>
+<div class="popup" id="popup">
+  <span class="close" onclick="closePopup()">x</span>
+  <div id="popup-content"></div>
+</div>
+
+<script>
+let DATA = null;
+
+async function main() {
+  const res = await fetch('data.json');
+  DATA = await res.json();
+  renderMeta();
+  renderRanking();
+  renderTable();
+}
+
+function renderMeta() {
+  document.getElementById('meta').textContent =
+    `${DATA.metadata.deckCount}デッキ / ${DATA.metadata.engine}エンジン / trials=${DATA.metadata.trials}`;
+}
+
+function renderRanking() {
+  const div = document.getElementById('ranking');
+  DATA.cspRanking.forEach(entry => {
+    const card = document.createElement('div');
+    card.className = 'rank-card';
+    card.dataset.deckId = entry.deckId;
+    const barColor = entry.fitness > 0.5 ? '#2ed573' : (entry.fitness > 0.45 ? '#ffa502' : '#ff4757');
+    card.innerHTML = `
+      <span class="rank">#${entry.rank}</span>
+      <div class="deck-name">${entry.name}</div>
+      <div class="stats">
+        share ${(entry.share*100).toFixed(1)}% / fit ${(entry.fitness*100).toFixed(1)}%
+      </div>
+      <div class="bar"><div class="bar-fill" style="width:${Math.min(entry.fitness*100,100)}%;background:${barColor}"></div></div>
+    `;
+    card.onclick = () => showDeckDetail(entry.deckId);
+    div.appendChild(card);
+  });
+}
+
+function showDeckDetail(deckId) {
+  // ハイライト
+  document.querySelectorAll('.rank-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector(`[data-deck-id="${deckId}"]`)?.classList.add('selected');
+
+  const info = DATA.deckInfo[deckId];
+  const detail = document.getElementById('deck-detail');
+  if (!info) { detail.classList.remove('visible'); return; }
+
+  let attackersHtml = info.attackers.map(a =>
+    `<div class="attacker">
+      <div class="name">${a.name}</div>
+      <div class="stat">HP ${a.hp} / ${a.damage}dmg / prize ${a.prizeCost}</div>
+      <div class="stat">type: ${a.attackType}</div>
+    </div>`
+  ).join('');
+
+  // マッチアップサマリー
+  const wr = DATA.winrateMatrix[deckId] || {};
+  const matchups = Object.entries(wr)
+    .filter(([k]) => k !== deckId)
+    .map(([k, v]) => ({ id: k, name: DATA.deckInfo[k]?.name || k, wr: v }))
+    .sort((a, b) => b.wr - a.wr);
+
+  let matchupHtml = matchups.map(m => {
+    const cls = m.wr > 0.55 ? 'win' : (m.wr < 0.45 ? 'lose' : 'even');
+    return `<span class="${cls}" style="padding:2px 6px;border-radius:3px;margin:2px;display:inline-block;font-size:0.8em">
+      vs ${m.name.substring(0,8)} ${(m.wr*100).toFixed(0)}%</span>`;
+  }).join('');
+
+  detail.innerHTML = `
+    <h3>${info.name}</h3>
+    <div style="margin-bottom:8px">
+      <span class="stat">setup: ${info.setupTurns}T / weakness: ${info.weakness} / type: ${info.pokemonType}</span>
+    </div>
+    <div class="attackers">${attackersHtml}</div>
+    <div style="margin-top:10px">${matchupHtml}</div>
+  `;
+  detail.classList.add('visible');
+}
+
+function renderTable() {
+  const table = document.getElementById('matchup-table');
+  const ids = DATA.deckIds;
+  const names = ids.map(id => DATA.deckInfo[id]?.name || id);
+
+  let html = '<tr><th></th>';
+  names.forEach(n => html += `<th>${n.substring(0,6)}</th>`);
+  html += '</tr>';
+
+  ids.forEach((rowId, i) => {
+    html += `<tr><td class="name">${names[i]}</td>`;
+    ids.forEach((colId, j) => {
+      const wr = DATA.winrateMatrix[rowId]?.[colId];
+      if (i === j) {
+        html += '<td class="mirror">-</td>';
+      } else if (wr !== undefined) {
+        const pct = (wr*100).toFixed(0);
+        const cls = wr > 0.55 ? 'win' : (wr < 0.45 ? 'lose' : 'even');
+        html += `<td class="${cls} clickable" onclick="showMatchup('${rowId}','${colId}')">${pct}%</td>`;
+      } else {
+        html += '<td>-</td>';
+      }
+    });
+    html += '</tr>';
+  });
+  table.innerHTML = html;
+}
+
+function showMatchup(aId, bId) {
+  const a = DATA.deckInfo[aId];
+  const b = DATA.deckInfo[bId];
+  const wr = DATA.winrateMatrix[aId]?.[bId];
+  if (!a || !b || wr === undefined) return;
+
+  const wrB = 1 - wr;
+  const content = document.getElementById('popup-content');
+  content.innerHTML = `
+    <h3>${a.name} vs ${b.name}</h3>
+    <div style="font-size:2em;text-align:center;margin:12px 0;color:${wr>0.5?'#2ed573':'#ff4757'}">
+      ${(wr*100).toFixed(1)}% - ${(wrB*100).toFixed(1)}%
+    </div>
+    <table style="width:100%;font-size:0.85em">
+      <tr><th></th><th>${a.name.substring(0,10)}</th><th>${b.name.substring(0,10)}</th></tr>
+      <tr><td>メインHP</td><td>${a.attackers[0]?.hp || '?'}</td><td>${b.attackers[0]?.hp || '?'}</td></tr>
+      <tr><td>ダメージ</td><td>${a.attackers[0]?.damage || '?'}</td><td>${b.attackers[0]?.damage || '?'}</td></tr>
+      <tr><td>prize</td><td>${a.attackers[0]?.prizeCost || '?'}</td><td>${b.attackers[0]?.prizeCost || '?'}</td></tr>
+      <tr><td>setup</td><td>${a.setupTurns}T</td><td>${b.setupTurns}T</td></tr>
+      <tr><td>弱点</td><td>${a.weakness}</td><td>${b.weakness}</td></tr>
+    </table>
+  `;
+
+  document.getElementById('popup').classList.add('visible');
+  document.getElementById('overlay').classList.add('visible');
+}
+
+function closePopup() {
+  document.getElementById('popup').classList.remove('visible');
+  document.getElementById('overlay').classList.remove('visible');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+
+main();
+</script>
+</body>
+</html>
