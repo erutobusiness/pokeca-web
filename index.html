@@ -379,58 +379,117 @@ async function fetchDeckFromCode(code) {
 }
 
 function buildProfileFromCards(cards) {
-  // Simple profile builder: extract Pokemon as attackers
-  const attackers = [];
+  const db = DATA.cardDatabase || {};
   const pokemon = cards.filter(c => c.category === 'pokemon');
-  const energyCount = cards.filter(c => c.category === 'energy').reduce((s, c) => s + c.count, 0);
-  const supporterCount = cards.filter(c => c.category === 'supporter').reduce((s, c) => s + c.count, 0);
+  const bossCount = cards.filter(c => c.name === 'ボスの指令').reduce((s, c) => s + c.count, 0);
+  const beltCount = cards.filter(c => c.name?.includes('マキシマムベルト')).reduce((s, c) => s + c.count, 0);
 
-  // Try to match against known cards in deckProfiles
-  const knownCards = {};
-  if (DATA.deckProfiles) {
-    for (const profile of Object.values(DATA.deckProfiles)) {
-      for (const atk of profile.attackers) {
-        knownCards[atk.name] = atk;
+  // 60枚のcards配列を構築（cardDatabaseから実データ取得）
+  const deckCards = [];
+  let deckWeakness = '';
+  let hasExAttacker = false;
+  let hasEvolution = false;
+
+  for (const poke of pokemon) {
+    const info = db[poke.name];
+    for (let i = 0; i < poke.count; i++) {
+      if (info) {
+        const attacks = (info.attacks || []).map(a => ({
+          damage: a.damage || 0, energy_count: a.energy_count || 0,
+          damage_type: a.damage_type || 'fixed',
+          bonus_condition: a.bonus_condition || '',
+          bonus_amount: a.bonus_amount || 0,
+          bonus_multiplier: a.bonus_multiplier || 0,
+          effect: a.effect || '', effect_value: 0,
+          bench_snipe: a.bench_damage_all || 0,
+          energy_accel_from_trash: 0, bench_damage_multiplier: 0, bench_damage_base: 0,
+        }));
+        const bestDmg = Math.max(...(info.attacks || []).map(a => a.damage || 0), 0);
+        if (info.weakness && bestDmg > 0) deckWeakness = deckWeakness || info.weakness;
+        if (info.is_ex && bestDmg > 0) hasExAttacker = true;
+        if (info.stage >= 1) hasEvolution = true;
+        deckCards.push({
+          kind: 'pokemon', name: poke.name, hp: info.hp || 70,
+          prize_cost: info.prize_cost || (info.is_ex ? 2 : 1),
+          attacks, attack_type: info.type || '', weakness: info.weakness || '',
+          is_ex: info.is_ex || false, has_immunity: false, ability: '',
+          stage: 0, effect_id: 0, effect_value: 0,
+        });
+      } else {
+        // DBにないカード（新弾等）→HP70のシステムポケモン
+        deckCards.push({
+          kind: 'pokemon', name: poke.name, hp: 70, prize_cost: 1,
+          attacks: [], attack_type: '', weakness: '',
+          is_ex: false, has_immunity: false, ability: '', stage: 0,
+          effect_id: 0, effect_value: 0,
+        });
       }
     }
   }
 
-  for (const poke of pokemon) {
-    const known = knownCards[poke.name];
-    if (known) {
-      attackers.push({ ...known, count: poke.count });
-    } else {
-      // Default values for unknown Pokemon
-      attackers.push({
-        name: poke.name,
-        hp: 100,
-        damage: 80,
-        energy_cost: 2,
-        prize_cost: 1,
-        attack_type: 'unknown',
-        count: poke.count,
-      });
+  // サポート
+  for (const card of cards.filter(c => c.category === 'supporter')) {
+    const isBoss = card.name === 'ボスの指令';
+    for (let i = 0; i < card.count; i++) {
+      deckCards.push({ kind: 'supporter', hp: 0, prize_cost: 0, attacks: [],
+        attack_type: '', weakness: '', is_ex: false, has_immunity: false,
+        ability: '', stage: 0, effect_id: isBoss ? 1 : 2, effect_value: isBoss ? 0 : 5 });
     }
   }
 
-  // Sort by estimated power (HP * damage) descending, take top 6
-  attackers.sort((a, b) => (b.hp * b.damage) - (a.hp * a.damage));
+  // グッズ・どうぐ
+  for (const card of cards.filter(c => c.category === 'goods' || c.category === 'tool')) {
+    const isBelt = card.name?.includes('マキシマムベルト');
+    for (let i = 0; i < card.count; i++) {
+      deckCards.push({ kind: isBelt ? 'tool' : 'item', hp: 0, prize_cost: 0, attacks: [],
+        attack_type: '', weakness: '', is_ex: false, has_immunity: false,
+        ability: '', stage: 0, effect_id: isBelt ? 4 : 3, effect_value: isBelt ? 30 : 0 });
+    }
+  }
+
+  // スタジアム
+  for (const card of cards.filter(c => c.category === 'stadium')) {
+    for (let i = 0; i < card.count; i++) {
+      deckCards.push({ kind: 'stadium', hp: 0, prize_cost: 0, attacks: [],
+        attack_type: '', weakness: '', is_ex: false, has_immunity: false,
+        ability: '', stage: 0, effect_id: 0, effect_value: 0 });
+    }
+  }
+
+  // エネルギー
+  for (const card of cards.filter(c => c.category === 'energy')) {
+    for (let i = 0; i < card.count; i++) {
+      deckCards.push({ kind: 'energy', hp: 0, prize_cost: 0, attacks: [],
+        attack_type: '', weakness: '', is_ex: false, has_immunity: false,
+        ability: '', stage: 0, effect_id: 0, effect_value: 0 });
+    }
+  }
+
+  while (deckCards.length < 60) {
+    deckCards.push({ kind: 'energy', hp: 0, prize_cost: 0, attacks: [],
+      attack_type: '', weakness: '', is_ex: false, has_immunity: false,
+      ability: '', stage: 0, effect_id: 0, effect_value: 0 });
+  }
 
   return {
     name: 'カスタムデッキ',
-    attackers: attackers.slice(0, 6),
-    setup_turns: attackers.some(a => a.hp >= 250) ? 2 : 1,
+    cards: deckCards.slice(0, 60),
+    setup_turns: (() => {
+      // メインアタッカー（最大ダメージ）が進化ポケモンかで判定
+      const mainAttacker = deckCards
+        .filter(c => c.kind === 'pokemon' && c.attacks?.some(a => a.damage > 0))
+        .reduce((best, c) => {
+          const d = Math.max(...c.attacks.map(a => a.damage || 0));
+          return d > (best?.maxDmg || 0) ? { card: c, maxDmg: d } : best;
+        }, null);
+      if (!mainAttacker) return 0;
+      const info = db[mainAttacker.card.name];
+      return info && info.stage >= 2 ? 2 : info && info.stage >= 1 ? 1 : 0;
+    })(),
     energy_accel: 0,
-    weakness: 'none',
-    composition: {
-      energy: energyCount || 10,
-      supporters: supporterCount || 12,
-      items: 16,
-      pokemon: pokemon.reduce((s, c) => s + c.count, 0),
-      stadiums: 2,
-    },
-    boss_count: 2,
-    belt_count: 0,
+    weakness: deckWeakness,
+    boss_count: bossCount,
+    belt_count: beltCount,
     bench_size: 5,
   };
 }
@@ -465,7 +524,7 @@ function selectMetaDeck() {
   const id = document.getElementById('meta-deck-select').value;
   if (!id) return;
 
-  // メタデッキ同士は事前計算勝率を使う（Pythonフルエンジンの正確な結果）
+  // メタデッキ同士は事前計算勝率を使う
   const precomputed = DATA.winrateMatrix[id];
   if (precomputed) {
     const results = DATA.deckIds
@@ -473,16 +532,25 @@ function selectMetaDeck() {
       .map(did => ({ id: did, winrate: precomputed[did] ?? 0.5 }));
 
     showStatus(`事前計算済み勝率を表示中（${DATA.metadata.engine}エンジン, trials=${DATA.metadata.trials}）`, 'success');
-    const profile = DATA.deckFullConfigs?.[id] || {name: DATA.deckInfo[id]?.name};
-    renderAnalysisResults(profile, results);
+    const deckData = buildMetaDeck(id);
+    renderAnalysisResults(deckData, results);
     return;
   }
 
-  // 事前計算がなければWasmで計算（フルデッキデータ使用）
-  const fullConfig = DATA.deckFullConfigs?.[id];
-  if (fullConfig) {
-    runAnalysis(fullConfig);
+  // 事前計算がなければWasmで計算
+  const deckData = buildMetaDeck(id);
+  if (deckData) {
+    runAnalysis(deckData);
   }
+}
+
+// メタデッキをcardDatabaseから構築
+function buildMetaDeck(deckId) {
+  const cardList = DATA.deckCardLists?.[deckId];
+  if (cardList) {
+    return buildProfileFromCards(cardList);
+  }
+  return { name: DATA.deckInfo[deckId]?.name || deckId, cards: [] };
 }
 
 async function runAnalysis(deckData) {
@@ -491,18 +559,19 @@ async function runAnalysis(deckData) {
     return;
   }
 
-  const trials = 500;
+  const trials = 5000;
   showStatus(`Wasmエンジンで${DATA.deckIds.length}デッキとの勝率を計算中（${trials}trials/pair）...`, 'loading');
 
   // Run in next frame to allow UI update
   await new Promise(r => setTimeout(r, 10));
 
   try {
-    // メタデッキ: フルデッキデータがあればそれを使う
+    // メタデッキ: cardDatabaseから統一構築
     const metaEntries = DATA.deckIds.map(id => {
       const entry = { id };
-      if (DATA.deckFullConfigs?.[id]) {
-        entry.deck = DATA.deckFullConfigs[id];
+      const built = buildMetaDeck(id);
+      if (built?.cards) {
+        entry.deck = built;
       }
       return entry;
     });
@@ -536,72 +605,104 @@ function showStatus(msg, type) {
 const TYPE_NAMES = {fire:'炎',water:'水',grass:'草',lightning:'雷',psychic:'超',fighting:'闘',dark:'悪',steel:'鋼',dragon:'龍',colorless:'無'};
 
 function analyzeMatchupReason(myDeck, oppId) {
-  const oppDeck = DATA.deckFullConfigs?.[oppId];
-  const oppInfo = DATA.deckInfo?.[oppId];
-  if (!oppDeck || !oppInfo) return '';
+  const oppDeck = buildMetaDeck(oppId);
+  if (!oppDeck?.cards) return '';
 
   const reasons = [];
+  const estimateEffDmg = (atk) => {
+    let d = atk.damage || 0;
+    const cond = atk.bonus_condition || '';
+    const mult = atk.bonus_multiplier || 0;
+    const amt = atk.bonus_amount || 0;
+    if (cond === 'own_field_pokemon') d = mult * 5; // 場5体想定
+    else if (cond === 'own_field_energy') d = mult * 4;
+    else if (cond === 'attached_energy') d += mult * 3; // エネ3個想定
+    else if (cond === 'trash_bench_energy') d += mult * 1.5; // 平均1.5枚トラッシュ
+    else if (cond === 'opponent_prizes_taken') d += amt * 2; // サイド2枚想定
+    else if (cond === 'vs_ex') d += amt * 0.6; // 60%の確率でex相手
+    else if (cond === 'always') d += amt;
+    else if (cond === 'bench_count') d += amt * 3;
+    else if (cond === 'self_damage_counters') d += amt * 3;
+    return d;
+  };
+  const getAttackers = (deck) => {
+    const seen = new Map();
+    for (const c of (deck.cards || [])) {
+      if (c.kind !== 'pokemon') continue;
+      const bestDmg = Math.max(...(c.attacks || []).map(a => estimateEffDmg(a)), 0);
+      if (bestDmg <= 0) continue;
+      const key = c.name || `${c.hp}_${bestDmg}`;
+      if (!seen.has(key) || bestDmg > estimateEffDmg(seen.get(key).attacks[0])) seen.set(key, c);
+    }
+    return [...seen.values()].sort((a, b) => {
+      const da = Math.max(...a.attacks.map(x => estimateEffDmg(x)));
+      const db = Math.max(...b.attacks.map(x => estimateEffDmg(x)));
+      return db - da;
+    });
+  };
 
-  // 自分のアタッカー情報
-  const myAttackers = (myDeck.cards || []).filter(c => c.kind === 'pokemon' && c.attacks?.some(a => a.damage > 0));
-  const oppAttackers = (oppDeck.cards || []).filter(c => c.kind === 'pokemon' && c.attacks?.some(a => a.damage > 0));
+  const myAtks = getAttackers(myDeck);
+  const oppAtks = getAttackers(oppDeck);
+  if (!myAtks.length || !oppAtks.length) return '';
 
-  if (!myAttackers.length || !oppAttackers.length) return '';
-
-  const myMain = myAttackers.reduce((best, c) => (!best || (c.attacks[0]?.damage||0) > (best.attacks[0]?.damage||0)) ? c : best, null);
-  const oppMain = oppAttackers.reduce((best, c) => (!best || (c.attacks[0]?.damage||0) > (best.attacks[0]?.damage||0)) ? c : best, null);
-
-  if (!myMain || !oppMain) return '';
-
-  const myDmg = myMain.attacks[0]?.damage || 0;
-  const oppDmg = oppMain.attacks[0]?.damage || 0;
-  const myHp = myMain.hp;
-  const oppHp = oppMain.hp;
-
-  // タイプ相性
+  const myMain = myAtks[0];
+  const oppMain = oppAtks[0];
+  const myName = myMain.name || '?';
+  const oppName = oppMain.name || '?';
+  const myDmg = Math.max(...myMain.attacks.map(a => estimateEffDmg(a)));
+  const oppDmg = Math.max(...oppMain.attacks.map(a => estimateEffDmg(a)));
   const myType = myMain.attack_type || '';
   const oppWeak = oppMain.weakness || '';
   const oppType = oppMain.attack_type || '';
   const myWeak = myMain.weakness || '';
 
+  // タイプ相性
   if (myType && myType === oppWeak) {
-    reasons.push(`弱点: ${TYPE_NAMES[myType]||myType}攻撃が相手の弱点(x2)`);
+    reasons.push(`弱点: ${myName}(${TYPE_NAMES[myType]||myType})→${oppName}に×2`);
   }
   if (oppType && oppType === myWeak) {
-    reasons.push(`弱点被り: 相手の${TYPE_NAMES[oppType]||oppType}攻撃がこちらの弱点`);
+    reasons.push(`弱点被り: ${oppName}(${TYPE_NAMES[oppType]||oppType})→${myName}に×2`);
   }
 
-  // KO効率
+  // KO効率（メインアタッカー）
   const myEffDmg = (myType && myType === oppWeak) ? myDmg * 2 : myDmg;
   const oppEffDmg = (oppType && oppType === myWeak) ? oppDmg * 2 : oppDmg;
-  const hitsToKoOpp = Math.ceil(oppHp / Math.max(myEffDmg, 1));
-  const hitsToKoMe = Math.ceil(myHp / Math.max(oppEffDmg, 1));
+  const hitsToKo = Math.ceil(oppMain.hp / Math.max(myEffDmg, 1));
+  const hitsToKoMe = Math.ceil(myMain.hp / Math.max(oppEffDmg, 1));
+  reasons.push(`${myName}(${myEffDmg}dmg)→${oppName}(HP${oppMain.hp}): ${hitsToKo}発KO`);
+  if (hitsToKoMe <= 2) {
+    reasons.push(`${oppName}(${oppEffDmg}dmg)→${myName}(HP${myMain.hp}): ${hitsToKoMe}発KO`);
+  }
 
-  if (hitsToKoOpp === 1) reasons.push(`1発KO: ${myDmg}dmg → HP${oppHp}`);
-  else reasons.push(`${hitsToKoOpp}発KO: ${myEffDmg}dmg → HP${oppHp}`);
-
-  if (hitsToKoMe === 1) reasons.push(`被1発KO: ${oppDmg}dmg → HP${myHp}`);
-
-  // サイドレース
+  // サイドレース（カード名付き）
   const myPrize = myMain.prize_cost || 2;
   const oppPrize = oppMain.prize_cost || 2;
   const needKOs = Math.ceil(6 / oppPrize);
   const theyNeedKOs = Math.ceil(6 / myPrize);
   if (needKOs !== theyNeedKOs) {
-    reasons.push(`サイドレース: こちら${needKOs}体KO必要, 相手${theyNeedKOs}体`);
+    reasons.push(`サイド: ${oppName}(${oppPrize}枚)を${needKOs}体 vs ${myName}(${myPrize}枚)を${theyNeedKOs}体`);
+  }
+
+  // サブアタッカー（メイン以外で重要なもの）
+  if (myAtks.length > 1) {
+    const sub = myAtks[1];
+    const subDmg = Math.max(...sub.attacks.map(a => a.damage || 0));
+    if (subDmg >= 30) {
+      reasons.push(`サブ: ${sub.name || '?'}(${subDmg}dmg/HP${sub.hp})`);
+    }
   }
 
   // setup差
   const mySetup = myDeck.setup_turns || 0;
   const oppSetup = oppDeck.setup_turns || 0;
-  if (mySetup < oppSetup) reasons.push(`速度有利: setup ${mySetup}T vs ${oppSetup}T`);
-  else if (mySetup > oppSetup) reasons.push(`速度不利: setup ${mySetup}T vs ${oppSetup}T`);
+  if (mySetup !== oppSetup) {
+    reasons.push(`setup: ${mySetup}T vs ${oppSetup}T`);
+  }
 
   // 特殊効果
-  if (myMain.has_immunity) reasons.push('ex無効特性持ち');
-  if (myMain.attacks[0]?.bench_snipe > 0) reasons.push(`ベンチ狙撃${myMain.attacks[0].bench_snipe}`);
+  if (myMain.has_immunity) reasons.push(`${myName}: ex無効`);
 
-  return reasons.slice(0, 3).join(' / ');
+  return reasons.slice(0, 4).join(' / ');
 }
 
 function renderAnalysisResults(deckData, results) {
@@ -687,7 +788,7 @@ async function analyze1v1() {
     show1v1Status('シミュレーション中...', 'loading');
     await new Promise(r => setTimeout(r, 10));
 
-    const trials = 2000;
+    const trials = 10000;
     const start = performance.now();
     const wr = analyze_matchup(JSON.stringify(deckA.data), JSON.stringify(deckB.data), trials);
     const elapsed = performance.now() - start;
