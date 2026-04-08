@@ -403,16 +403,26 @@ function buildProfileFromCards(cards) {
           effect: a.effect || '', effect_value: 0,
           bench_snipe: a.bench_damage_all || 0,
           energy_accel_from_trash: 0, bench_damage_multiplier: 0, bench_damage_base: 0,
+          energy_cost: a.energy_cost || [],  // タイプ別コスト
         }));
         const bestDmg = Math.max(...(info.attacks || []).map(a => a.damage || 0), 0);
         if (info.weakness && bestDmg > 0) deckWeakness = deckWeakness || info.weakness;
         if (info.is_ex && bestDmg > 0) hasExAttacker = true;
         if (info.stage >= 1) hasEvolution = true;
+        // 特性名→Rust AbilityType文字列
+        const ABILITY_MAP = {
+          'レジストヴェール': 'resist_veil', 'ベンチバリア': 'bench_barrier',
+          'みどりのまい': 'midori_mai', 'ひっさつしゅりけん': 'hissatsu_shuriken',
+          'おつかいダッシュ': 'otsugai_dash', 'カースドボム': 'cursed_bomb',
+          'がんばりハート': 'survive_once', 'アビスシーク': 'abyss_seek',
+          'サイコエンブレイス': 'psycho_embrace',
+        };
+        const abilityStr = ABILITY_MAP[info.ability_name] || '';
         deckCards.push({
           kind: 'pokemon', name: poke.name, hp: info.hp || 70,
           prize_cost: info.prize_cost || (info.is_ex ? 2 : 1),
           attacks, attack_type: info.type || '', weakness: info.weakness || '',
-          is_ex: info.is_ex || false, has_immunity: false, ability: '',
+          is_ex: info.is_ex || false, has_immunity: false, ability: abilityStr,
           stage: 0, effect_id: 0, effect_value: 0,
         });
       } else {
@@ -456,12 +466,42 @@ function buildProfileFromCards(cards) {
     }
   }
 
-  // エネルギー
+  // デッキ内アタッカーが必要とするエネルギータイプを収集
+  const neededTypes = new Set();
+  for (const c of deckCards) {
+    if (c.kind === 'pokemon') {
+      for (const a of (c.attacks || [])) {
+        for (const ec of (a.energy_cost || [])) {
+          const t = ETYPE_MAP[ec.type] ?? 0;
+          if (t > 0) neededTypes.add(t);
+        }
+      }
+    }
+  }
+
   for (const card of cards.filter(c => c.category === 'energy')) {
+    let eTypeId = 0;
+    // 基本エネルギー
+    for (const [key, id] of Object.entries(ENERGY_SINGLE_MAP)) {
+      if (card.name?.includes(key)) { eTypeId = id; break; }
+    }
+    // 特殊エネルギー: 提供可能タイプのうちデッキが必要とするタイプに設定
+    if (eTypeId === 0) {
+      for (const [key, typeIds] of Object.entries(ENERGY_MULTI_MAP)) {
+        if (card.name?.includes(key)) {
+          for (const t of typeIds) {
+            if (neededTypes.has(t)) { eTypeId = t; break; }
+          }
+          if (eTypeId === 0 && typeIds.length > 0) eTypeId = typeIds[0];
+          break;
+        }
+      }
+    }
     for (let i = 0; i < card.count; i++) {
       deckCards.push({ kind: 'energy', hp: 0, prize_cost: 0, attacks: [],
         attack_type: '', weakness: '', is_ex: false, has_immunity: false,
-        ability: '', stage: 0, effect_id: 0, effect_value: 0 });
+        ability: '', stage: 0, effect_id: 0, effect_value: 0,
+        name: card.name, energy_type_id: eTypeId });
     }
   }
 
@@ -603,6 +643,16 @@ function showStatus(msg, type) {
 // =========================================================================
 
 const TYPE_NAMES = {fire:'炎',water:'水',grass:'草',lightning:'雷',psychic:'超',fighting:'闘',dark:'悪',steel:'鋼',dragon:'龍',colorless:'無'};
+const ETYPE_MAP = {fire:1,water:2,grass:3,lightning:4,electric:4,psychic:5,fighting:6,dark:7,steel:8,dragon:9,colorless:0};
+const ENERGY_SINGLE_MAP = {
+  '草': 3, '炎': 1, '水': 2, '雷': 4, '超': 5, '闘': 6, '悪': 7, '鋼': 8, '龍': 9,
+  'grass': 3, 'fire': 1, 'water': 2, 'lightning': 4, 'psychic': 5, 'fighting': 6,
+  'dark': 7, 'steel': 8, 'dragon': 9, 'イグニッション': 1,
+};
+const ENERGY_MULTI_MAP = {
+  'ロケット団エネルギー': [5, 7],  // 超 or 悪
+  'レガシーエネルギー': [5, 7],
+};
 
 function analyzeMatchupReason(myDeck, oppId) {
   const oppDeck = buildMetaDeck(oppId);
@@ -625,18 +675,53 @@ function analyzeMatchupReason(myDeck, oppId) {
     else if (cond === 'self_damage_counters') d += amt * 3;
     return d;
   };
+  // デッキ内のエネルギータイプを収集（特殊エネルギーの複数タイプも含む）
+  const getDeckEnergyTypes = (deck) => {
+    const types = new Set();
+    for (const c of (deck.cards || [])) {
+      if (c.kind === 'energy') {
+        const eid = c.energy_type_id || 0;
+        types.add(eid);
+        // 特殊エネルギーの複数タイプを追加
+        const eName = c.name || '';
+        for (const [key, typeIds] of Object.entries(ENERGY_MULTI_MAP)) {
+          if (eName.includes(key)) {
+            for (const t of typeIds) types.add(t);
+          }
+        }
+      }
+    }
+    return types;
+  };
+  const canUseInDeck = (atk, deckEnergyTypes) => {
+    const costs = atk.energy_cost || [];
+    if (costs.length === 0) return true;
+    for (const ec of costs) {
+      const t = ETYPE_MAP[ec.type] ?? 0;
+      if (t === 0) continue; // 無色コストは任意で満たせる
+      if (!deckEnergyTypes.has(t)) return false;
+    }
+    return true;
+  };
   const getAttackers = (deck) => {
+    const deckEnergy = getDeckEnergyTypes(deck);
     const seen = new Map();
     for (const c of (deck.cards || [])) {
       if (c.kind !== 'pokemon') continue;
-      const bestDmg = Math.max(...(c.attacks || []).map(a => estimateEffDmg(a)), 0);
+      // このデッキのエネルギーで使えるワザのみ考慮
+      const usableAtks = (c.attacks || []).filter(a => canUseInDeck(a, deckEnergy));
+      const bestDmg = Math.max(...usableAtks.map(a => estimateEffDmg(a)), 0);
       if (bestDmg <= 0) continue;
       const key = c.name || `${c.hp}_${bestDmg}`;
-      if (!seen.has(key) || bestDmg > estimateEffDmg(seen.get(key).attacks[0])) seen.set(key, c);
+      if (!seen.has(key) || bestDmg > Math.max(...(seen.get(key).attacks || []).filter(a => canUseInDeck(a, deckEnergy)).map(a => estimateEffDmg(a)), 0)) {
+        seen.set(key, c);
+      }
     }
     return [...seen.values()].sort((a, b) => {
-      const da = Math.max(...a.attacks.map(x => estimateEffDmg(x)));
-      const db = Math.max(...b.attacks.map(x => estimateEffDmg(x)));
+      const usableA = (a.attacks || []).filter(x => canUseInDeck(x, deckEnergy));
+      const usableB = (b.attacks || []).filter(x => canUseInDeck(x, deckEnergy));
+      const da = Math.max(...usableA.map(x => estimateEffDmg(x)), 0);
+      const db = Math.max(...usableB.map(x => estimateEffDmg(x)), 0);
       return db - da;
     });
   };
