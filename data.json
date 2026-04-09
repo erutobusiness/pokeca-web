@@ -2,7 +2,7 @@
   "metadata": {
     "generatedAt": "2026-04-09",
     "engine": "wasm-full",
-    "trials": 5000,
+    "trials": 3000,
     "deckCount": 14
   },
   "deckIds": [
@@ -425,227 +425,227 @@
   "winrateMatrix": {
     "garchomp": {
       "garchomp": 0.5,
-      "takeru_raiko": 0.747,
-      "mega_lucario": 0.496,
-      "zoroark_n": 0.804,
-      "ogapon_bullet": 0.765,
-      "arboliva": 0.617,
-      "pippi_ogapon": 0.756,
-      "dragapult_bashamo": 0.63,
-      "iwapalace": 0.268,
-      "hoodini": 0.899,
-      "gekkouga": 0.575,
-      "omaturi_ondo": 0.622,
-      "mewtwo_rocket": 0.474,
-      "dragapult_ex_bomb": 0.635
+      "takeru_raiko": 0.64,
+      "mega_lucario": 0.744,
+      "zoroark_n": 0.676,
+      "ogapon_bullet": 0.67,
+      "arboliva": 0.538,
+      "pippi_ogapon": 0.689,
+      "dragapult_bashamo": 0.41,
+      "iwapalace": 0.269,
+      "hoodini": 0.821,
+      "gekkouga": 0.429,
+      "omaturi_ondo": 0.633,
+      "mewtwo_rocket": 0.706,
+      "dragapult_ex_bomb": 0.486
     },
     "takeru_raiko": {
       "takeru_raiko": 0.5,
-      "garchomp": 0.184,
-      "mega_lucario": 0.208,
-      "zoroark_n": 0.456,
-      "ogapon_bullet": 0.394,
-      "arboliva": 0.373,
-      "pippi_ogapon": 0.357,
-      "dragapult_bashamo": 0.249,
-      "iwapalace": 0.086,
-      "hoodini": 0.481,
-      "gekkouga": 0.299,
-      "omaturi_ondo": 0.342,
-      "mewtwo_rocket": 0.313,
-      "dragapult_ex_bomb": 0.248
+      "garchomp": 0.233,
+      "mega_lucario": 0.31,
+      "zoroark_n": 0.453,
+      "ogapon_bullet": 0.389,
+      "arboliva": 0.401,
+      "pippi_ogapon": 0.367,
+      "dragapult_bashamo": 0.147,
+      "iwapalace": 0.087,
+      "hoodini": 0.517,
+      "gekkouga": 0.243,
+      "omaturi_ondo": 0.341,
+      "mewtwo_rocket": 0.415,
+      "dragapult_ex_bomb": 0.188
     },
     "mega_lucario": {
       "mega_lucario": 0.5,
-      "garchomp": 0.485,
-      "takeru_raiko": 0.682,
-      "zoroark_n": 0.733,
-      "ogapon_bullet": 0.687,
-      "arboliva": 0.65,
-      "pippi_ogapon": 0.689,
-      "dragapult_bashamo": 0.578,
-      "iwapalace": 0.311,
-      "hoodini": 0.696,
-      "gekkouga": 0.524,
-      "omaturi_ondo": 0.627,
-      "mewtwo_rocket": 0.569,
-      "dragapult_ex_bomb": 0.589
+      "garchomp": 0.181,
+      "takeru_raiko": 0.523,
+      "zoroark_n": 0.563,
+      "ogapon_bullet": 0.581,
+      "arboliva": 0.484,
+      "pippi_ogapon": 0.575,
+      "dragapult_bashamo": 0.142,
+      "iwapalace": 0.049,
+      "hoodini": 0.665,
+      "gekkouga": 0.246,
+      "omaturi_ondo": 0.398,
+      "mewtwo_rocket": 0.529,
+      "dragapult_ex_bomb": 0.171
     },
     "zoroark_n": {
       "zoroark_n": 0.5,
-      "garchomp": 0.07,
-      "takeru_raiko": 0.181,
-      "mega_lucario": 0.081,
-      "ogapon_bullet": 0.164,
-      "arboliva": 0.266,
-      "pippi_ogapon": 0.135,
-      "dragapult_bashamo": 0.103,
-      "iwapalace": 0.042,
-      "hoodini": 0.189,
-      "gekkouga": 0.105,
-      "omaturi_ondo": 0.234,
-      "mewtwo_rocket": 0.149,
-      "dragapult_ex_bomb": 0.107
+      "garchomp": 0.086,
+      "takeru_raiko": 0.16,
+      "mega_lucario": 0.127,
+      "ogapon_bullet": 0.155,
+      "arboliva": 0.242,
+      "pippi_ogapon": 0.137,
+      "dragapult_bashamo": 0.08,
+      "iwapalace": 0.045,
+      "hoodini": 0.191,
+      "gekkouga": 0.088,
+      "omaturi_ondo": 0.191,
+      "mewtwo_rocket": 0.198,
+      "dragapult_ex_bomb": 0.089
     },
     "ogapon_bullet": {
       "ogapon_bullet": 0.5,
-      "garchomp": 0.141,
-      "takeru_raiko": 0.318,
-      "mega_lucario": 0.158,
-      "zoroark_n": 0.363,
-      "arboliva": 0.297,
-      "pippi_ogapon": 0.272,
-      "dragapult_bashamo": 0.281,
-      "iwapalace": 0.137,
-      "hoodini": 0.367,
-      "gekkouga": 0.227,
-      "omaturi_ondo": 0.252,
-      "mewtwo_rocket": 0.268,
-      "dragapult_ex_bomb": 0.27
+      "garchomp": 0.159,
+      "takeru_raiko": 0.302,
+      "mega_lucario": 0.211,
+      "zoroark_n": 0.318,
+      "arboliva": 0.29,
+      "pippi_ogapon": 0.252,
+      "dragapult_bashamo": 0.185,
+      "iwapalace": 0.135,
+      "hoodini": 0.342,
+      "gekkouga": 0.165,
+      "omaturi_ondo": 0.242,
+      "mewtwo_rocket": 0.32,
+      "dragapult_ex_bomb": 0.201
     },
     "arboliva": {
       "arboliva": 0.5,
-      "garchomp": 0.293,
-      "takeru_raiko": 0.373,
-      "mega_lucario": 0.242,
-      "zoroark_n": 0.348,
-      "ogapon_bullet": 0.314,
-      "pippi_ogapon": 0.295,
-      "dragapult_bashamo": 0.289,
-      "iwapalace": 0.165,
-      "hoodini": 0.439,
-      "gekkouga": 0.282,
-      "omaturi_ondo": 0.343,
-      "mewtwo_rocket": 0.315,
-      "dragapult_ex_bomb": 0.305
+      "garchomp": 0.245,
+      "takeru_raiko": 0.255,
+      "mega_lucario": 0.268,
+      "zoroark_n": 0.27,
+      "ogapon_bullet": 0.24,
+      "pippi_ogapon": 0.23,
+      "dragapult_bashamo": 0.156,
+      "iwapalace": 0.137,
+      "hoodini": 0.319,
+      "gekkouga": 0.18,
+      "omaturi_ondo": 0.26,
+      "mewtwo_rocket": 0.267,
+      "dragapult_ex_bomb": 0.18
     },
     "pippi_ogapon": {
       "pippi_ogapon": 0.5,
-      "garchomp": 0.152,
-      "takeru_raiko": 0.354,
-      "mega_lucario": 0.17,
-      "zoroark_n": 0.415,
-      "ogapon_bullet": 0.29,
-      "arboliva": 0.333,
-      "dragapult_bashamo": 0.312,
-      "iwapalace": 0.143,
-      "hoodini": 0.439,
-      "gekkouga": 0.244,
-      "omaturi_ondo": 0.287,
-      "mewtwo_rocket": 0.292,
-      "dragapult_ex_bomb": 0.297
+      "garchomp": 0.155,
+      "takeru_raiko": 0.333,
+      "mega_lucario": 0.224,
+      "zoroark_n": 0.369,
+      "ogapon_bullet": 0.268,
+      "arboliva": 0.312,
+      "dragapult_bashamo": 0.184,
+      "iwapalace": 0.132,
+      "hoodini": 0.399,
+      "gekkouga": 0.172,
+      "omaturi_ondo": 0.263,
+      "mewtwo_rocket": 0.317,
+      "dragapult_ex_bomb": 0.205
     },
     "dragapult_bashamo": {
       "dragapult_bashamo": 0.5,
-      "garchomp": 0.281,
-      "takeru_raiko": 0.48,
-      "mega_lucario": 0.283,
-      "zoroark_n": 0.411,
-      "ogapon_bullet": 0.352,
-      "arboliva": 0.411,
-      "pippi_ogapon": 0.328,
-      "iwapalace": 0.17,
-      "hoodini": 0.591,
-      "gekkouga": 0.301,
-      "omaturi_ondo": 0.476,
-      "mewtwo_rocket": 0.419,
-      "dragapult_ex_bomb": 0.379
+      "garchomp": 0.517,
+      "takeru_raiko": 0.679,
+      "mega_lucario": 0.709,
+      "zoroark_n": 0.62,
+      "ogapon_bullet": 0.572,
+      "arboliva": 0.642,
+      "pippi_ogapon": 0.596,
+      "iwapalace": 0.285,
+      "hoodini": 0.774,
+      "gekkouga": 0.42,
+      "omaturi_ondo": 0.656,
+      "mewtwo_rocket": 0.738,
+      "dragapult_ex_bomb": 0.517
     },
     "iwapalace": {
       "iwapalace": 0.5,
-      "garchomp": 0.519,
-      "takeru_raiko": 0.626,
-      "mega_lucario": 0.501,
-      "zoroark_n": 0.469,
-      "ogapon_bullet": 0.485,
-      "arboliva": 0.476,
-      "pippi_ogapon": 0.475,
-      "dragapult_bashamo": 0.499,
-      "hoodini": 0.718,
-      "gekkouga": 0.482,
-      "omaturi_ondo": 0.444,
-      "mewtwo_rocket": 0.512,
-      "dragapult_ex_bomb": 0.555
+      "garchomp": 0.504,
+      "takeru_raiko": 0.606,
+      "mega_lucario": 0.671,
+      "zoroark_n": 0.418,
+      "ogapon_bullet": 0.473,
+      "arboliva": 0.464,
+      "pippi_ogapon": 0.488,
+      "dragapult_bashamo": 0.43,
+      "hoodini": 0.56,
+      "gekkouga": 0.393,
+      "omaturi_ondo": 0.423,
+      "mewtwo_rocket": 0.689,
+      "dragapult_ex_bomb": 0.489
     },
     "hoodini": {
       "hoodini": 0.5,
-      "garchomp": 0.048,
-      "takeru_raiko": 0.212,
-      "mega_lucario": 0.187,
-      "zoroark_n": 0.251,
-      "ogapon_bullet": 0.137,
-      "arboliva": 0.166,
-      "pippi_ogapon": 0.107,
-      "dragapult_bashamo": 0.099,
-      "iwapalace": 0.015,
-      "gekkouga": 0.153,
-      "omaturi_ondo": 0.258,
-      "mewtwo_rocket": 0.246,
-      "dragapult_ex_bomb": 0.124
+      "garchomp": 0.019,
+      "takeru_raiko": 0.045,
+      "mega_lucario": 0.072,
+      "zoroark_n": 0.054,
+      "ogapon_bullet": 0.035,
+      "arboliva": 0.041,
+      "pippi_ogapon": 0.036,
+      "dragapult_bashamo": 0.016,
+      "iwapalace": 0.011,
+      "gekkouga": 0.026,
+      "omaturi_ondo": 0.058,
+      "mewtwo_rocket": 0.091,
+      "dragapult_ex_bomb": 0.019
     },
     "gekkouga": {
       "gekkouga": 0.5,
-      "garchomp": 0.352,
-      "takeru_raiko": 0.491,
-      "mega_lucario": 0.316,
-      "zoroark_n": 0.547,
-      "ogapon_bullet": 0.475,
-      "arboliva": 0.48,
-      "pippi_ogapon": 0.47,
-      "dragapult_bashamo": 0.474,
-      "iwapalace": 0.247,
-      "hoodini": 0.581,
-      "omaturi_ondo": 0.47,
-      "mewtwo_rocket": 0.462,
-      "dragapult_ex_bomb": 0.476
+      "garchomp": 0.51,
+      "takeru_raiko": 0.673,
+      "mega_lucario": 0.668,
+      "zoroark_n": 0.765,
+      "ogapon_bullet": 0.706,
+      "arboliva": 0.698,
+      "pippi_ogapon": 0.696,
+      "dragapult_bashamo": 0.486,
+      "iwapalace": 0.385,
+      "hoodini": 0.83,
+      "omaturi_ondo": 0.597,
+      "mewtwo_rocket": 0.711,
+      "dragapult_ex_bomb": 0.535
     },
     "omaturi_ondo": {
       "omaturi_ondo": 0.5,
-      "garchomp": 0.35,
-      "takeru_raiko": 0.485,
-      "mega_lucario": 0.306,
-      "zoroark_n": 0.559,
-      "ogapon_bullet": 0.485,
-      "arboliva": 0.459,
-      "pippi_ogapon": 0.461,
-      "dragapult_bashamo": 0.371,
-      "iwapalace": 0.412,
-      "hoodini": 0.626,
-      "gekkouga": 0.378,
-      "mewtwo_rocket": 0.409,
-      "dragapult_ex_bomb": 0.366
+      "garchomp": 0.327,
+      "takeru_raiko": 0.489,
+      "mega_lucario": 0.493,
+      "zoroark_n": 0.564,
+      "ogapon_bullet": 0.553,
+      "arboliva": 0.522,
+      "pippi_ogapon": 0.544,
+      "dragapult_bashamo": 0.262,
+      "iwapalace": 0.423,
+      "hoodini": 0.648,
+      "gekkouga": 0.346,
+      "mewtwo_rocket": 0.515,
+      "dragapult_ex_bomb": 0.29
     },
     "mewtwo_rocket": {
       "mewtwo_rocket": 0.5,
-      "garchomp": 0.486,
-      "takeru_raiko": 0.511,
-      "mega_lucario": 0.372,
-      "zoroark_n": 0.635,
-      "ogapon_bullet": 0.501,
-      "arboliva": 0.498,
-      "pippi_ogapon": 0.485,
-      "dragapult_bashamo": 0.379,
-      "iwapalace": 0.267,
-      "hoodini": 0.531,
-      "gekkouga": 0.361,
-      "omaturi_ondo": 0.467,
-      "dragapult_ex_bomb": 0.402
+      "garchomp": 0.222,
+      "takeru_raiko": 0.379,
+      "mega_lucario": 0.361,
+      "zoroark_n": 0.517,
+      "ogapon_bullet": 0.445,
+      "arboliva": 0.444,
+      "pippi_ogapon": 0.423,
+      "dragapult_bashamo": 0.111,
+      "iwapalace": 0.065,
+      "hoodini": 0.519,
+      "gekkouga": 0.198,
+      "omaturi_ondo": 0.341,
+      "dragapult_ex_bomb": 0.131
     },
     "dragapult_ex_bomb": {
       "dragapult_ex_bomb": 0.5,
-      "garchomp": 0.302,
-      "takeru_raiko": 0.536,
-      "mega_lucario": 0.285,
-      "zoroark_n": 0.469,
-      "ogapon_bullet": 0.369,
-      "arboliva": 0.428,
-      "pippi_ogapon": 0.361,
-      "dragapult_bashamo": 0.382,
-      "iwapalace": 0.162,
-      "hoodini": 0.666,
-      "gekkouga": 0.312,
-      "omaturi_ondo": 0.522,
-      "mewtwo_rocket": 0.442
+      "garchomp": 0.465,
+      "takeru_raiko": 0.679,
+      "mega_lucario": 0.714,
+      "zoroark_n": 0.638,
+      "ogapon_bullet": 0.568,
+      "arboliva": 0.621,
+      "pippi_ogapon": 0.577,
+      "dragapult_bashamo": 0.372,
+      "iwapalace": 0.224,
+      "hoodini": 0.78,
+      "gekkouga": 0.37,
+      "omaturi_ondo": 0.638,
+      "mewtwo_rocket": 0.737
     }
   },
   "metaShares": {
@@ -43049,5 +43049,203 @@
         "category": "energy"
       }
     ]
+  },
+  "evolutionChains": {
+    "ドラメシヤ": {
+      "stage": 0
+    },
+    "ドロンチ": {
+      "stage": 1,
+      "evolves_from": "ドラメシヤ"
+    },
+    "ドラパルトex": {
+      "stage": 2,
+      "evolves_from": "ドロンチ"
+    },
+    "ヨマワル": {
+      "stage": 0
+    },
+    "サマヨール": {
+      "stage": 1,
+      "evolves_from": "ヨマワル"
+    },
+    "ヨノワール": {
+      "stage": 2,
+      "evolves_from": "サマヨール"
+    },
+    "ケロマツ": {
+      "stage": 0
+    },
+    "ゲコガシラ": {
+      "stage": 1,
+      "evolves_from": "ケロマツ"
+    },
+    "ゲッコウガex": {
+      "stage": 2,
+      "evolves_from": "ゲコガシラ"
+    },
+    "ミニーブ": {
+      "stage": 0
+    },
+    "オリーニョ": {
+      "stage": 1,
+      "evolves_from": "ミニーブ"
+    },
+    "オリーヴァex": {
+      "stage": 2,
+      "evolves_from": "オリーニョ"
+    },
+    "チコリータ": {
+      "stage": 0
+    },
+    "ベイリーフ": {
+      "stage": 1,
+      "evolves_from": "チコリータ"
+    },
+    "メガニウム": {
+      "stage": 2,
+      "evolves_from": "ベイリーフ"
+    },
+    "ケーシィ": {
+      "stage": 0
+    },
+    "ユンゲラー": {
+      "stage": 1,
+      "evolves_from": "ケーシィ"
+    },
+    "フーディン": {
+      "stage": 2,
+      "evolves_from": "ユンゲラー"
+    },
+    "シロナのフカマル": {
+      "stage": 0
+    },
+    "シロナのガバイト": {
+      "stage": 1,
+      "evolves_from": "シロナのフカマル"
+    },
+    "シロナのガブリアスex": {
+      "stage": 2,
+      "evolves_from": "シロナのガバイト"
+    },
+    "シロナのスボミー": {
+      "stage": 0
+    },
+    "シロナのロズレイド": {
+      "stage": 1,
+      "evolves_from": "シロナのスボミー"
+    },
+    "アチャモ": {
+      "stage": 0
+    },
+    "ワカシャモ": {
+      "stage": 1,
+      "evolves_from": "アチャモ"
+    },
+    "バシャーモex": {
+      "stage": 2,
+      "evolves_from": "ワカシャモ"
+    },
+    "バシャーモ": {
+      "stage": 2,
+      "evolves_from": "ワカシャモ"
+    },
+    "ルカリオex": {
+      "stage": 0
+    },
+    "メガルカリオex": {
+      "stage": 1,
+      "evolves_from": "ルカリオex"
+    },
+    "マクノシタ": {
+      "stage": 0
+    },
+    "マクノシタM-P004/M-P": {
+      "stage": 0
+    },
+    "ハリテヤマ": {
+      "stage": 1,
+      "evolves_from": "マクノシタ"
+    },
+    "Nのゾロア": {
+      "stage": 0
+    },
+    "Nのゾロアークex": {
+      "stage": 1,
+      "evolves_from": "Nのゾロア"
+    },
+    "ミニリュウ": {
+      "stage": 0
+    },
+    "ハクリュー": {
+      "stage": 1,
+      "evolves_from": "ミニリュウ"
+    },
+    "メガカイリューex": {
+      "stage": 2,
+      "evolves_from": "ハクリュー"
+    },
+    "イシズマイ": {
+      "stage": 0
+    },
+    "イワパレス": {
+      "stage": 1,
+      "evolves_from": "イシズマイ"
+    },
+    "ホーホー": {
+      "stage": 0
+    },
+    "ヨルノズク": {
+      "stage": 1,
+      "evolves_from": "ホーホー"
+    },
+    "ノコッチ": {
+      "stage": 0
+    },
+    "ノココッチ": {
+      "stage": 1,
+      "evolves_from": "ノコッチ"
+    },
+    "ロケット団のデンチュラ": {
+      "stage": 0
+    },
+    "ロケット団のワナイダー": {
+      "stage": 1,
+      "evolves_from": "ロケット団のデンチュラ"
+    },
+    "カジッチュ": {
+      "stage": 0
+    },
+    "カミッチュ": {
+      "stage": 1,
+      "evolves_from": "カジッチュ"
+    },
+    "サルノリ": {
+      "stage": 0
+    },
+    "バチンキー": {
+      "stage": 1,
+      "evolves_from": "サルノリ"
+    },
+    "トサキント": {
+      "stage": 0
+    },
+    "アズマオウ": {
+      "stage": 1,
+      "evolves_from": "トサキント"
+    },
+    "ユキワラシ": {
+      "stage": 0
+    },
+    "メガユキメノコex": {
+      "stage": 1,
+      "evolves_from": "ユキワラシ"
+    },
+    "ソルロック": {
+      "stage": 0
+    },
+    "ルナトーン": {
+      "stage": 0
+    }
   }
 }
