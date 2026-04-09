@@ -524,9 +524,23 @@ function buildProfileFromCards(cards) {
         }, null);
       if (!mainAttacker) return 0;
       const info = db[mainAttacker.card.name];
-      return info && info.stage >= 2 ? 2 : info && info.stage >= 1 ? 1 : 0;
+      // stage 0=即攻撃, stage 1=2T(基本→進化→攻撃), stage 2=2T(ふしぎなアメ考慮)
+      return info && info.stage >= 1 ? 2 : 0;
     })(),
-    energy_accel: 0,
+    energy_accel: (() => {
+      // みどりのまい/サイコエンブレイス等のエネ加速特性を検出
+      let accel = 0;
+      for (const c of deckCards) {
+        if (c.kind !== 'pokemon') continue;
+        const info = db[c.name];
+        if (!info) continue;
+        if (info.ability_name === 'みどりのまい') accel += 1;
+        if (info.ability_name === 'サイコエンブレイス') accel += 1;
+      }
+      // みどりのまいは1ターン1回、複数枚あっても期待値は使える枚数に依存
+      // 4枚入っていても場に出るのは2枚程度 → min(accel/2, 2)で近似
+      return Math.min(Math.ceil(accel / 2), 3);
+    })(),
     weakness: deckWeakness,
     boss_count: bossCount,
     belt_count: beltCount,
