@@ -2740,12 +2740,10 @@
   "34602": {
    "name": "改造ハンマー",
    "category": "goods",
-   "effect_id": 0,
+   "effect_id": 144,
    "effect_value": 0,
    "printing": "SM5p 039/050",
-   "unsupported": [
-    "「改造ハンマー」の効果"
-   ]
+   "unsupported": []
   },
   "35737": {
    "name": "ジャッジマン",
@@ -3107,9 +3105,7 @@
    "effect_id": 6,
    "effect_value": 0,
    "printing": "SV1V 072/078",
-   "unsupported": [
-    "「ふしぎなアメ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "42714": {
    "name": "エネルギーつけかえ",
@@ -3253,9 +3249,7 @@
    "effect_id": 6,
    "effect_value": 0,
    "printing": "SVD 120/139",
-   "unsupported": [
-    "「ふしぎなアメ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "44023": {
    "name": "基本雷エネルギー",
@@ -3375,9 +3369,7 @@
    "effect_id": 6,
    "effect_value": 0,
    "printing": "SV1V 107/078",
-   "unsupported": [
-    "「ふしぎなアメ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "44950": {
    "name": "基本雷エネルギー",
@@ -3565,13 +3557,12 @@
        "type": "colorless",
        "count": 2
       }
-     ]
+     ],
+     "effect": "protect_next_coin"
     }
    ],
    "printing": "SV5K 056/071",
-   "unsupported": [
-    "ワザ「あなをほる」の効果の一部"
-   ]
+   "unsupported": []
   },
   "45203": {
    "name": "ノココッチ",
@@ -3607,9 +3598,7 @@
     }
    ],
    "printing": "SV5K 057/071",
-   "unsupported": [
-    "特性「にげあしドロー」の一部"
-   ]
+   "unsupported": []
   },
   "45209": {
    "name": "なかよしポフィン",
@@ -3625,6 +3614,9 @@
    "effect_id": 4,
    "effect_value": 30,
    "tool": true,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SV5K 066/071",
    "unsupported": []
   },
@@ -3633,6 +3625,9 @@
    "category": "energy",
    "effect_id": 0,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SV5K 071/071",
    "unsupported": [
     "「ネオアッパーエネルギー」の効果"
@@ -3690,9 +3685,7 @@
     }
    ],
    "printing": "SV5M 046/071",
-   "unsupported": [
-    "ワザ「アイアンタックル」の効果の一部"
-   ]
+   "unsupported": []
   },
   "45264": {
    "name": "メタング",
@@ -3713,7 +3706,7 @@
     "メタング",
     "ダンバル"
    ],
-   "ability": "",
+   "ability": "metal_maker",
    "ability_name": "メタルメーカー",
    "attacks": [
     {
@@ -3733,9 +3726,7 @@
     }
    ],
    "printing": "SV5M 047/071",
-   "unsupported": [
-    "特性「メタルメーカー」"
-   ]
+   "unsupported": []
   },
   "45281": {
    "name": "ヒーローマント",
@@ -3743,10 +3734,11 @@
    "effect_id": 73,
    "effect_value": 0,
    "tool": true,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SV5M 064/071",
-   "unsupported": [
-    "「ヒーローマント」の効果の一部"
-   ]
+   "unsupported": []
   },
   "45284": {
    "name": "暗号マニアの解読",
@@ -3759,12 +3751,10 @@
   "45288": {
    "name": "ミストエネルギー",
    "category": "energy",
-   "effect_id": 0,
+   "effect_id": 148,
    "effect_value": 0,
    "printing": "SV5M 071/071",
-   "unsupported": [
-    "「ミストエネルギー」の効果"
-   ]
+   "unsupported": []
   },
   "45369": {
    "name": "ハイパーボール",
@@ -3780,9 +3770,7 @@
    "effect_id": 6,
    "effect_value": 0,
    "printing": "SVHM 030/053",
-   "unsupported": [
-    "「ふしぎなアメ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "45387": {
    "name": "ボスの指令",
@@ -3806,9 +3794,7 @@
    "effect_id": 6,
    "effect_value": 0,
    "printing": "SVI 053/066",
-   "unsupported": [
-    "「ふしぎなアメ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "45517": {
    "name": "ドーミラー",
@@ -4184,6 +4170,9 @@
    "category": "goods",
    "effect_id": 5,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SV5a 053/066",
    "unsupported": []
   },
@@ -4766,9 +4755,7 @@
     }
    ],
    "printing": "SV6 080/101",
-   "unsupported": [
-    "特性「ていさつしれい」の一部"
-   ]
+   "unsupported": []
   },
   "45772": {
    "name": "ドラパルトex",
@@ -4829,6 +4816,9 @@
    "category": "goods",
    "effect_id": 0,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SV6 092/101",
    "unsupported": [
     "「シークレットボックス」の効果"
@@ -4845,13 +4835,11 @@
   "45786": {
    "name": "ハンディサーキュレーター",
    "category": "tool",
-   "effect_id": 0,
+   "effect_id": 145,
    "effect_value": 0,
    "tool": true,
    "printing": "SV6 095/101",
-   "unsupported": [
-    "「ハンディサーキュレーター」の効果"
-   ]
+   "unsupported": []
   },
   "45787": {
    "name": "スグリ",
@@ -4894,6 +4882,9 @@
    "category": "energy",
    "effect_id": 93,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SV6 101/101",
    "unsupported": []
   },
@@ -5563,7 +5554,7 @@
    "prize_cost": 1,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "ace_canceller",
    "ability_name": "エースキャンセラー",
    "attacks": [
     {
@@ -5583,9 +5574,7 @@
     }
    ],
    "printing": "SV6a 040/064",
-   "unsupported": [
-    "特性「エースキャンセラー」"
-   ]
+   "unsupported": []
   },
   "45922": {
    "name": "キュレム",
@@ -5844,14 +5833,12 @@
        "type": "colorless",
        "count": 1
       }
-     ]
+     ],
+     "needs_stadium": true
     }
    ],
    "printing": "SV7 080/102",
-   "unsupported": [
-    "特性「ファンコール」の一部",
-    "ワザ「とつげきランディング」の効果の一部"
-   ]
+   "unsupported": []
   },
   "46036": {
    "name": "アカマツ",
@@ -6399,12 +6386,13 @@
   "46220": {
    "name": "プレシャスキャリー",
    "category": "goods",
-   "effect_id": 0,
+   "effect_id": 140,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SVLN 015/022",
-   "unsupported": [
-    "「プレシャスキャリー」の効果"
-   ]
+   "unsupported": []
   },
   "46227": {
    "name": "ボスの指令",
@@ -6508,6 +6496,9 @@
    "category": "energy",
    "effect_id": 0,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SV7a 064/064",
    "unsupported": []
   },
@@ -7663,7 +7654,7 @@
     "メタング",
     "ダンバル"
    ],
-   "ability": "",
+   "ability": "metal_maker",
    "ability_name": "メタルメーカー",
    "attacks": [
     {
@@ -7683,9 +7674,7 @@
     }
    ],
    "printing": "SV8a 107/187",
-   "unsupported": [
-    "特性「メタルメーカー」"
-   ]
+   "unsupported": []
   },
   "46781": {
    "name": "ドラパルトex",
@@ -7818,13 +7807,12 @@
        "type": "colorless",
        "count": 2
       }
-     ]
+     ],
+     "effect": "protect_next_coin"
     }
    ],
    "printing": "SV8a 129/187",
-   "unsupported": [
-    "ワザ「あなをほる」の効果の一部"
-   ]
+   "unsupported": []
   },
   "46791": {
    "name": "ノココッチ",
@@ -7860,9 +7848,7 @@
     }
    ],
    "printing": "SV8a 130/187",
-   "unsupported": [
-    "特性「にげあしドロー」の一部"
-   ]
+   "unsupported": []
   },
   "46793": {
    "name": "レジギガス",
@@ -7904,6 +7890,9 @@
    "category": "goods",
    "effect_id": 0,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SV8a 142/187",
    "unsupported": [
     "「つりざおMAX」の効果"
@@ -7922,6 +7911,9 @@
    "category": "goods",
    "effect_id": 110,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SV8a 148/187",
    "unsupported": []
   },
@@ -7985,12 +7977,10 @@
   "46847": {
    "name": "ミストエネルギー",
    "category": "energy",
-   "effect_id": 0,
+   "effect_id": 148,
    "effect_value": 0,
    "printing": "SV8a 186/187",
-   "unsupported": [
-    "「ミストエネルギー」の効果"
-   ]
+   "unsupported": []
   },
   "46849": {
    "name": "スボミー",
@@ -8431,13 +8421,12 @@
        "type": "colorless",
        "count": 2
       }
-     ]
+     ],
+     "effect": "protect_next_coin"
     }
    ],
    "printing": "SV8a 129/187",
-   "unsupported": [
-    "ワザ「あなをほる」の効果の一部"
-   ]
+   "unsupported": []
   },
   "46945": {
    "name": "ノココッチ",
@@ -8473,9 +8462,7 @@
     }
    ],
    "printing": "SV8a 130/187",
-   "unsupported": [
-    "特性「にげあしドロー」の一部"
-   ]
+   "unsupported": []
   },
   "46946": {
    "name": "スピンロトム",
@@ -8503,14 +8490,12 @@
        "type": "colorless",
        "count": 1
       }
-     ]
+     ],
+     "needs_stadium": true
     }
    ],
    "printing": "SV8a 131/187",
-   "unsupported": [
-    "特性「ファンコール」の一部",
-    "ワザ「とつげきランディング」の効果の一部"
-   ]
+   "unsupported": []
   },
   "46958": {
    "name": "なかよしポフィン",
@@ -8614,12 +8599,10 @@
   "46992": {
    "name": "ミストエネルギー",
    "category": "energy",
-   "effect_id": 0,
+   "effect_id": 148,
    "effect_value": 0,
    "printing": "SV8a 186/187",
-   "unsupported": [
-    "「ミストエネルギー」の効果"
-   ]
+   "unsupported": []
   },
   "47023": {
    "name": "Nのダルマッカ",
@@ -8925,7 +8908,8 @@
        "type": "colorless",
        "count": 1
       }
-     ]
+     ],
+     "effect": "self_switch"
     },
     {
      "name": "ぶつかる",
@@ -8940,9 +8924,7 @@
     }
    ],
    "printing": "SV9 078/100",
-   "unsupported": [
-    "ワザ「いれかわる」の効果"
-   ]
+   "unsupported": []
   },
   "47087": {
    "name": "ノココッチex",
@@ -8975,7 +8957,8 @@
        "count": 1
       }
      ],
-     "damage_type": "multiply"
+     "damage_type": "multiply",
+     "bonus_condition": "opp_field_ex_count"
     },
     {
      "name": "ドリルブレイク",
@@ -8986,13 +8969,12 @@
        "type": "colorless",
        "count": 3
       }
-     ]
+     ],
+     "ignore_defender_effects": true
     }
    ],
    "printing": "SV9 079/100",
-   "unsupported": [
-    "ワザ「ぎゃっきょうテール」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47097": {
    "name": "Nのポイントアップ",
@@ -9457,6 +9439,9 @@
    "category": "goods",
    "effect_id": 110,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SVN 020/045",
    "unsupported": []
   },
@@ -9497,18 +9482,19 @@
   "47218": {
    "name": "ミストエネルギー",
    "category": "energy",
-   "effect_id": 0,
+   "effect_id": 148,
    "effect_value": 0,
    "printing": "SVN 043/045",
-   "unsupported": [
-    "「ミストエネルギー」の効果"
-   ]
+   "unsupported": []
   },
   "47220": {
    "name": "レガシーエネルギー",
    "category": "energy",
    "effect_id": 93,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "SVN 045/045",
    "unsupported": []
   },
@@ -9712,7 +9698,8 @@
        "count": 1
       }
      ],
-     "damage_type": "multiply"
+     "damage_type": "multiply",
+     "bonus_condition": "opp_field_ex_count"
     },
     {
      "name": "ドリルブレイク",
@@ -9723,13 +9710,12 @@
        "type": "colorless",
        "count": 3
       }
-     ]
+     ],
+     "ignore_defender_effects": true
     }
    ],
    "printing": "SV9 120/100",
-   "unsupported": [
-    "ワザ「ぎゃっきょうテール」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47243": {
    "name": "タケシのスカウト",
@@ -10248,12 +10234,10 @@
   "47489": {
    "name": "ロケット団の監視塔",
    "category": "stadium",
-   "effect_id": 0,
+   "effect_id": 147,
    "effect_value": 0,
    "printing": "SV10 096/098",
-   "unsupported": [
-    "「ロケット団の監視塔」の効果"
-   ]
+   "unsupported": []
   },
   "47490": {
    "name": "ロケット団のファクトリー",
@@ -10383,7 +10367,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "metal_signal",
    "ability_name": "メタルシグナル",
    "attacks": [
     {
@@ -10405,10 +10389,7 @@
     }
    ],
    "printing": "SV11B 069/086",
-   "unsupported": [
-    "特性「メタルシグナル」",
-    "ワザ「プロテクトチャージ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47617": {
    "name": "ポケギア3.0",
@@ -10761,13 +10742,13 @@
        "type": "fighting",
        "count": 3
       }
-     ]
+     ],
+     "effect": "self_damage",
+     "effect_value": 70
     }
    ],
    "printing": "M1L 025/063",
-   "unsupported": [
-    "ワザ「ワイルドプレス」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47759": {
    "name": "ルナトーン",
@@ -10785,6 +10766,10 @@
    "family": [],
    "ability": "luna_cycle",
    "ability_name": "ルナサイクル",
+   "engine": {
+    "field_tag": 2,
+    "ability_needs_field_tag": 1
+   },
    "attacks": [
     {
      "name": "パワージェム",
@@ -10799,9 +10784,7 @@
     }
    ],
    "printing": "M1L 026/063",
-   "unsupported": [
-    "特性「ルナサイクル」の一部"
-   ]
+   "unsupported": []
   },
   "47760": {
    "name": "ソルロック",
@@ -10819,6 +10802,9 @@
    "family": [],
    "ability": "",
    "ability_name": "",
+   "engine": {
+    "field_tag": 1
+   },
    "attacks": [
     {
      "name": "コスモビーム",
@@ -10829,13 +10815,13 @@
        "type": "fighting",
        "count": 1
       }
-     ]
+     ],
+     "needs_bench_tag": 2,
+     "ignore_weakness": true
     }
    ],
    "printing": "M1L 027/063",
-   "unsupported": [
-    "ワザ「コスモビーム」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47761": {
    "name": "リオル",
@@ -11039,9 +11025,7 @@
    "effect_id": 12,
    "effect_value": 0,
    "printing": "M1L 058/063",
-   "unsupported": [
-    "「パワープロテイン」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47792": {
    "name": "ファイトゴング",
@@ -11049,9 +11033,7 @@
    "effect_id": 53,
    "effect_value": 0,
    "printing": "M1L 059/063",
-   "unsupported": [
-    "「ファイトゴング」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47795": {
    "name": "リーリエの決心",
@@ -11064,12 +11046,10 @@
   "47796": {
    "name": "危ない廃墟",
    "category": "stadium",
-   "effect_id": 0,
+   "effect_id": 146,
    "effect_value": 0,
    "printing": "M1L 063/063",
-   "unsupported": [
-    "「危ない廃墟」の効果"
-   ]
+   "unsupported": []
   },
   "47799": {
    "name": "チコリータ",
@@ -11222,13 +11202,12 @@
        "type": "psychic",
        "count": 1
       }
-     ]
+     ],
+     "effect": "self_switch"
     }
    ],
    "printing": "M1S 036/063",
-   "unsupported": [
-    "ワザ「テレポートアタック」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47833": {
    "name": "ユンゲラー",
@@ -11438,6 +11417,9 @@
    "category": "goods",
    "effect_id": 5,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MA 011/043",
    "unsupported": []
   },
@@ -11471,9 +11453,7 @@
    "effect_id": 6,
    "effect_value": 0,
    "printing": "MA 021/043",
-   "unsupported": [
-    "「ふしぎなアメ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47885": {
    "name": "夜のタンカ",
@@ -11489,6 +11469,9 @@
    "effect_id": 4,
    "effect_value": 30,
    "tool": true,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MA 031/043",
    "unsupported": []
   },
@@ -11611,7 +11594,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "metal_signal",
    "ability_name": "メタルシグナル",
    "attacks": [
     {
@@ -11633,10 +11616,7 @@
     }
    ],
    "printing": "SV11B 164/086",
-   "unsupported": [
-    "特性「メタルシグナル」",
-    "ワザ「プロテクトチャージ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48036": {
    "name": "プルリル",
@@ -11870,6 +11850,9 @@
    "category": "goods",
    "effect_id": 110,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MBG 013/021",
    "unsupported": []
   },
@@ -11936,10 +11919,11 @@
    "effect_id": 73,
    "effect_value": 0,
    "tool": true,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MBD 016/021",
-   "unsupported": [
-    "「ヒーローマント」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48301": {
    "name": "ふうせん",
@@ -12407,6 +12391,7 @@
       }
      ],
      "damage_type": "plus",
+     "bonus_condition": "moved_to_active_this_turn",
      "bonus_amount": 170
     },
     {
@@ -12418,14 +12403,12 @@
        "type": "colorless",
        "count": 2
       }
-     ]
+     ],
+     "ignore_defender_effects": true
     }
    ],
    "printing": "M2 072/080",
-   "unsupported": [
-    "ワザ「しっぷうづき」の効果の一部",
-    "ワザ「スパイクホッパー」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48413": {
    "name": "ジャンボアイス",
@@ -12446,12 +12429,10 @@
   "48419": {
    "name": "バトルコロシアム",
    "category": "stadium",
-   "effect_id": 0,
+   "effect_id": 143,
    "effect_value": 0,
    "printing": "M2 079/080",
-   "unsupported": [
-    "「バトルコロシアム」の効果"
-   ]
+   "unsupported": []
   },
   "48421": {
    "name": "フシギダネ",
@@ -12615,9 +12596,7 @@
    "effect_id": 12,
    "effect_value": 0,
    "printing": "M1L 081/063",
-   "unsupported": [
-    "「パワープロテイン」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48439": {
    "name": "ファイトゴング",
@@ -12625,9 +12604,7 @@
    "effect_id": 53,
    "effect_value": 0,
    "printing": "M1L 082/063",
-   "unsupported": [
-    "「ファイトゴング」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48440": {
    "name": "夜のタンカ",
@@ -12896,9 +12873,7 @@
    "effect_id": 6,
    "effect_value": 0,
    "printing": "M1S 082/063",
-   "unsupported": [
-    "「ふしぎなアメ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48471": {
    "name": "ミツルの思いやり",
@@ -13038,9 +13013,7 @@
     }
    ],
    "printing": "M-P 048/M-P",
-   "unsupported": [
-    "特性「にげあしドロー」の一部"
-   ]
+   "unsupported": []
   },
   "48485": {
    "name": "ふうせん",
@@ -13118,12 +13091,10 @@
   "48514": {
    "name": "バトルコロシアム",
    "category": "stadium",
-   "effect_id": 0,
+   "effect_id": 143,
    "effect_value": 0,
    "printing": "M2 108/080",
-   "unsupported": [
-    "「バトルコロシアム」の効果"
-   ]
+   "unsupported": []
   },
   "48519": {
    "name": "メガサメハダーex",
@@ -13209,6 +13180,7 @@
       }
      ],
      "damage_type": "plus",
+     "bonus_condition": "moved_to_active_this_turn",
      "bonus_amount": 170
     },
     {
@@ -13220,14 +13192,12 @@
        "type": "colorless",
        "count": 2
       }
-     ]
+     ],
+     "ignore_defender_effects": true
     }
    ],
    "printing": "M2 114/080",
-   "unsupported": [
-    "ワザ「しっぷうづき」の効果の一部",
-    "ワザ「スパイクホッパー」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48521": {
    "name": "ヒカリ",
@@ -13444,9 +13414,8 @@
        "count": 1
       }
      ],
-     "damage_type": "plus",
-     "bonus_condition": "opponent_prizes_taken",
-     "bonus_multiplier": 50
+     "damage_type": "multiply",
+     "bonus_condition": "opp_hand_count"
     },
     {
      "name": "アブソリュートスノー",
@@ -13796,6 +13765,10 @@
    "family": [],
    "ability": "luna_cycle",
    "ability_name": "ルナサイクル",
+   "engine": {
+    "field_tag": 2,
+    "ability_needs_field_tag": 1
+   },
    "attacks": [
     {
      "name": "パワージェム",
@@ -13810,9 +13783,7 @@
     }
    ],
    "printing": "M2a 086/193",
-   "unsupported": [
-    "特性「ルナサイクル」の一部"
-   ]
+   "unsupported": []
   },
   "48609": {
    "name": "ソルロック",
@@ -13830,6 +13801,9 @@
    "family": [],
    "ability": "",
    "ability_name": "",
+   "engine": {
+    "field_tag": 1
+   },
    "attacks": [
     {
      "name": "コスモビーム",
@@ -13840,13 +13814,13 @@
        "type": "fighting",
        "count": 1
       }
-     ]
+     ],
+     "needs_bench_tag": 2,
+     "ignore_weakness": true
     }
    ],
    "printing": "M2a 087/193",
-   "unsupported": [
-    "ワザ「コスモビーム」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48613": {
    "name": "リオル",
@@ -14260,14 +14234,12 @@
        "type": "colorless",
        "count": 1
       }
-     ]
+     ],
+     "needs_stadium": true
     }
    ],
    "printing": "M2a 139/193",
-   "unsupported": [
-    "特性「ファンコール」の一部",
-    "ワザ「とつげきランディング」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48668": {
    "name": "Nのポイントアップ",
@@ -14288,12 +14260,10 @@
   "48670": {
    "name": "改造ハンマー",
    "category": "goods",
-   "effect_id": 0,
+   "effect_id": 144,
    "effect_value": 0,
    "printing": "M2a 148/193",
-   "unsupported": [
-    "「改造ハンマー」の効果"
-   ]
+   "unsupported": []
   },
   "48671": {
    "name": "ガラスのラッパ",
@@ -14444,12 +14414,10 @@
   "48711": {
    "name": "ロケット団の監視塔",
    "category": "stadium",
-   "effect_id": 0,
+   "effect_id": 147,
    "effect_value": 0,
    "printing": "M2a 189/193",
-   "unsupported": [
-    "「ロケット団の監視塔」の効果"
-   ]
+   "unsupported": []
   },
   "48712": {
    "name": "ロケット団のファクトリー",
@@ -15300,6 +15268,10 @@
    "family": [],
    "ability": "luna_cycle",
    "ability_name": "ルナサイクル",
+   "engine": {
+    "field_tag": 2,
+    "ability_needs_field_tag": 1
+   },
    "attacks": [
     {
      "name": "パワージェム",
@@ -15314,9 +15286,7 @@
     }
    ],
    "printing": "MC 371/742",
-   "unsupported": [
-    "特性「ルナサイクル」の一部"
-   ]
+   "unsupported": []
   },
   "49088": {
    "name": "ソルロック",
@@ -15334,6 +15304,9 @@
    "family": [],
    "ability": "",
    "ability_name": "",
+   "engine": {
+    "field_tag": 1
+   },
    "attacks": [
     {
      "name": "コスモビーム",
@@ -15344,13 +15317,13 @@
        "type": "fighting",
        "count": 1
       }
-     ]
+     ],
+     "needs_bench_tag": 2,
+     "ignore_weakness": true
     }
    ],
    "printing": "MC 372/742",
-   "unsupported": [
-    "ワザ「コスモビーム」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49095": {
    "name": "リオル",
@@ -15744,9 +15717,7 @@
     }
    ],
    "printing": "MC 496/742",
-   "unsupported": [
-    "ワザ「アイアンタックル」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49213": {
    "name": "メタング",
@@ -15767,7 +15738,7 @@
     "メタング",
     "ダンバル"
    ],
-   "ability": "",
+   "ability": "metal_maker",
    "ability_name": "メタルメーカー",
    "attacks": [
     {
@@ -15787,9 +15758,7 @@
     }
    ],
    "printing": "MC 497/742",
-   "unsupported": [
-    "特性「メタルメーカー」"
-   ]
+   "unsupported": []
   },
   "49228": {
    "name": "ゲノセクトex",
@@ -15805,7 +15774,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "metal_signal",
    "ability_name": "メタルシグナル",
    "attacks": [
     {
@@ -15827,10 +15796,7 @@
     }
    ],
    "printing": "MC 512/742",
-   "unsupported": [
-    "特性「メタルシグナル」",
-    "ワザ「プロテクトチャージ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49261": {
    "name": "Nのレシラム",
@@ -15981,9 +15947,7 @@
     }
    ],
    "printing": "MC 547/742",
-   "unsupported": [
-    "特性「ていさつしれい」の一部"
-   ]
+   "unsupported": []
   },
   "49264": {
    "name": "ドラパルトex",
@@ -16159,7 +16123,8 @@
        "type": "colorless",
        "count": 1
       }
-     ]
+     ],
+     "effect": "self_switch"
     },
     {
      "name": "ぶつかる",
@@ -16174,9 +16139,7 @@
     }
    ],
    "printing": "MC 574/742",
-   "unsupported": [
-    "ワザ「いれかわる」の効果"
-   ]
+   "unsupported": []
   },
   "49291": {
    "name": "ノココッチex",
@@ -16209,7 +16172,8 @@
        "count": 1
       }
      ],
-     "damage_type": "multiply"
+     "damage_type": "multiply",
+     "bonus_condition": "opp_field_ex_count"
     },
     {
      "name": "ドリルブレイク",
@@ -16220,13 +16184,12 @@
        "type": "colorless",
        "count": 3
       }
-     ]
+     ],
+     "ignore_defender_effects": true
     }
    ],
    "printing": "MC 575/742",
-   "unsupported": [
-    "ワザ「ぎゃっきょうテール」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49309": {
    "name": "ミミロル",
@@ -16258,7 +16221,9 @@
        "type": "colorless",
        "count": 1
       }
-     ]
+     ],
+     "effect": "opp_attack_down_next",
+     "effect_value": 20
     },
     {
      "name": "スキップ",
@@ -16273,9 +16238,7 @@
     }
    ],
    "printing": "MC 593/742",
-   "unsupported": [
-    "ワザ「あまえる」の効果"
-   ]
+   "unsupported": []
   },
   "49341": {
    "name": "ガチグマ アカツキex",
@@ -16313,18 +16276,19 @@
   "49347": {
    "name": "アイアンディフェンダー",
    "category": "goods",
-   "effect_id": 0,
+   "effect_id": 141,
    "effect_value": 0,
    "printing": "MC 631/742",
-   "unsupported": [
-    "「アイアンディフェンダー」の効果"
-   ]
+   "unsupported": []
   },
   "49349": {
    "name": "アンフェアスタンプ",
    "category": "goods",
    "effect_id": 5,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MC 633/742",
    "unsupported": []
   },
@@ -16366,9 +16330,7 @@
    "effect_id": 12,
    "effect_value": 0,
    "printing": "MC 652/742",
-   "unsupported": [
-    "「パワープロテイン」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49370": {
    "name": "ファイトゴング",
@@ -16376,27 +16338,29 @@
    "effect_id": 53,
    "effect_value": 0,
    "printing": "MC 654/742",
-   "unsupported": [
-    "「ファイトゴング」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49372": {
    "name": "プライムキャッチャー",
    "category": "goods",
    "effect_id": 110,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MC 656/742",
    "unsupported": []
   },
   "49374": {
    "name": "プレシャスキャリー",
    "category": "goods",
-   "effect_id": 0,
+   "effect_id": 140,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MC 658/742",
-   "unsupported": [
-    "「プレシャスキャリー」の効果"
-   ]
+   "unsupported": []
   },
   "49376": {
    "name": "ポケギア3.0",
@@ -16461,10 +16425,11 @@
    "effect_id": 73,
    "effect_value": 0,
    "tool": true,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MC 687/742",
-   "unsupported": [
-    "「ヒーローマント」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49404": {
    "name": "ふうせん",
@@ -16490,6 +16455,9 @@
    "effect_id": 4,
    "effect_value": 30,
    "tool": true,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MC 691/742",
    "unsupported": []
   },
@@ -16655,6 +16623,9 @@
    "category": "energy",
    "effect_id": 0,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MC 740/742",
    "unsupported": []
   },
@@ -16663,6 +16634,9 @@
    "category": "energy",
    "effect_id": 93,
    "effect_value": 0,
+   "engine": {
+    "is_ace_spec": true
+   },
    "printing": "MC 741/742",
    "unsupported": []
   },
@@ -17165,7 +17139,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "metal_signal",
    "ability_name": "メタルシグナル",
    "attacks": [
     {
@@ -17187,10 +17161,7 @@
     }
    ],
    "printing": "MC 512/742",
-   "unsupported": [
-    "特性「メタルシグナル」",
-    "ワザ「プロテクトチャージ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49558": {
    "name": "ミミロル",
@@ -17222,7 +17193,9 @@
        "type": "colorless",
        "count": 1
       }
-     ]
+     ],
+     "effect": "opp_attack_down_next",
+     "effect_value": 20
     },
     {
      "name": "スキップ",
@@ -17237,9 +17210,7 @@
     }
    ],
    "printing": "MC 593/742",
-   "unsupported": [
-    "ワザ「あまえる」の効果"
-   ]
+   "unsupported": []
   },
   "49570": {
    "name": "なかよしポフィン",
@@ -17561,9 +17532,7 @@
    "effect_id": 43,
    "effect_value": 0,
    "printing": "M3 075/080",
-   "unsupported": [
-    "「メイのはげまし」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49710": {
    "name": "ミアレシティ",
@@ -17596,12 +17565,10 @@
   "49713": {
    "name": "ロック闘エネルギー",
    "category": "energy",
-   "effect_id": 0,
+   "effect_id": 149,
    "effect_value": 0,
    "printing": "M3 080/080",
-   "unsupported": [
-    "「ロック闘エネルギー」の効果"
-   ]
+   "unsupported": []
   },
   "49728": {
    "name": "シェイミ",
@@ -17723,6 +17690,10 @@
    "family": [],
    "ability": "luna_cycle",
    "ability_name": "ルナサイクル",
+   "engine": {
+    "field_tag": 2,
+    "ability_needs_field_tag": 1
+   },
    "attacks": [
     {
      "name": "パワージェム",
@@ -17737,9 +17708,7 @@
     }
    ],
    "printing": "M2a 086/193",
-   "unsupported": [
-    "特性「ルナサイクル」の一部"
-   ]
+   "unsupported": []
   },
   "49790": {
    "name": "ソルロック",
@@ -17757,6 +17726,9 @@
    "family": [],
    "ability": "",
    "ability_name": "",
+   "engine": {
+    "field_tag": 1
+   },
    "attacks": [
     {
      "name": "コスモビーム",
@@ -17767,13 +17739,13 @@
        "type": "fighting",
        "count": 1
       }
-     ]
+     ],
+     "needs_bench_tag": 2,
+     "ignore_weakness": true
     }
    ],
    "printing": "M2a 087/193",
-   "unsupported": [
-    "ワザ「コスモビーム」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49793": {
    "name": "リオル",
@@ -17853,9 +17825,7 @@
     }
    ],
    "printing": "M2a 133/193",
-   "unsupported": [
-    "特性「ていさつしれい」の一部"
-   ]
+   "unsupported": []
   },
   "49846": {
    "name": "シェイミ",
@@ -18464,9 +18434,7 @@
     }
    ],
    "printing": "M2a 212/193",
-   "unsupported": [
-    "特性「ていさつしれい」の一部"
-   ]
+   "unsupported": []
   },
   "49973": {
    "name": "スピンロトム",
@@ -18494,14 +18462,12 @@
        "type": "colorless",
        "count": 1
       }
-     ]
+     ],
+     "needs_stadium": true
     }
    ],
    "printing": "M2a 213/193",
-   "unsupported": [
-    "特性「ファンコール」の一部",
-    "ワザ「とつげきランディング」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49974": {
    "name": "Nのポイントアップ",
@@ -18637,9 +18603,8 @@
        "count": 1
       }
      ],
-     "damage_type": "plus",
-     "bonus_condition": "opponent_prizes_taken",
-     "bonus_multiplier": 50
+     "damage_type": "multiply",
+     "bonus_condition": "opp_hand_count"
     },
     {
      "name": "アブソリュートスノー",
@@ -19041,9 +19006,7 @@
    "effect_id": 43,
    "effect_value": 0,
    "printing": "M3 107/080",
-   "unsupported": [
-    "「メイのはげまし」の効果の一部"
-   ]
+   "unsupported": []
   },
   "50076": {
    "name": "活力の森",
@@ -19092,9 +19055,7 @@
    "effect_id": 43,
    "effect_value": 0,
    "printing": "M3 115/080",
-   "unsupported": [
-    "「メイのはげまし」の効果の一部"
-   ]
+   "unsupported": []
   },
   "50116": {
    "name": "デオキシス",
@@ -19213,7 +19174,8 @@
        "type": "steel",
        "count": 1
       }
-     ]
+     ],
+     "effect": "opp_switch"
     },
     {
      "name": "メタリックハンマー",
@@ -19237,9 +19199,7 @@
     }
    ],
    "printing": "M4 059/083",
-   "unsupported": [
-    "ワザ「はねかえす」の効果の一部"
-   ]
+   "unsupported": []
   },
   "50152": {
    "name": "ミネズミ",
@@ -19307,12 +19267,10 @@
   "50166": {
    "name": "バブル水エネルギー",
    "category": "energy",
-   "effect_id": 0,
+   "effect_id": 142,
    "effect_value": 0,
    "printing": "M4 082/083",
-   "unsupported": [
-    "「バブル水エネルギー」の効果"
-   ]
+   "unsupported": []
   },
   "50171": {
    "name": "ポケパッド",
@@ -19691,7 +19649,9 @@
        "type": "colorless",
        "count": 1
       }
-     ]
+     ],
+     "effect": "search_basics_to_bench",
+     "effect_value": 2
     },
     {
      "name": "ツメをたてる",
@@ -19706,9 +19666,7 @@
     }
    ],
    "printing": "M5 044/081",
-   "unsupported": [
-    "ワザ「なかまをよぶ」の効果"
-   ]
+   "unsupported": []
   },
   "50276": {
    "name": "イーユイ",
@@ -19778,7 +19736,9 @@
        "type": "steel",
        "count": 2
       }
-     ]
+     ],
+     "effect": "mill_opp",
+     "effect_value": 2
     },
     {
      "name": "マキシマムドリル",
@@ -19791,14 +19751,13 @@
       }
      ],
      "damage_type": "plus",
-     "bonus_amount": 130
+     "bonus_condition": "extra_energy_at_least",
+     "bonus_amount": 130,
+     "bonus_threshold": 2
     }
    ],
    "printing": "M5 063/081",
-   "unsupported": [
-    "ワザ「ほりくずす」の効果の一部",
-    "ワザ「マキシマムドリル」の効果の一部"
-   ]
+   "unsupported": []
   },
   "50283": {
    "name": "ツツケラ",
@@ -19998,7 +19957,9 @@
        "type": "steel",
        "count": 2
       }
-     ]
+     ],
+     "effect": "mill_opp",
+     "effect_value": 2
     },
     {
      "name": "マキシマムドリル",
@@ -20011,24 +19972,21 @@
       }
      ],
      "damage_type": "plus",
-     "bonus_amount": 130
+     "bonus_condition": "extra_energy_at_least",
+     "bonus_amount": 130,
+     "bonus_threshold": 2
     }
    ],
    "printing": "M5 101/081",
-   "unsupported": [
-    "ワザ「ほりくずす」の効果の一部",
-    "ワザ「マキシマムドリル」の効果の一部"
-   ]
+   "unsupported": []
   },
   "50322": {
    "name": "アイアンディフェンダー",
    "category": "goods",
-   "effect_id": 0,
+   "effect_id": 141,
    "effect_value": 0,
    "printing": "M5 102/081",
-   "unsupported": [
-    "「アイアンディフェンダー」の効果"
-   ]
+   "unsupported": []
   },
   "50323": {
    "name": "エネルギーつけかえ",
@@ -20349,9 +20307,7 @@
    "effect_id": 6,
    "effect_value": 0,
    "printing": "MEM 011/017",
-   "unsupported": [
-    "「ふしぎなアメ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "50463": {
    "name": "ポケパッド",
@@ -20601,12 +20557,10 @@
   "50547": {
    "name": "バブル水エネルギー",
    "category": "energy",
-   "effect_id": 0,
+   "effect_id": 142,
    "effect_value": 0,
    "printing": "M6 106/076",
-   "unsupported": [
-    "「バブル水エネルギー」の効果"
-   ]
+   "unsupported": []
   },
   "50596": {
    "name": "クラッシュハンマー",
@@ -20858,258 +20812,258 @@
  "winrateMatrix": {
   "dragapult": {
    "dragapult": 0.5,
-   "bakegakure": 0.624,
-   "yadoking": 0.537,
-   "zoroark_n": 0.454,
-   "kamitsuorochi_ex": 0.303,
-   "omaturi_ondo": 0.573,
-   "mega_lucario": 0.335,
-   "arboliva": 0.329,
-   "strinder_bullet": 0.56,
-   "ogapon_bullet": 0.432,
-   "takeru_raiko": 0.5,
-   "mega_mimilop": 0.607,
-   "hoodini": 0.552,
-   "mega_fushigibana": 0.389,
-   "mega_doryuzu": 0.63
+   "bakegakure": 0.68,
+   "yadoking": 0.66,
+   "zoroark_n": 0.531,
+   "kamitsuorochi_ex": 0.435,
+   "omaturi_ondo": 0.621,
+   "mega_lucario": 0.374,
+   "arboliva": 0.436,
+   "strinder_bullet": 0.615,
+   "ogapon_bullet": 0.57,
+   "takeru_raiko": 0.64,
+   "mega_mimilop": 0.458,
+   "hoodini": 0.429,
+   "mega_fushigibana": 0.519,
+   "mega_doryuzu": 0.216
   },
   "bakegakure": {
    "bakegakure": 0.5,
-   "dragapult": 0.376,
-   "yadoking": 0.381,
-   "zoroark_n": 0.297,
-   "kamitsuorochi_ex": 0.135,
-   "omaturi_ondo": 0.435,
-   "mega_lucario": 0.611,
-   "arboliva": 0.161,
-   "strinder_bullet": 0.417,
-   "ogapon_bullet": 0.248,
-   "takeru_raiko": 0.367,
-   "mega_mimilop": 0.372,
-   "hoodini": 0.337,
-   "mega_fushigibana": 0.177,
-   "mega_doryuzu": 0.331
+   "dragapult": 0.32,
+   "yadoking": 0.501,
+   "zoroark_n": 0.313,
+   "kamitsuorochi_ex": 0.204,
+   "omaturi_ondo": 0.446,
+   "mega_lucario": 0.514,
+   "arboliva": 0.231,
+   "strinder_bullet": 0.436,
+   "ogapon_bullet": 0.393,
+   "takeru_raiko": 0.507,
+   "mega_mimilop": 0.249,
+   "hoodini": 0.25,
+   "mega_fushigibana": 0.279,
+   "mega_doryuzu": 0.116
   },
   "yadoking": {
    "yadoking": 0.5,
-   "dragapult": 0.463,
-   "bakegakure": 0.619,
-   "zoroark_n": 0.408,
-   "kamitsuorochi_ex": 0.171,
-   "omaturi_ondo": 0.411,
-   "mega_lucario": 0.438,
-   "arboliva": 0.214,
-   "strinder_bullet": 0.536,
-   "ogapon_bullet": 0.324,
-   "takeru_raiko": 0.396,
-   "mega_mimilop": 0.465,
-   "hoodini": 0.297,
-   "mega_fushigibana": 0.267,
-   "mega_doryuzu": 0.555
+   "dragapult": 0.34,
+   "bakegakure": 0.499,
+   "zoroark_n": 0.417,
+   "kamitsuorochi_ex": 0.177,
+   "omaturi_ondo": 0.417,
+   "mega_lucario": 0.385,
+   "arboliva": 0.203,
+   "strinder_bullet": 0.5,
+   "ogapon_bullet": 0.321,
+   "takeru_raiko": 0.415,
+   "mega_mimilop": 0.267,
+   "hoodini": 0.188,
+   "mega_fushigibana": 0.26,
+   "mega_doryuzu": 0.103
   },
   "zoroark_n": {
    "zoroark_n": 0.5,
-   "dragapult": 0.546,
-   "bakegakure": 0.703,
-   "yadoking": 0.592,
-   "kamitsuorochi_ex": 0.214,
-   "omaturi_ondo": 0.371,
-   "mega_lucario": 0.418,
-   "arboliva": 0.271,
-   "strinder_bullet": 0.663,
-   "ogapon_bullet": 0.426,
-   "takeru_raiko": 0.54,
-   "mega_mimilop": 0.528,
-   "hoodini": 0.49,
-   "mega_fushigibana": 0.287,
-   "mega_doryuzu": 0.614
+   "dragapult": 0.469,
+   "bakegakure": 0.687,
+   "yadoking": 0.583,
+   "kamitsuorochi_ex": 0.222,
+   "omaturi_ondo": 0.389,
+   "mega_lucario": 0.349,
+   "arboliva": 0.282,
+   "strinder_bullet": 0.674,
+   "ogapon_bullet": 0.439,
+   "takeru_raiko": 0.548,
+   "mega_mimilop": 0.355,
+   "hoodini": 0.44,
+   "mega_fushigibana": 0.3,
+   "mega_doryuzu": 0.227
   },
   "kamitsuorochi_ex": {
    "kamitsuorochi_ex": 0.5,
-   "dragapult": 0.697,
-   "bakegakure": 0.865,
-   "yadoking": 0.829,
-   "zoroark_n": 0.786,
-   "omaturi_ondo": 0.724,
-   "mega_lucario": 0.551,
-   "arboliva": 0.561,
-   "strinder_bullet": 0.886,
-   "ogapon_bullet": 0.638,
-   "takeru_raiko": 0.714,
-   "mega_mimilop": 0.791,
-   "hoodini": 0.652,
-   "mega_fushigibana": 0.604,
-   "mega_doryuzu": 0.838
+   "dragapult": 0.565,
+   "bakegakure": 0.796,
+   "yadoking": 0.823,
+   "zoroark_n": 0.778,
+   "omaturi_ondo": 0.731,
+   "mega_lucario": 0.528,
+   "arboliva": 0.555,
+   "strinder_bullet": 0.878,
+   "ogapon_bullet": 0.639,
+   "takeru_raiko": 0.725,
+   "mega_mimilop": 0.618,
+   "hoodini": 0.594,
+   "mega_fushigibana": 0.598,
+   "mega_doryuzu": 0.365
   },
   "omaturi_ondo": {
    "omaturi_ondo": 0.5,
-   "dragapult": 0.427,
-   "bakegakure": 0.565,
-   "yadoking": 0.589,
-   "zoroark_n": 0.629,
-   "kamitsuorochi_ex": 0.276,
-   "mega_lucario": 0.339,
-   "arboliva": 0.274,
-   "strinder_bullet": 0.598,
-   "ogapon_bullet": 0.375,
-   "takeru_raiko": 0.423,
-   "mega_mimilop": 0.398,
-   "hoodini": 0.466,
-   "mega_fushigibana": 0.374,
-   "mega_doryuzu": 0.377
+   "dragapult": 0.379,
+   "bakegakure": 0.554,
+   "yadoking": 0.583,
+   "zoroark_n": 0.611,
+   "kamitsuorochi_ex": 0.269,
+   "mega_lucario": 0.316,
+   "arboliva": 0.268,
+   "strinder_bullet": 0.585,
+   "ogapon_bullet": 0.34,
+   "takeru_raiko": 0.419,
+   "mega_mimilop": 0.275,
+   "hoodini": 0.293,
+   "mega_fushigibana": 0.364,
+   "mega_doryuzu": 0.079
   },
   "mega_lucario": {
    "mega_lucario": 0.5,
-   "dragapult": 0.665,
-   "bakegakure": 0.389,
-   "yadoking": 0.562,
-   "zoroark_n": 0.582,
-   "kamitsuorochi_ex": 0.449,
-   "omaturi_ondo": 0.661,
-   "arboliva": 0.494,
-   "strinder_bullet": 0.779,
+   "dragapult": 0.626,
+   "bakegakure": 0.486,
+   "yadoking": 0.615,
+   "zoroark_n": 0.651,
+   "kamitsuorochi_ex": 0.472,
+   "omaturi_ondo": 0.684,
+   "arboliva": 0.491,
+   "strinder_bullet": 0.78,
    "ogapon_bullet": 0.561,
-   "takeru_raiko": 0.624,
-   "mega_mimilop": 0.735,
-   "hoodini": 0.407,
-   "mega_fushigibana": 0.525,
-   "mega_doryuzu": 0.744
+   "takeru_raiko": 0.656,
+   "mega_mimilop": 0.691,
+   "hoodini": 0.48,
+   "mega_fushigibana": 0.548,
+   "mega_doryuzu": 0.384
   },
   "arboliva": {
    "arboliva": 0.5,
-   "dragapult": 0.671,
-   "bakegakure": 0.839,
-   "yadoking": 0.786,
-   "zoroark_n": 0.729,
-   "kamitsuorochi_ex": 0.439,
-   "omaturi_ondo": 0.726,
-   "mega_lucario": 0.506,
+   "dragapult": 0.564,
+   "bakegakure": 0.769,
+   "yadoking": 0.797,
+   "zoroark_n": 0.718,
+   "kamitsuorochi_ex": 0.445,
+   "omaturi_ondo": 0.732,
+   "mega_lucario": 0.509,
    "strinder_bullet": 0.859,
-   "ogapon_bullet": 0.59,
-   "takeru_raiko": 0.681,
-   "mega_mimilop": 0.744,
-   "hoodini": 0.552,
-   "mega_fushigibana": 0.542,
-   "mega_doryuzu": 0.802
+   "ogapon_bullet": 0.588,
+   "takeru_raiko": 0.688,
+   "mega_mimilop": 0.552,
+   "hoodini": 0.489,
+   "mega_fushigibana": 0.54,
+   "mega_doryuzu": 0.328
   },
   "strinder_bullet": {
    "strinder_bullet": 0.5,
-   "dragapult": 0.44,
-   "bakegakure": 0.583,
-   "yadoking": 0.464,
-   "zoroark_n": 0.337,
-   "kamitsuorochi_ex": 0.114,
-   "omaturi_ondo": 0.402,
-   "mega_lucario": 0.221,
+   "dragapult": 0.385,
+   "bakegakure": 0.564,
+   "yadoking": 0.5,
+   "zoroark_n": 0.326,
+   "kamitsuorochi_ex": 0.122,
+   "omaturi_ondo": 0.415,
+   "mega_lucario": 0.22,
    "arboliva": 0.141,
-   "ogapon_bullet": 0.222,
-   "takeru_raiko": 0.329,
-   "mega_mimilop": 0.326,
-   "hoodini": 0.377,
-   "mega_fushigibana": 0.193,
-   "mega_doryuzu": 0.449
+   "ogapon_bullet": 0.238,
+   "takeru_raiko": 0.347,
+   "mega_mimilop": 0.239,
+   "hoodini": 0.356,
+   "mega_fushigibana": 0.177,
+   "mega_doryuzu": 0.063
   },
   "ogapon_bullet": {
    "ogapon_bullet": 0.5,
-   "dragapult": 0.568,
-   "bakegakure": 0.752,
-   "yadoking": 0.676,
-   "zoroark_n": 0.574,
-   "kamitsuorochi_ex": 0.362,
-   "omaturi_ondo": 0.625,
+   "dragapult": 0.43,
+   "bakegakure": 0.607,
+   "yadoking": 0.679,
+   "zoroark_n": 0.561,
+   "kamitsuorochi_ex": 0.361,
+   "omaturi_ondo": 0.66,
    "mega_lucario": 0.439,
-   "arboliva": 0.41,
-   "strinder_bullet": 0.778,
-   "takeru_raiko": 0.578,
-   "mega_mimilop": 0.619,
-   "hoodini": 0.482,
-   "mega_fushigibana": 0.447,
-   "mega_doryuzu": 0.679
+   "arboliva": 0.412,
+   "strinder_bullet": 0.762,
+   "takeru_raiko": 0.584,
+   "mega_mimilop": 0.443,
+   "hoodini": 0.392,
+   "mega_fushigibana": 0.431,
+   "mega_doryuzu": 0.194
   },
   "takeru_raiko": {
    "takeru_raiko": 0.5,
-   "dragapult": 0.5,
-   "bakegakure": 0.633,
-   "yadoking": 0.604,
-   "zoroark_n": 0.46,
-   "kamitsuorochi_ex": 0.286,
-   "omaturi_ondo": 0.577,
-   "mega_lucario": 0.376,
-   "arboliva": 0.319,
-   "strinder_bullet": 0.671,
-   "ogapon_bullet": 0.422,
-   "mega_mimilop": 0.548,
-   "hoodini": 0.454,
-   "mega_fushigibana": 0.355,
-   "mega_doryuzu": 0.603
+   "dragapult": 0.36,
+   "bakegakure": 0.493,
+   "yadoking": 0.585,
+   "zoroark_n": 0.452,
+   "kamitsuorochi_ex": 0.275,
+   "omaturi_ondo": 0.581,
+   "mega_lucario": 0.344,
+   "arboliva": 0.312,
+   "strinder_bullet": 0.653,
+   "ogapon_bullet": 0.416,
+   "mega_mimilop": 0.391,
+   "hoodini": 0.398,
+   "mega_fushigibana": 0.347,
+   "mega_doryuzu": 0.192
   },
   "mega_mimilop": {
    "mega_mimilop": 0.5,
-   "dragapult": 0.393,
-   "bakegakure": 0.628,
-   "yadoking": 0.535,
-   "zoroark_n": 0.472,
-   "kamitsuorochi_ex": 0.209,
-   "omaturi_ondo": 0.602,
-   "mega_lucario": 0.265,
-   "arboliva": 0.256,
-   "strinder_bullet": 0.674,
-   "ogapon_bullet": 0.381,
-   "takeru_raiko": 0.452,
-   "hoodini": 0.201,
-   "mega_fushigibana": 0.296,
-   "mega_doryuzu": 0.474
+   "dragapult": 0.542,
+   "bakegakure": 0.751,
+   "yadoking": 0.733,
+   "zoroark_n": 0.645,
+   "kamitsuorochi_ex": 0.382,
+   "omaturi_ondo": 0.725,
+   "mega_lucario": 0.309,
+   "arboliva": 0.448,
+   "strinder_bullet": 0.761,
+   "ogapon_bullet": 0.557,
+   "takeru_raiko": 0.609,
+   "hoodini": 0.443,
+   "mega_fushigibana": 0.5,
+   "mega_doryuzu": 0.162
   },
   "hoodini": {
    "hoodini": 0.5,
-   "dragapult": 0.448,
-   "bakegakure": 0.663,
-   "yadoking": 0.703,
-   "zoroark_n": 0.51,
-   "kamitsuorochi_ex": 0.348,
-   "omaturi_ondo": 0.534,
-   "mega_lucario": 0.593,
-   "arboliva": 0.448,
-   "strinder_bullet": 0.623,
-   "ogapon_bullet": 0.518,
-   "takeru_raiko": 0.546,
-   "mega_mimilop": 0.799,
-   "mega_fushigibana": 0.432,
-   "mega_doryuzu": 0.727
+   "dragapult": 0.571,
+   "bakegakure": 0.75,
+   "yadoking": 0.812,
+   "zoroark_n": 0.56,
+   "kamitsuorochi_ex": 0.406,
+   "omaturi_ondo": 0.707,
+   "mega_lucario": 0.52,
+   "arboliva": 0.511,
+   "strinder_bullet": 0.644,
+   "ogapon_bullet": 0.608,
+   "takeru_raiko": 0.602,
+   "mega_mimilop": 0.557,
+   "mega_fushigibana": 0.465,
+   "mega_doryuzu": 0.383
   },
   "mega_fushigibana": {
    "mega_fushigibana": 0.5,
-   "dragapult": 0.611,
-   "bakegakure": 0.823,
-   "yadoking": 0.733,
-   "zoroark_n": 0.713,
-   "kamitsuorochi_ex": 0.396,
-   "omaturi_ondo": 0.626,
-   "mega_lucario": 0.475,
-   "arboliva": 0.458,
-   "strinder_bullet": 0.807,
-   "ogapon_bullet": 0.553,
-   "takeru_raiko": 0.645,
-   "mega_mimilop": 0.704,
-   "hoodini": 0.568,
-   "mega_doryuzu": 0.752
+   "dragapult": 0.481,
+   "bakegakure": 0.721,
+   "yadoking": 0.74,
+   "zoroark_n": 0.7,
+   "kamitsuorochi_ex": 0.402,
+   "omaturi_ondo": 0.636,
+   "mega_lucario": 0.452,
+   "arboliva": 0.46,
+   "strinder_bullet": 0.823,
+   "ogapon_bullet": 0.569,
+   "takeru_raiko": 0.653,
+   "mega_mimilop": 0.5,
+   "hoodini": 0.535,
+   "mega_doryuzu": 0.311
   },
   "mega_doryuzu": {
    "mega_doryuzu": 0.5,
-   "dragapult": 0.37,
-   "bakegakure": 0.669,
-   "yadoking": 0.445,
-   "zoroark_n": 0.386,
-   "kamitsuorochi_ex": 0.162,
-   "omaturi_ondo": 0.623,
-   "mega_lucario": 0.256,
-   "arboliva": 0.198,
-   "strinder_bullet": 0.551,
-   "ogapon_bullet": 0.321,
-   "takeru_raiko": 0.397,
-   "mega_mimilop": 0.526,
-   "hoodini": 0.273,
-   "mega_fushigibana": 0.248
+   "dragapult": 0.784,
+   "bakegakure": 0.884,
+   "yadoking": 0.897,
+   "zoroark_n": 0.773,
+   "kamitsuorochi_ex": 0.635,
+   "omaturi_ondo": 0.921,
+   "mega_lucario": 0.616,
+   "arboliva": 0.672,
+   "strinder_bullet": 0.937,
+   "ogapon_bullet": 0.806,
+   "takeru_raiko": 0.808,
+   "mega_mimilop": 0.838,
+   "hoodini": 0.617,
+   "mega_fushigibana": 0.689
   }
  }
 }
