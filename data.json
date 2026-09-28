@@ -5593,7 +5593,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "shihai_no_kusari",
    "ability_name": "しはいのくさり",
    "attacks": [
     {
@@ -5612,10 +5612,7 @@
     }
    ],
    "printing": "SV6a 039/064",
-   "unsupported": [
-    "特性「しはいのくさり」",
-    "ワザ「イライラバースト」の効果の一部"
-   ]
+   "unsupported": []
   },
   "45915": {
    "name": "ゲノセクト",
@@ -5711,13 +5708,11 @@
   "45932": {
    "name": "くさりもち",
    "category": "tool",
-   "effect_id": 0,
+   "effect_id": 80,
    "effect_value": 0,
    "tool": true,
    "printing": "SV6a 057/064",
-   "unsupported": [
-    "「くさりもち」の効果"
-   ]
+   "unsupported": []
   },
   "45937": {
    "name": "クセロシキのたくらみ",
@@ -6120,7 +6115,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "shihai_no_kusari",
    "ability_name": "しはいのくさり",
    "attacks": [
     {
@@ -6139,10 +6134,7 @@
     }
    ],
    "printing": "SV6a 082/064",
-   "unsupported": [
-    "特性「しはいのくさり」",
-    "ワザ「イライラバースト」の効果の一部"
-   ]
+   "unsupported": []
   },
   "46063": {
    "name": "クセロシキのたくらみ",
@@ -6203,7 +6195,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "shihai_no_kusari",
    "ability_name": "しはいのくさり",
    "attacks": [
     {
@@ -6222,10 +6214,7 @@
     }
    ],
    "printing": "SV6a 090/064",
-   "unsupported": [
-    "特性「しはいのくさり」",
-    "ワザ「イライラバースト」の効果の一部"
-   ]
+   "unsupported": []
   },
   "46069": {
    "name": "モモワロウex",
@@ -6241,7 +6230,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "shihai_no_kusari",
    "ability_name": "しはいのくさり",
    "attacks": [
     {
@@ -6260,10 +6249,7 @@
     }
    ],
    "printing": "SV6a 092/064",
-   "unsupported": [
-    "特性「しはいのくさり」",
-    "ワザ「イライラバースト」の効果の一部"
-   ]
+   "unsupported": []
   },
   "46091": {
    "name": "ハイパーボール",
@@ -6851,12 +6837,10 @@
   "46446": {
    "name": "グラビティーマウンテン",
    "category": "stadium",
-   "effect_id": 0,
+   "effect_id": 83,
    "effect_value": 0,
    "printing": "SV8 106/106",
-   "unsupported": [
-    "「グラビティーマウンテン」の効果"
-   ]
+   "unsupported": []
   },
   "46451": {
    "name": "ボスの指令",
@@ -7096,12 +7080,10 @@
   "46661": {
    "name": "グラビティーマウンテン",
    "category": "stadium",
-   "effect_id": 0,
+   "effect_id": 83,
    "effect_value": 0,
    "printing": "SV8 138/106",
-   "unsupported": [
-    "「グラビティーマウンテン」の効果"
-   ]
+   "unsupported": []
   },
   "46662": {
    "name": "スボミー",
@@ -7739,7 +7721,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "shihai_no_kusari",
    "ability_name": "しはいのくさり",
    "attacks": [
     {
@@ -7758,10 +7740,7 @@
     }
    ],
    "printing": "SV8a 105/187",
-   "unsupported": [
-    "特性「しはいのくさり」",
-    "ワザ「イライラバースト」の効果の一部"
-   ]
+   "unsupported": []
   },
   "46768": {
    "name": "メタング",
@@ -8067,13 +8046,11 @@
   "46815": {
    "name": "くさりもち",
    "category": "tool",
-   "effect_id": 0,
+   "effect_id": 80,
    "effect_value": 0,
    "tool": true,
    "printing": "SV8a 154/187",
-   "unsupported": [
-    "「くさりもち」の効果"
-   ]
+   "unsupported": []
   },
   "46826": {
    "name": "暗号マニアの解読",
@@ -8675,13 +8652,11 @@
   "46962": {
    "name": "くさりもち",
    "category": "tool",
-   "effect_id": 0,
+   "effect_id": 80,
    "effect_value": 0,
    "tool": true,
    "printing": "SV8a 154/187",
-   "unsupported": [
-    "「くさりもち」の効果"
-   ]
+   "unsupported": []
   },
   "46970": {
    "name": "アカマツ",
@@ -8983,9 +8958,7 @@
     }
    ],
    "printing": "SV9 061/100",
-   "unsupported": [
-    "ワザ「ナイトジョーカー」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47082": {
    "name": "Nのレシラム",
@@ -9043,9 +9016,7 @@
     }
    ],
    "printing": "SV9 074/100",
-   "unsupported": [
-    "ワザ「パワーレイジ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47086": {
    "name": "ノコッチ",
@@ -9149,12 +9120,10 @@
   "47097": {
    "name": "Nのポイントアップ",
    "category": "goods",
-   "effect_id": 0,
+   "effect_id": 82,
    "effect_value": 0,
    "printing": "SV9 089/100",
-   "unsupported": [
-    "「Nのポイントアップ」の効果"
-   ]
+   "unsupported": []
   },
   "47102": {
    "name": "アイリスの闘志",
@@ -9177,12 +9146,10 @@
   "47105": {
    "name": "Nの城",
    "category": "stadium",
-   "effect_id": 0,
+   "effect_id": 84,
    "effect_value": 0,
    "printing": "SV9 097/100",
-   "unsupported": [
-    "「Nの城」の効果"
-   ]
+   "unsupported": []
   },
   "47118": {
    "name": "ビワ",
@@ -9333,7 +9300,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "shihai_no_kusari",
    "ability_name": "しはいのくさり",
    "attacks": [
     {
@@ -9352,10 +9319,7 @@
     }
    ],
    "printing": "SV8a 219/187",
-   "unsupported": [
-    "特性「しはいのくさり」",
-    "ワザ「イライラバースト」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47142": {
    "name": "ドラパルトex",
@@ -9510,12 +9474,10 @@
   "47149": {
    "name": "アンズの秘技",
    "category": "supporter",
-   "effect_id": 0,
+   "effect_id": 81,
    "effect_value": 0,
    "printing": "SV8a 228/187",
-   "unsupported": [
-    "「アンズの秘技」の効果"
-   ]
+   "unsupported": []
   },
   "47165": {
    "name": "Nのゾロア",
@@ -9778,9 +9740,7 @@
     }
    ],
    "printing": "SV9 109/100",
-   "unsupported": [
-    "ワザ「パワーレイジ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47235": {
    "name": "リーリエのピッピex",
@@ -9856,9 +9816,7 @@
     }
    ],
    "printing": "SV9 117/100",
-   "unsupported": [
-    "ワザ「ナイトジョーカー」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47240": {
    "name": "ノココッチex",
@@ -9992,9 +9950,7 @@
     }
    ],
    "printing": "SV9 127/100",
-   "unsupported": [
-    "ワザ「ナイトジョーカー」の効果の一部"
-   ]
+   "unsupported": []
   },
   "47277": {
    "name": "ダイゴのメタング",
@@ -14307,9 +14263,7 @@
     }
    ],
    "printing": "M2a 112/193",
-   "unsupported": [
-    "ワザ「ナイトジョーカー」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48636": {
    "name": "キチキギスex",
@@ -14404,9 +14358,7 @@
     }
    ],
    "printing": "M2a 128/193",
-   "unsupported": [
-    "ワザ「パワーレイジ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48651": {
    "name": "Nのゼクロム",
@@ -14454,13 +14406,11 @@
        "count": 1
       }
      ],
-     "effect": "cant_use_next"
+     "effect": "cant_attack_next"
     }
    ],
    "printing": "M2a 129/193",
-   "unsupported": [
-    "ワザ「ランページサンダー」の効果の一部"
-   ]
+   "unsupported": []
   },
   "48657": {
    "name": "シャリタツ",
@@ -14536,12 +14486,10 @@
   "48668": {
    "name": "Nのポイントアップ",
    "category": "goods",
-   "effect_id": 0,
+   "effect_id": 82,
    "effect_value": 0,
    "printing": "M2a 146/193",
-   "unsupported": [
-    "「Nのポイントアップ」の効果"
-   ]
+   "unsupported": []
   },
   "48669": {
    "name": "エネルギーリサイクル",
@@ -14678,12 +14626,10 @@
   "48703": {
    "name": "Nの城",
    "category": "stadium",
-   "effect_id": 0,
+   "effect_id": 84,
    "effect_value": 0,
    "printing": "M2a 181/193",
-   "unsupported": [
-    "「Nの城」の効果"
-   ]
+   "unsupported": []
   },
   "48704": {
    "name": "活力の森",
@@ -14698,12 +14644,10 @@
   "48705": {
    "name": "グラビティーマウンテン",
    "category": "stadium",
-   "effect_id": 0,
+   "effect_id": 83,
    "effect_value": 0,
    "printing": "M2a 183/193",
-   "unsupported": [
-    "「グラビティーマウンテン」の効果"
-   ]
+   "unsupported": []
   },
   "48706": {
    "name": "ゼロの大空洞",
@@ -15968,7 +15912,7 @@
    "prize_cost": 2,
    "is_terastal": false,
    "family": [],
-   "ability": "",
+   "ability": "shihai_no_kusari",
    "ability_name": "しはいのくさり",
    "attacks": [
     {
@@ -15987,10 +15931,7 @@
     }
    ],
    "printing": "MC 491/742",
-   "unsupported": [
-    "特性「しはいのくさり」",
-    "ワザ「イライラバースト」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49212": {
    "name": "ダンバル",
@@ -16188,9 +16129,7 @@
     }
    ],
    "printing": "MC 545/742",
-   "unsupported": [
-    "ワザ「パワーレイジ」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49262": {
    "name": "ドラメシヤ",
@@ -16764,13 +16703,11 @@
   "49397": {
    "name": "くさりもち",
    "category": "tool",
-   "effect_id": 0,
+   "effect_id": 80,
    "effect_value": 0,
    "tool": true,
    "printing": "MC 681/742",
-   "unsupported": [
-    "「くさりもち」の効果"
-   ]
+   "unsupported": []
   },
   "49403": {
    "name": "ヒーローマント",
@@ -16842,12 +16779,10 @@
   "49415": {
    "name": "アンズの秘技",
    "category": "supporter",
-   "effect_id": 0,
+   "effect_id": 81,
    "effect_value": 0,
    "printing": "MC 699/742",
-   "unsupported": [
-    "「アンズの秘技」の効果"
-   ]
+   "unsupported": []
   },
   "49417": {
    "name": "Nの筋書き",
@@ -18509,13 +18444,11 @@
        "count": 1
       }
      ],
-     "effect": "cant_use_next"
+     "effect": "cant_attack_next"
     }
    ],
    "printing": "M2a 129/193",
-   "unsupported": [
-    "ワザ「ランページサンダー」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49944": {
    "name": "シャリタツ",
@@ -18710,13 +18643,11 @@
        "count": 1
       }
      ],
-     "effect": "cant_use_next"
+     "effect": "cant_attack_next"
     }
    ],
    "printing": "M2a 210/193",
-   "unsupported": [
-    "ワザ「ランページサンダー」の効果の一部"
-   ]
+   "unsupported": []
   },
   "49971": {
    "name": "ドラメシヤ",
@@ -18851,12 +18782,10 @@
   "49974": {
    "name": "Nのポイントアップ",
    "category": "goods",
-   "effect_id": 0,
+   "effect_id": 82,
    "effect_value": 0,
    "printing": "M2a 214/193",
-   "unsupported": [
-    "「Nのポイントアップ」の効果"
-   ]
+   "unsupported": []
   },
   "49975": {
    "name": "ガラスのラッパ",
@@ -19044,9 +18973,7 @@
     }
    ],
    "printing": "M2a 242/193",
-   "unsupported": [
-    "ワザ「ナイトジョーカー」の効果の一部"
-   ]
+   "unsupported": []
   },
   "50004": {
    "name": "キチキギスex",
@@ -21239,258 +21166,258 @@
  "winrateMatrix": {
   "dragapult": {
    "dragapult": 0.5,
-   "bakegakure": 0.587,
-   "yadoking": 0.533,
-   "zoroark_n": 0.725,
-   "kamitsuorochi_ex": 0.312,
-   "omaturi_ondo": 0.768,
-   "mega_lucario": 0.325,
+   "bakegakure": 0.581,
+   "yadoking": 0.537,
+   "zoroark_n": 0.487,
+   "kamitsuorochi_ex": 0.298,
+   "omaturi_ondo": 0.76,
+   "mega_lucario": 0.314,
    "arboliva": 0.303,
-   "strinder_bullet": 0.793,
-   "ogapon_bullet": 0.587,
-   "takeru_raiko": 0.562,
-   "mega_mimilop": 0.669,
-   "hoodini": 0.517,
-   "mega_fushigibana": 0.51,
-   "mega_doryuzu": 0.569
+   "strinder_bullet": 0.779,
+   "ogapon_bullet": 0.593,
+   "takeru_raiko": 0.563,
+   "mega_mimilop": 0.633,
+   "hoodini": 0.527,
+   "mega_fushigibana": 0.508,
+   "mega_doryuzu": 0.54
   },
   "bakegakure": {
    "bakegakure": 0.5,
-   "dragapult": 0.413,
-   "yadoking": 0.395,
-   "zoroark_n": 0.664,
-   "kamitsuorochi_ex": 0.168,
-   "omaturi_ondo": 0.483,
-   "mega_lucario": 0.587,
-   "arboliva": 0.165,
-   "strinder_bullet": 0.512,
-   "ogapon_bullet": 0.389,
-   "takeru_raiko": 0.483,
-   "mega_mimilop": 0.424,
-   "hoodini": 0.306,
-   "mega_fushigibana": 0.308,
-   "mega_doryuzu": 0.303
+   "dragapult": 0.419,
+   "yadoking": 0.386,
+   "zoroark_n": 0.315,
+   "kamitsuorochi_ex": 0.16,
+   "omaturi_ondo": 0.486,
+   "mega_lucario": 0.572,
+   "arboliva": 0.162,
+   "strinder_bullet": 0.518,
+   "ogapon_bullet": 0.404,
+   "takeru_raiko": 0.469,
+   "mega_mimilop": 0.41,
+   "hoodini": 0.303,
+   "mega_fushigibana": 0.289,
+   "mega_doryuzu": 0.307
   },
   "yadoking": {
    "yadoking": 0.5,
-   "dragapult": 0.467,
-   "bakegakure": 0.605,
-   "zoroark_n": 0.688,
-   "kamitsuorochi_ex": 0.253,
-   "omaturi_ondo": 0.682,
-   "mega_lucario": 0.314,
-   "arboliva": 0.256,
-   "strinder_bullet": 0.714,
-   "ogapon_bullet": 0.466,
-   "takeru_raiko": 0.536,
-   "mega_mimilop": 0.514,
-   "hoodini": 0.274,
-   "mega_fushigibana": 0.44,
-   "mega_doryuzu": 0.494
+   "dragapult": 0.463,
+   "bakegakure": 0.614,
+   "zoroark_n": 0.364,
+   "kamitsuorochi_ex": 0.245,
+   "omaturi_ondo": 0.685,
+   "mega_lucario": 0.335,
+   "arboliva": 0.279,
+   "strinder_bullet": 0.694,
+   "ogapon_bullet": 0.471,
+   "takeru_raiko": 0.534,
+   "mega_mimilop": 0.495,
+   "hoodini": 0.301,
+   "mega_fushigibana": 0.461,
+   "mega_doryuzu": 0.505
   },
   "zoroark_n": {
    "zoroark_n": 0.5,
-   "dragapult": 0.275,
-   "bakegakure": 0.336,
-   "yadoking": 0.312,
-   "kamitsuorochi_ex": 0.061,
-   "omaturi_ondo": 0.215,
-   "mega_lucario": 0.217,
-   "arboliva": 0.089,
-   "strinder_bullet": 0.38,
-   "ogapon_bullet": 0.224,
-   "takeru_raiko": 0.336,
-   "mega_mimilop": 0.286,
-   "hoodini": 0.205,
-   "mega_fushigibana": 0.137,
-   "mega_doryuzu": 0.267
+   "dragapult": 0.513,
+   "bakegakure": 0.685,
+   "yadoking": 0.636,
+   "kamitsuorochi_ex": 0.203,
+   "omaturi_ondo": 0.49,
+   "mega_lucario": 0.396,
+   "arboliva": 0.242,
+   "strinder_bullet": 0.69,
+   "ogapon_bullet": 0.535,
+   "takeru_raiko": 0.609,
+   "mega_mimilop": 0.62,
+   "hoodini": 0.473,
+   "mega_fushigibana": 0.345,
+   "mega_doryuzu": 0.565
   },
   "kamitsuorochi_ex": {
    "kamitsuorochi_ex": 0.5,
-   "dragapult": 0.688,
-   "bakegakure": 0.832,
-   "yadoking": 0.747,
-   "zoroark_n": 0.939,
-   "omaturi_ondo": 0.884,
-   "mega_lucario": 0.504,
-   "arboliva": 0.522,
-   "strinder_bullet": 0.968,
-   "ogapon_bullet": 0.638,
-   "takeru_raiko": 0.697,
-   "mega_mimilop": 0.823,
-   "hoodini": 0.647,
-   "mega_fushigibana": 0.664,
-   "mega_doryuzu": 0.82
+   "dragapult": 0.702,
+   "bakegakure": 0.84,
+   "yadoking": 0.755,
+   "zoroark_n": 0.797,
+   "omaturi_ondo": 0.874,
+   "mega_lucario": 0.497,
+   "arboliva": 0.506,
+   "strinder_bullet": 0.954,
+   "ogapon_bullet": 0.65,
+   "takeru_raiko": 0.699,
+   "mega_mimilop": 0.814,
+   "hoodini": 0.645,
+   "mega_fushigibana": 0.661,
+   "mega_doryuzu": 0.813
   },
   "omaturi_ondo": {
    "omaturi_ondo": 0.5,
-   "dragapult": 0.232,
-   "bakegakure": 0.517,
-   "yadoking": 0.318,
-   "zoroark_n": 0.785,
-   "kamitsuorochi_ex": 0.116,
-   "mega_lucario": 0.243,
-   "arboliva": 0.118,
-   "strinder_bullet": 0.522,
-   "ogapon_bullet": 0.323,
-   "takeru_raiko": 0.405,
-   "mega_mimilop": 0.288,
-   "hoodini": 0.255,
+   "dragapult": 0.24,
+   "bakegakure": 0.514,
+   "yadoking": 0.315,
+   "zoroark_n": 0.51,
+   "kamitsuorochi_ex": 0.126,
+   "mega_lucario": 0.247,
+   "arboliva": 0.137,
+   "strinder_bullet": 0.514,
+   "ogapon_bullet": 0.343,
+   "takeru_raiko": 0.392,
+   "mega_mimilop": 0.282,
+   "hoodini": 0.259,
    "mega_fushigibana": 0.255,
-   "mega_doryuzu": 0.228
+   "mega_doryuzu": 0.222
   },
   "mega_lucario": {
    "mega_lucario": 0.5,
-   "dragapult": 0.675,
-   "bakegakure": 0.413,
-   "yadoking": 0.686,
-   "zoroark_n": 0.783,
-   "kamitsuorochi_ex": 0.496,
-   "omaturi_ondo": 0.757,
-   "arboliva": 0.498,
-   "strinder_bullet": 0.866,
-   "ogapon_bullet": 0.75,
-   "takeru_raiko": 0.702,
-   "mega_mimilop": 0.826,
-   "hoodini": 0.461,
-   "mega_fushigibana": 0.63,
-   "mega_doryuzu": 0.704
+   "dragapult": 0.686,
+   "bakegakure": 0.428,
+   "yadoking": 0.665,
+   "zoroark_n": 0.604,
+   "kamitsuorochi_ex": 0.503,
+   "omaturi_ondo": 0.753,
+   "arboliva": 0.537,
+   "strinder_bullet": 0.861,
+   "ogapon_bullet": 0.772,
+   "takeru_raiko": 0.712,
+   "mega_mimilop": 0.79,
+   "hoodini": 0.511,
+   "mega_fushigibana": 0.641,
+   "mega_doryuzu": 0.724
   },
   "arboliva": {
    "arboliva": 0.5,
    "dragapult": 0.697,
-   "bakegakure": 0.835,
-   "yadoking": 0.744,
-   "zoroark_n": 0.911,
-   "kamitsuorochi_ex": 0.478,
-   "omaturi_ondo": 0.882,
-   "mega_lucario": 0.502,
-   "strinder_bullet": 0.956,
-   "ogapon_bullet": 0.609,
-   "takeru_raiko": 0.689,
-   "mega_mimilop": 0.783,
-   "hoodini": 0.607,
-   "mega_fushigibana": 0.656,
-   "mega_doryuzu": 0.81
+   "bakegakure": 0.838,
+   "yadoking": 0.721,
+   "zoroark_n": 0.758,
+   "kamitsuorochi_ex": 0.494,
+   "omaturi_ondo": 0.863,
+   "mega_lucario": 0.463,
+   "strinder_bullet": 0.944,
+   "ogapon_bullet": 0.61,
+   "takeru_raiko": 0.686,
+   "mega_mimilop": 0.782,
+   "hoodini": 0.6,
+   "mega_fushigibana": 0.661,
+   "mega_doryuzu": 0.798
   },
   "strinder_bullet": {
    "strinder_bullet": 0.5,
-   "dragapult": 0.207,
-   "bakegakure": 0.488,
-   "yadoking": 0.286,
-   "zoroark_n": 0.62,
-   "kamitsuorochi_ex": 0.032,
-   "omaturi_ondo": 0.478,
-   "mega_lucario": 0.134,
-   "arboliva": 0.044,
-   "ogapon_bullet": 0.187,
-   "takeru_raiko": 0.309,
-   "mega_mimilop": 0.273,
-   "hoodini": 0.193,
-   "mega_fushigibana": 0.108,
-   "mega_doryuzu": 0.183
+   "dragapult": 0.221,
+   "bakegakure": 0.482,
+   "yadoking": 0.306,
+   "zoroark_n": 0.31,
+   "kamitsuorochi_ex": 0.046,
+   "omaturi_ondo": 0.486,
+   "mega_lucario": 0.139,
+   "arboliva": 0.056,
+   "ogapon_bullet": 0.218,
+   "takeru_raiko": 0.33,
+   "mega_mimilop": 0.291,
+   "hoodini": 0.218,
+   "mega_fushigibana": 0.134,
+   "mega_doryuzu": 0.209
   },
   "ogapon_bullet": {
    "ogapon_bullet": 0.5,
-   "dragapult": 0.413,
-   "bakegakure": 0.611,
-   "yadoking": 0.534,
-   "zoroark_n": 0.776,
-   "kamitsuorochi_ex": 0.362,
-   "omaturi_ondo": 0.677,
-   "mega_lucario": 0.25,
-   "arboliva": 0.391,
-   "strinder_bullet": 0.813,
-   "takeru_raiko": 0.56,
-   "mega_mimilop": 0.547,
-   "hoodini": 0.382,
-   "mega_fushigibana": 0.498,
-   "mega_doryuzu": 0.597
+   "dragapult": 0.407,
+   "bakegakure": 0.596,
+   "yadoking": 0.529,
+   "zoroark_n": 0.465,
+   "kamitsuorochi_ex": 0.35,
+   "omaturi_ondo": 0.657,
+   "mega_lucario": 0.228,
+   "arboliva": 0.39,
+   "strinder_bullet": 0.782,
+   "takeru_raiko": 0.564,
+   "mega_mimilop": 0.536,
+   "hoodini": 0.383,
+   "mega_fushigibana": 0.481,
+   "mega_doryuzu": 0.566
   },
   "takeru_raiko": {
    "takeru_raiko": 0.5,
-   "dragapult": 0.438,
-   "bakegakure": 0.517,
-   "yadoking": 0.464,
-   "zoroark_n": 0.664,
-   "kamitsuorochi_ex": 0.303,
-   "omaturi_ondo": 0.595,
-   "mega_lucario": 0.298,
-   "arboliva": 0.311,
-   "strinder_bullet": 0.691,
-   "ogapon_bullet": 0.44,
-   "mega_mimilop": 0.506,
-   "hoodini": 0.369,
-   "mega_fushigibana": 0.43,
-   "mega_doryuzu": 0.483
+   "dragapult": 0.437,
+   "bakegakure": 0.531,
+   "yadoking": 0.466,
+   "zoroark_n": 0.391,
+   "kamitsuorochi_ex": 0.301,
+   "omaturi_ondo": 0.608,
+   "mega_lucario": 0.288,
+   "arboliva": 0.314,
+   "strinder_bullet": 0.67,
+   "ogapon_bullet": 0.436,
+   "mega_mimilop": 0.484,
+   "hoodini": 0.382,
+   "mega_fushigibana": 0.415,
+   "mega_doryuzu": 0.496
   },
   "mega_mimilop": {
    "mega_mimilop": 0.5,
-   "dragapult": 0.331,
-   "bakegakure": 0.576,
-   "yadoking": 0.486,
-   "zoroark_n": 0.714,
-   "kamitsuorochi_ex": 0.177,
-   "omaturi_ondo": 0.712,
-   "mega_lucario": 0.174,
-   "arboliva": 0.217,
-   "strinder_bullet": 0.727,
-   "ogapon_bullet": 0.453,
-   "takeru_raiko": 0.494,
-   "hoodini": 0.21,
-   "mega_fushigibana": 0.356,
-   "mega_doryuzu": 0.354
+   "dragapult": 0.367,
+   "bakegakure": 0.59,
+   "yadoking": 0.505,
+   "zoroark_n": 0.38,
+   "kamitsuorochi_ex": 0.186,
+   "omaturi_ondo": 0.718,
+   "mega_lucario": 0.21,
+   "arboliva": 0.218,
+   "strinder_bullet": 0.709,
+   "ogapon_bullet": 0.464,
+   "takeru_raiko": 0.516,
+   "hoodini": 0.217,
+   "mega_fushigibana": 0.383,
+   "mega_doryuzu": 0.364
   },
   "hoodini": {
    "hoodini": 0.5,
-   "dragapult": 0.483,
-   "bakegakure": 0.694,
-   "yadoking": 0.726,
-   "zoroark_n": 0.795,
-   "kamitsuorochi_ex": 0.353,
-   "omaturi_ondo": 0.745,
-   "mega_lucario": 0.539,
-   "arboliva": 0.393,
-   "strinder_bullet": 0.807,
-   "ogapon_bullet": 0.618,
-   "takeru_raiko": 0.631,
-   "mega_mimilop": 0.79,
-   "mega_fushigibana": 0.539,
-   "mega_doryuzu": 0.67
+   "dragapult": 0.473,
+   "bakegakure": 0.697,
+   "yadoking": 0.699,
+   "zoroark_n": 0.527,
+   "kamitsuorochi_ex": 0.355,
+   "omaturi_ondo": 0.741,
+   "mega_lucario": 0.489,
+   "arboliva": 0.4,
+   "strinder_bullet": 0.782,
+   "ogapon_bullet": 0.617,
+   "takeru_raiko": 0.618,
+   "mega_mimilop": 0.783,
+   "mega_fushigibana": 0.542,
+   "mega_doryuzu": 0.667
   },
   "mega_fushigibana": {
    "mega_fushigibana": 0.5,
-   "dragapult": 0.49,
-   "bakegakure": 0.692,
-   "yadoking": 0.56,
-   "zoroark_n": 0.863,
-   "kamitsuorochi_ex": 0.336,
+   "dragapult": 0.492,
+   "bakegakure": 0.711,
+   "yadoking": 0.539,
+   "zoroark_n": 0.655,
+   "kamitsuorochi_ex": 0.339,
    "omaturi_ondo": 0.745,
-   "mega_lucario": 0.37,
-   "arboliva": 0.344,
-   "strinder_bullet": 0.892,
-   "ogapon_bullet": 0.502,
-   "takeru_raiko": 0.57,
-   "mega_mimilop": 0.644,
-   "hoodini": 0.461,
-   "mega_doryuzu": 0.622
+   "mega_lucario": 0.359,
+   "arboliva": 0.339,
+   "strinder_bullet": 0.866,
+   "ogapon_bullet": 0.519,
+   "takeru_raiko": 0.585,
+   "mega_mimilop": 0.617,
+   "hoodini": 0.458,
+   "mega_doryuzu": 0.624
   },
   "mega_doryuzu": {
    "mega_doryuzu": 0.5,
-   "dragapult": 0.431,
-   "bakegakure": 0.697,
-   "yadoking": 0.506,
-   "zoroark_n": 0.733,
-   "kamitsuorochi_ex": 0.18,
-   "omaturi_ondo": 0.772,
-   "mega_lucario": 0.296,
-   "arboliva": 0.19,
-   "strinder_bullet": 0.817,
-   "ogapon_bullet": 0.403,
-   "takeru_raiko": 0.517,
-   "mega_mimilop": 0.646,
-   "hoodini": 0.33,
-   "mega_fushigibana": 0.378
+   "dragapult": 0.46,
+   "bakegakure": 0.693,
+   "yadoking": 0.495,
+   "zoroark_n": 0.435,
+   "kamitsuorochi_ex": 0.187,
+   "omaturi_ondo": 0.778,
+   "mega_lucario": 0.276,
+   "arboliva": 0.202,
+   "strinder_bullet": 0.791,
+   "ogapon_bullet": 0.434,
+   "takeru_raiko": 0.504,
+   "mega_mimilop": 0.636,
+   "hoodini": 0.333,
+   "mega_fushigibana": 0.376
   }
  }
 }
