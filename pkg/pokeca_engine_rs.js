@@ -1,6 +1,7 @@
 /* @ts-self-types="./pokeca_engine_rs.d.ts" */
 
 /**
+ * 2つのデッキの勝率 (A 側)。フルデッキ形式 (cards: 60枚) を先に試し、読めなければプロファイル形式
  * @param {string} deck_a_json
  * @param {string} deck_b_json
  * @param {number} trials

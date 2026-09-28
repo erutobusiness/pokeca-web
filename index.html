@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>デッキ強度分析 - ポケカメタ分析</title>
+<title>デッキ強度分析 - ポケカ環境デッキの勝率シミュレーター</title>
+<meta name="description" content="ポケモンカードの環境デッキどうしの勝率を、対戦シミュレーターで計算する非公式ツール。自分のデッキコードを入れて、環境の各デッキとの勝率も計算できる。">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
@@ -24,128 +25,129 @@ tailwind.config = {
   .fade-in { animation: fadeIn 0.2s ease-out; }
   @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
   .bar-chart-bar { transition: width 0.5s ease-out; }
+  details > summary { cursor: pointer; }
 </style>
 </head>
 <body class="bg-bg text-slate-200 font-sans min-h-screen">
 
 <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
 
-  <!-- Header -->
-  <header class="mb-8">
+  <header class="mb-6">
     <h1 class="text-3xl font-bold text-primary">デッキ強度分析</h1>
-    <p class="text-slate-400 text-sm mt-1">フルゲームエンジン + CSP近似ランキング</p>
-    <p class="text-slate-500 text-xs mt-2" id="meta"></p>
+    <p class="text-slate-400 text-sm mt-1">ポケカの環境デッキどうしの勝率を、対戦シミュレーターで計算する</p>
+    <p class="text-slate-400 text-xs mt-2" id="env-line"></p>
+    <p class="text-slate-500 text-xs mt-1" id="calc-line"></p>
   </header>
 
-  <!-- Deck Analysis -->
-  <!-- Tab Navigation -->
+  <!-- このページについて -->
+  <details class="mb-8 bg-surface/50 rounded-lg p-4 text-sm text-slate-300 leading-relaxed" open>
+    <summary class="font-semibold text-slate-200">このページについて（数字を読む前に）</summary>
+    <div class="mt-3 space-y-2">
+      <p>勝率は、デッキのレシピ60枚をそのまま入れた対戦シミュレーターで、1つの組み合わせにつき数千回戦わせた結果です。実際の大会の勝率ではありません。</p>
+      <p>シミュレーターの AI の判断は人より単純で、まだ動かせない効果のカードもあります。なので、<strong class="text-amber-300">実際の勝率とずれることがあります</strong>。各デッキでどの効果がまだ動かないかは、デッキの詳細に出しています。実際の勝率に近づくように、ルールと AI の判断を直し続けています。</p>
+      <p>環境のデッキと入賞数は、<a class="text-primary underline" href="https://pokeka-win-decks.jp/tier-ranking" target="_blank" rel="noopener">ポケカWinDecks のティア表</a>（シティリーグの入賞データ）から取り、各デッキの代表レシピで計算しています。入賞数は上位に入ったデッキの数で、参加した全デッキの使用率ではありません。カードの HP やワザの数値は、ポケモンカードゲーム公式サイトのカード情報をもとにしています。</p>
+      <p class="text-slate-500 text-xs">このページは個人が作った非公式のツールで、株式会社ポケモン・任天堂・クリーチャーズ・ゲームフリークとは関係ありません。ポケモン・ポケットモンスター・Pokémon は任天堂・クリーチャーズ・ゲームフリークの商標です。</p>
+    </div>
+  </details>
+
+  <!-- デッキ分析 -->
   <section class="mb-10">
     <h2 class="bg-primary text-deep font-bold text-lg px-4 py-2 rounded-lg mb-4">デッキ分析</h2>
 
     <div class="flex gap-1 mb-4">
-      <button onclick="switchTab('meta')" id="tab-meta" class="px-4 py-1.5 rounded-t-lg text-sm font-semibold bg-surface text-primary border-b-2 border-primary">vs 環境</button>
-      <button onclick="switchTab('1v1')" id="tab-1v1" class="px-4 py-1.5 rounded-t-lg text-sm font-semibold bg-surface/50 text-slate-400 border-b-2 border-transparent hover:text-slate-200">1v1 対戦</button>
+      <button id="tab-meta" class="px-4 py-1.5 rounded-t-lg text-sm font-semibold bg-surface text-primary border-b-2 border-primary">vs 環境</button>
+      <button id="tab-1v1" class="px-4 py-1.5 rounded-t-lg text-sm font-semibold bg-surface/50 text-slate-400 border-b-2 border-transparent hover:text-slate-200">1v1 対戦</button>
     </div>
 
-    <!-- vs Meta Tab -->
     <div id="panel-meta" class="bg-surface rounded-xl p-5 shadow-lg">
-      <div class="mb-4">
-        <label class="block text-sm text-slate-400 mb-1">自分のデッキコード</label>
-        <div class="flex gap-2">
-          <input type="text" id="deck-code-input" placeholder="XXXXXX-XXXXXX-XXXXXX"
-            class="flex-1 bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary">
-          <button onclick="analyzeFromCode()" id="analyze-btn"
-            class="bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2 rounded-lg transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
-            分析
-          </button>
-        </div>
+      <label class="block text-sm text-slate-400 mb-1" for="deck-code-input">自分のデッキコード</label>
+      <div class="flex gap-2">
+        <input type="text" id="deck-code-input" placeholder="XXXXXX-XXXXXX-XXXXXX" autocomplete="off"
+          class="flex-1 min-w-0 bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary">
+        <button id="analyze-btn"
+          class="bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2 rounded-lg transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">分析</button>
       </div>
       <div class="flex items-center gap-3 my-4">
         <div class="flex-1 h-px bg-slate-700"></div>
-        <span class="text-xs text-slate-500">または環境デッキを選択</span>
+        <span class="text-xs text-slate-500">または環境デッキを選ぶ（計算済みの勝率を出す）</span>
         <div class="flex-1 h-px bg-slate-700"></div>
       </div>
-      <select id="meta-deck-select" onchange="selectMetaDeck()"
-        class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary mb-4">
-        <option value="">環境デッキから選択...</option>
+      <select id="meta-deck-select"
+        class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary mb-2">
+        <option value="">環境デッキから選ぶ...</option>
       </select>
-      <div id="analysis-status" class="text-sm text-slate-400 hidden"></div>
+      <div id="analysis-status" class="text-sm text-slate-400 hidden mt-2"></div>
+      <div id="analysis-warnings" class="mt-2"></div>
       <div id="analysis-results" class="hidden mt-4">
-        <h3 class="text-primary font-semibold mb-3">環境マッチアップ</h3>
+        <h3 class="text-primary font-semibold mb-3" id="analysis-title">環境の各デッキとの勝率</h3>
         <div id="matchup-bars"></div>
         <div class="mt-3 p-3 bg-deep/40 rounded-lg">
-          <div class="text-xs text-slate-400">環境適応度（加重平均勝率）</div>
+          <div class="text-xs text-slate-400">環境への強さ（相手の入賞数で重みをつけた平均勝率）</div>
           <div class="text-2xl font-bold text-primary" id="fitness-score"></div>
         </div>
       </div>
     </div>
 
-    <!-- 1v1 Tab -->
     <div id="panel-1v1" class="bg-surface rounded-xl p-5 shadow-lg hidden">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
-          <label class="block text-sm text-slate-400 mb-1">デッキA</label>
-          <input type="text" id="deck-a-code" placeholder="XXXXXX-XXXXXX-XXXXXX"
+          <label class="block text-sm text-slate-400 mb-1" for="deck-a-code">デッキA</label>
+          <input type="text" id="deck-a-code" placeholder="XXXXXX-XXXXXX-XXXXXX" autocomplete="off"
             class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary">
-          <select id="deck-a-select" onchange="document.getElementById('deck-a-code').value=''"
+          <select id="deck-a-select"
             class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary mt-2">
             <option value="">または環境デッキ...</option>
           </select>
         </div>
         <div>
-          <label class="block text-sm text-slate-400 mb-1">デッキB</label>
-          <input type="text" id="deck-b-code" placeholder="XXXXXX-XXXXXX-XXXXXX"
+          <label class="block text-sm text-slate-400 mb-1" for="deck-b-code">デッキB</label>
+          <input type="text" id="deck-b-code" placeholder="XXXXXX-XXXXXX-XXXXXX" autocomplete="off"
             class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-primary">
-          <select id="deck-b-select" onchange="document.getElementById('deck-b-code').value=''"
+          <select id="deck-b-select"
             class="w-full bg-deep/60 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary mt-2">
             <option value="">または環境デッキ...</option>
           </select>
         </div>
       </div>
-      <button onclick="analyze1v1()" id="analyze-1v1-btn"
-        class="w-full bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2 rounded-lg transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
-        対戦分析
-      </button>
+      <button id="analyze-1v1-btn"
+        class="w-full bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2 rounded-lg transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">対戦分析</button>
       <div id="status-1v1" class="text-sm text-slate-400 mt-2 hidden"></div>
+      <div id="warnings-1v1" class="mt-2"></div>
       <div id="result-1v1" class="hidden mt-4"></div>
     </div>
   </section>
 
-  <!-- CSP Ranking -->
+  <!-- CSP近似ランキング -->
   <section class="mb-10">
     <h2 class="bg-primary text-deep font-bold text-lg px-4 py-2 rounded-lg mb-4">CSP近似ランキング</h2>
     <div class="bg-surface/50 rounded-lg p-4 mb-4 text-sm text-slate-300 leading-relaxed">
-      <code class="bg-deep/60 text-primary px-2 py-0.5 rounded text-xs">CSP近似 = 使用率 x 環境適応度</code><br class="mb-1">
-      使用率が高いデッキは、勝率50%でも大会で多くのポイントを獲得する。環境適応度は各マッチアップ勝率の加重平均。
+      <code class="bg-deep/60 text-primary px-2 py-0.5 rounded text-xs">CSP近似 = 入賞の割合 × 環境への強さ</code><br>
+      入賞の多いデッキは、勝率が50%でも大会で多くのポイントを取る。環境への強さは、下の勝率表の勝率を、相手の入賞数で重みをつけて平均したもの。デッキを押すと詳細を出す。
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" id="ranking"></div>
   </section>
 
-  <!-- Deck Detail -->
   <section id="deck-detail" class="hidden mb-10"></section>
 
-  <!-- Matchup Table -->
+  <!-- 勝率表 -->
   <section class="mb-10">
     <h2 class="bg-primary text-deep font-bold text-lg px-4 py-2 rounded-lg mb-4">マッチアップ勝率表</h2>
-    <p class="text-slate-500 text-xs mb-2">セルをクリックで詳細表示</p>
+    <p class="text-slate-500 text-xs mb-2">行のデッキから見た勝率。セルを押すと詳細を出す</p>
     <div class="overflow-x-auto rounded-lg border border-slate-700/50">
       <table class="w-full text-sm border-collapse matchup-table" id="matchup-table"></table>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="text-center text-xs text-slate-600 py-4">
-    pokeca-engine-rs (WebAssembly) | <span id="engine-version">loading...</span>
+  <footer class="text-center text-xs text-slate-600 py-4 space-y-1">
+    <div>pokeca-engine-rs (WebAssembly) | <span id="engine-version">読み込み中...</span></div>
+    <div>非公式のファンツール。株式会社ポケモン・任天堂・クリーチャーズ・ゲームフリークとは関係ありません</div>
   </footer>
 
 </div>
 
-<!-- Modal Overlay -->
-<div id="overlay" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity duration-200" onclick="closePopup()"></div>
-
-<!-- Modal Popup -->
-<div id="popup" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface border border-slate-600 rounded-xl shadow-2xl p-6 z-50 min-w-[320px] max-w-[440px] hidden">
-  <button onclick="closePopup()" class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-600/50 transition-colors text-slate-400 hover:text-slate-200" aria-label="閉じる">
+<div id="overlay" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity duration-200"></div>
+<div id="popup" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface border border-slate-600 rounded-xl shadow-2xl p-6 z-50 w-[92vw] max-w-[460px] max-h-[85vh] overflow-y-auto hidden" role="dialog" aria-modal="true">
+  <button id="popup-close" class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-600/50 transition-colors text-slate-400 hover:text-slate-200" aria-label="閉じる">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
     </svg>
@@ -154,131 +156,186 @@ tailwind.config = {
 </div>
 
 <script type="module">
-import init, { analyze_matchup, analyze_vs_meta, engine_version } from './pkg/pokeca_engine_rs.js';
+import { fetchDeck, DECK_CODE_RE } from './lib/deck-code.js';
+import { buildDeck, indexByName, computeRanking } from './lib/deck-profile.js';
+
+// 自分のデッキを環境の各デッキと戦わせるときの試行回数（1組あたり）。勝率表そのものは data.json の trials 回
+const CUSTOM_TRIALS = 3000;
+const ONE_V_ONE_TRIALS = 10000;
 
 let DATA = null;
-let WASM_READY = false;
+let BY_NAME = {};
+const BUILT = {};       // 環境デッキの組み立て結果（id → buildDeck の返り値）
+let RANKING = [];
 
-// Make functions available globally for onclick handlers
-window.showDeckDetail = showDeckDetail;
-window.showMatchup = showMatchup;
-window.closePopup = closePopup;
-window.analyzeFromCode = analyzeFromCode;
-window.selectMetaDeck = selectMetaDeck;
-window.switchTab = switchTab;
-window.analyze1v1 = analyze1v1;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pct = (x, d = 1) => `${(x * 100).toFixed(d)}%`;
 
+// ---- Worker（エンジンの計算を画面の外で回す） ----
+const worker = new Worker(new URL('./lib/sim-worker.js', import.meta.url), { type: 'module' });
+let nextReq = 1;
+const pending = new Map();
+worker.onmessage = e => {
+  const { reqId, type } = e.data;
+  const p = pending.get(reqId);
+  if (!p) return;
+  if (type === 'progress') p.onProgress?.(e.data);
+  else if (type === 'done') { pending.delete(reqId); p.resolve(e.data.results); }
+  else if (type === 'error') { pending.delete(reqId); p.reject(new Error(e.data.message)); }
+};
+function ask(msg, onProgress) {
+  const reqId = nextReq++;
+  return new Promise((resolve, reject) => {
+    pending.set(reqId, { resolve, reject, onProgress });
+    worker.postMessage({ reqId, ...msg });
+  });
+}
+
+// ---- 読み込み ----
 async function main() {
-  // Load data and wasm in parallel
-  const [dataRes] = await Promise.all([
-    fetch('data.json').then(r => r.json()),
-    init().then(() => { WASM_READY = true; }).catch(e => console.warn('Wasm init failed:', e)),
-  ]);
-  DATA = dataRes;
-
-  renderMeta();
+  DATA = await fetch('data.json').then(r => r.json());
+  if (DATA.metadata?.schema !== 2) throw new Error('data.json の形が古い');
+  BY_NAME = indexByName(DATA.cards);
+  for (const id of DATA.deckIds) {
+    BUILT[id] = buildDeck(DATA.deckCardLists[id], { cards: DATA.cards, byName: BY_NAME }, { name: id });
+  }
+  RANKING = computeRanking(DATA.deckIds, DATA.winrateMatrix, shares());
+  renderHeader();
   renderRanking();
   renderTable();
-  populateMetaDeckSelect();
+  populateSelects();
+  ask({ type: 'version' }).then(v => { $('engine-version').textContent = v; })
+    .catch(() => { $('engine-version').textContent = 'エンジンを読み込めなかった（計算済みの勝率だけ出す）'; });
+}
 
-  if (WASM_READY) {
-    document.getElementById('engine-version').textContent = engine_version();
-  } else {
-    document.getElementById('engine-version').textContent = 'Wasm未ロード（事前計算データで表示中）';
+const deckMeta = id => DATA.decks.find(d => d.id === id) || { id, name: id };
+const deckName = id => deckMeta(id).name;
+function shares() {
+  const s = {};
+  for (const d of DATA.decks) s[d.id] = d.share || 0;
+  return s;
+}
+
+function renderHeader() {
+  const env = DATA.metadata.environment || {};
+  const covered = env.coveredPlaced && env.placedDecks ? `（うち ${env.coveredPlaced} デッキ＝${pct(env.coveredPlaced / env.placedDecks, 0)} をここの ${DATA.deckIds.length} デッキで計算）` : '';
+  $('env-line').textContent = `環境: シティリーグ ${env.dateFrom || '?'}〜${env.dateTo || '?'} の ${env.venues ?? '?'} 会場・入賞 ${env.placedDecks ?? '?'} デッキ${covered}。出典の更新日 ${env.updated || '?'}`;
+  const m = DATA.metadata;
+  $('calc-line').textContent = m.trials ? `勝率表: 1組 ${m.trials.toLocaleString()} 回の対戦（${m.generatedAt} 計算）` : '勝率表はまだ計算していない';
+}
+
+// ---- デッキの情報 ----
+function attackers(id) {
+  const seen = new Map();
+  for (const e of DATA.deckCardLists[id] || []) {
+    if (e.category !== 'pokemon') continue;
+    const c = DATA.cards[e.id] || DATA.cards[BY_NAME[e.name]];
+    if (!c) continue;
+    const dmg = Math.max(0, ...(c.attacks || []).map(a => a.damage || 0));
+    if (dmg <= 0) continue;
+    if (!seen.has(c.name) || seen.get(c.name).dmg < dmg) seen.set(c.name, { name: c.name, hp: c.hp, dmg, prize: c.prize_cost, type: c.type });
+  }
+  return [...seen.values()].sort((a, b) => b.dmg - a.dmg).slice(0, 3);
+}
+
+function uniqueUnsupported(built) {
+  return [...new Set(built.unsupported.map(u => `${u.name}: ${u.what}`))];
+}
+
+function warningsHtml(built, label = '') {
+  const parts = [];
+  const lead = label ? `${esc(label)}: ` : '';
+  if (built.missing.length) {
+    parts.push(`<div class="text-xs text-red-300">${lead}データに無いカードが ${built.missing.length} 種類あります（ワザも特性も無い HP70 のポケモン、または効果の無いカードとして計算）: ${esc(built.missing.join('、'))}</div>`);
+  }
+  if (built.substituted.length) {
+    parts.push(`<div class="text-xs text-amber-300">${lead}別の版の同じ名前のカードで代わりに計算したカード: ${esc(built.substituted.join('、'))}</div>`);
+  }
+  const uns = uniqueUnsupported(built);
+  if (uns.length) {
+    parts.push(`<details class="text-xs text-slate-400"><summary>${lead}シミュレーターでまだ動かない効果 ${uns.length} 件</summary><ul class="list-disc ml-5 mt-1">${uns.map(u => `<li>${esc(u)}</li>`).join('')}</ul></details>`);
+  }
+  return parts.join('');
+}
+
+// ---- ランキング ----
+function renderRanking() {
+  const div = $('ranking');
+  div.innerHTML = '';
+  const total = DATA.metadata.environment?.placedDecks || 0;
+  for (const r of RANKING) {
+    const d = deckMeta(r.deckId);
+    const unsCount = uniqueUnsupported(BUILT[r.deckId]).length;
+    const barColor = r.fitness > 0.5 ? 'bg-emerald-500' : (r.fitness > 0.45 ? 'bg-amber-500' : 'bg-red-500');
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'text-left bg-surface rounded-xl p-3 border-2 border-transparent hover:border-primary hover:-translate-y-0.5 transition-all duration-150 shadow-lg';
+    card.dataset.deckId = r.deckId;
+    card.innerHTML = `
+      <div class="flex items-baseline gap-2 mb-1">
+        <span class="text-primary font-bold text-xl">#${r.rank}</span>
+        <span class="text-sm font-semibold truncate">${esc(d.name)}</span>
+      </div>
+      <div class="text-xs text-slate-400">入賞 ${d.placed ?? '-'}${total ? `（${pct((d.placed || 0) / total, 0)}）` : ''} / 環境への強さ ${pct(r.fitness)}</div>
+      <div class="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
+        <div class="h-full rounded-full ${barColor}" style="width:${Math.min(r.fitness * 200, 100)}%"></div>
+      </div>
+      ${unsCount ? `<div class="text-[10px] text-slate-500 mt-1">まだ動かない効果 ${unsCount} 件</div>` : ''}`;
+    card.onclick = () => showDeckDetail(r.deckId);
+    div.appendChild(card);
   }
 }
 
-function renderMeta() {
-  document.getElementById('meta').textContent =
-    `${DATA.metadata.deckCount}デッキ / ${DATA.metadata.engine}エンジン / trials=${DATA.metadata.trials} / ${DATA.metadata.generatedAt}`;
-}
-
-function renderRanking() {
-  const div = document.getElementById('ranking');
-  div.innerHTML = '';
-  DATA.cspRanking.forEach(entry => {
-    const barColor = entry.fitness > 0.5 ? 'bg-emerald-500' : (entry.fitness > 0.45 ? 'bg-amber-500' : 'bg-red-500');
-    const card = document.createElement('div');
-    card.className = 'bg-surface rounded-xl p-3 cursor-pointer border-2 border-transparent hover:border-primary hover:-translate-y-0.5 transition-all duration-150 shadow-lg';
-    card.dataset.deckId = entry.deckId;
-    card.innerHTML = `
-      <div class="flex items-baseline gap-2 mb-1">
-        <span class="text-primary font-bold text-xl">#${entry.rank}</span>
-        <span class="text-sm font-semibold truncate">${entry.name}</span>
-      </div>
-      <div class="text-xs text-slate-400">
-        share ${(entry.share*100).toFixed(1)}% / fit ${(entry.fitness*100).toFixed(1)}%
-      </div>
-      <div class="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
-        <div class="h-full rounded-full ${barColor}" style="width:${Math.min(entry.fitness*200,100)}%"></div>
-      </div>
-    `;
-    card.onclick = () => showDeckDetail(entry.deckId);
-    div.appendChild(card);
+function showDeckDetail(id) {
+  document.querySelectorAll('#ranking > button').forEach(c => {
+    c.classList.toggle('border-primary', c.dataset.deckId === id);
   });
-}
-
-function showDeckDetail(deckId) {
-  document.querySelectorAll('#ranking > div').forEach(c => {
-    c.classList.toggle('border-primary', c.dataset.deckId === deckId);
-    c.classList.toggle('bg-deep/30', c.dataset.deckId === deckId);
-  });
-  const info = DATA.deckInfo[deckId];
-  const detail = document.getElementById('deck-detail');
-  if (!info) { detail.classList.add('hidden'); return; }
-
-  const attackersHtml = info.attackers.map(a => `
-    <div class="bg-deep/40 rounded-lg p-3 min-w-[160px]">
-      <div class="font-semibold text-sm">${a.name}</div>
-      <div class="text-xs text-slate-400 mt-1">HP ${a.hp} / ${a.damage}dmg / prize ${a.prizeCost}</div>
-      <div class="text-xs text-slate-500">type: ${a.attackType}</div>
-    </div>
-  `).join('');
-
-  const wr = DATA.winrateMatrix[deckId] || {};
-  const matchups = Object.entries(wr)
-    .filter(([k]) => k !== deckId)
-    .map(([k, v]) => ({ id: k, name: DATA.deckInfo[k]?.name || k, wr: v }))
-    .sort((a, b) => b.wr - a.wr);
-
-  const matchupHtml = matchups.map(m => {
+  const d = deckMeta(id);
+  const built = BUILT[id];
+  const wr = DATA.winrateMatrix[id] || {};
+  const matchups = DATA.deckIds.filter(o => o !== id && wr[o] !== undefined)
+    .map(o => ({ id: o, wr: wr[o] })).sort((a, b) => b.wr - a.wr);
+  const atk = attackers(id).map(a => `
+    <div class="bg-deep/40 rounded-lg p-3 min-w-[150px]">
+      <div class="font-semibold text-sm">${esc(a.name)}</div>
+      <div class="text-xs text-slate-400 mt-1">HP ${a.hp} / 最大 ${a.dmg} ダメージ / サイド ${a.prize}</div>
+    </div>`).join('');
+  const chips = matchups.map(m => {
     const cls = m.wr > 0.55 ? 'bg-emerald-500/20 text-emerald-400' : (m.wr < 0.45 ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/10 text-amber-400');
-    return `<span class="${cls} px-2 py-0.5 rounded text-xs inline-block m-0.5">vs ${m.name.substring(0,8)} ${(m.wr*100).toFixed(0)}%</span>`;
+    return `<span class="${cls} px-2 py-0.5 rounded text-xs inline-block m-0.5">vs ${esc(deckName(m.id))} ${pct(m.wr, 0)}</span>`;
   }).join('');
-
+  const detail = $('deck-detail');
   detail.innerHTML = `
     <div class="bg-surface rounded-xl p-5 shadow-lg fade-in">
-      <h3 class="text-primary font-bold text-lg mb-3">${info.name}</h3>
-      <div class="text-xs text-slate-400 mb-3">setup: ${info.setupTurns}T / weakness: ${info.weakness} / type: ${info.pokemonType}</div>
-      <div class="flex gap-3 flex-wrap mb-4">${attackersHtml}</div>
-      <div>${matchupHtml}</div>
-    </div>
-  `;
+      <h3 class="text-primary font-bold text-lg mb-1">${esc(d.name)}</h3>
+      <div class="text-xs text-slate-400 mb-3">
+        Tier${d.tier ?? '-'} / 入賞 ${d.placed ?? '-'}・優勝 ${d.wins ?? 0}${d.mainType ? ` / 主流型 ${esc(d.mainType)}（${d.mainTypePct}%）` : ''}
+        / 計算に使ったレシピ: <a class="text-primary underline" href="https://www.pokemon-card.com/deck/confirm.html/deckID/${esc(d.deckCode)}/" target="_blank" rel="noopener">${esc(d.deckCode)}</a>${d.deckTitle ? `（${esc(d.deckTitle)}）` : ''}
+      </div>
+      <div class="flex gap-3 flex-wrap mb-4">${atk}</div>
+      <div class="mb-3">${chips}</div>
+      ${warningsHtml(built)}
+    </div>`;
   detail.classList.remove('hidden');
+  detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+// ---- 勝率表 ----
 function renderTable() {
-  const table = document.getElementById('matchup-table');
   const ids = DATA.deckIds;
-  const names = ids.map(id => DATA.deckInfo[id]?.name || id);
-
   let html = '<thead><tr><th class="bg-surface text-slate-400 text-xs p-2 border border-slate-700/50"></th>';
-  names.forEach(n => html += `<th class="bg-surface text-primary text-xs p-2 border border-slate-700/50 font-medium">${n.substring(0,6)}</th>`);
+  ids.forEach(id => { html += `<th class="bg-surface text-primary text-xs p-2 border border-slate-700/50 font-medium" title="${esc(deckName(id))}">${esc(deckName(id).substring(0, 6))}</th>`; });
   html += '</tr></thead><tbody>';
-
   ids.forEach((rowId, i) => {
-    html += `<tr><td class="text-left font-semibold text-xs whitespace-nowrap p-2 bg-surface/50 border border-slate-700/50">${names[i]}</td>`;
+    html += `<tr><td class="text-left font-semibold text-xs whitespace-nowrap p-2 bg-surface/50 border border-slate-700/50">${esc(deckName(rowId))}</td>`;
     ids.forEach((colId, j) => {
       const wr = DATA.winrateMatrix[rowId]?.[colId];
       if (i === j) {
         html += '<td class="bg-bg text-slate-600 p-2 border border-slate-700/50 text-center">-</td>';
       } else if (wr !== undefined) {
-        const pct = (wr*100).toFixed(0);
-        let cls;
-        if (wr > 0.55) cls = 'bg-emerald-500/15 text-emerald-400';
-        else if (wr < 0.45) cls = 'bg-red-500/15 text-red-400';
-        else cls = 'bg-amber-500/10 text-amber-400';
-        html += `<td class="${cls} p-2 border border-slate-700/50 text-center cursor-pointer hover:ring-2 hover:ring-primary transition-shadow" onclick="showMatchup('${rowId}','${colId}')">${pct}%</td>`;
+        const cls = wr > 0.55 ? 'bg-emerald-500/15 text-emerald-400' : wr < 0.45 ? 'bg-red-500/15 text-red-400' : 'bg-amber-500/10 text-amber-400';
+        html += `<td class="${cls} p-2 border border-slate-700/50 text-center cursor-pointer hover:ring-2 hover:ring-primary transition-shadow" data-a="${esc(rowId)}" data-b="${esc(colId)}">${pct(wr, 0)}</td>`;
       } else {
         html += '<td class="p-2 border border-slate-700/50 text-center text-slate-600">-</td>';
       }
@@ -286,748 +343,211 @@ function renderTable() {
     html += '</tr>';
   });
   html += '</tbody>';
+  const table = $('matchup-table');
   table.innerHTML = html;
+  table.onclick = e => {
+    const td = e.target.closest('td[data-a]');
+    if (td) showMatchup(td.dataset.a, td.dataset.b);
+  };
 }
 
 function showMatchup(aId, bId) {
-  const a = DATA.deckInfo[aId];
-  const b = DATA.deckInfo[bId];
   const wr = DATA.winrateMatrix[aId]?.[bId];
-  if (!a || !b || wr === undefined) return;
-
-  const wrB = 1 - wr;
-  const winColor = wr > 0.5 ? 'text-emerald-400' : 'text-red-400';
-  const content = document.getElementById('popup-content');
-  content.innerHTML = `
-    <h3 class="text-primary font-bold text-lg mb-4">${a.name} vs ${b.name}</h3>
-    <div class="text-center text-4xl font-bold my-4 ${winColor}">
-      ${(wr*100).toFixed(1)}% <span class="text-slate-500 text-2xl">-</span> ${(wrB*100).toFixed(1)}%
+  if (wr === undefined) return;
+  const a = attackers(aId)[0];
+  const b = attackers(bId)[0];
+  const row = (label, x, y) => `<tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">${label}</td><td class="text-center">${x}</td><td class="text-center">${y}</td></tr>`;
+  const ua = uniqueUnsupported(BUILT[aId]).length;
+  const ub = uniqueUnsupported(BUILT[bId]).length;
+  $('popup-content').innerHTML = `
+    <h3 class="text-primary font-bold text-lg mb-4">${esc(deckName(aId))} vs ${esc(deckName(bId))}</h3>
+    <div class="text-center text-4xl font-bold my-4 ${wr > 0.5 ? 'text-emerald-400' : 'text-red-400'}">
+      ${pct(wr)} <span class="text-slate-500 text-2xl">-</span> ${pct(1 - wr)}
     </div>
     <table class="w-full text-sm mt-4">
-      <thead><tr>
-        <th class="text-left text-slate-500 pb-2"></th>
-        <th class="text-center text-slate-300 pb-2">${a.name.substring(0,10)}</th>
-        <th class="text-center text-slate-300 pb-2">${b.name.substring(0,10)}</th>
-      </tr></thead>
+      <thead><tr><th></th><th class="text-center text-slate-300 pb-2">${esc(deckName(aId).substring(0, 10))}</th><th class="text-center text-slate-300 pb-2">${esc(deckName(bId).substring(0, 10))}</th></tr></thead>
       <tbody class="text-slate-300">
-        <tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">メインHP</td><td class="text-center">${a.attackers[0]?.hp || '?'}</td><td class="text-center">${b.attackers[0]?.hp || '?'}</td></tr>
-        <tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">ダメージ</td><td class="text-center">${a.attackers[0]?.damage || '?'}</td><td class="text-center">${b.attackers[0]?.damage || '?'}</td></tr>
-        <tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">prize</td><td class="text-center">${a.attackers[0]?.prizeCost || '?'}</td><td class="text-center">${b.attackers[0]?.prizeCost || '?'}</td></tr>
-        <tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">setup</td><td class="text-center">${a.setupTurns}T</td><td class="text-center">${b.setupTurns}T</td></tr>
-        <tr class="border-t border-slate-700"><td class="py-1.5 text-slate-400">弱点</td><td class="text-center">${a.weakness}</td><td class="text-center">${b.weakness}</td></tr>
+        ${row('主なアタッカー', esc(a?.name || '?'), esc(b?.name || '?'))}
+        ${row('HP', a?.hp ?? '?', b?.hp ?? '?')}
+        ${row('最大ダメージ', a?.dmg ?? '?', b?.dmg ?? '?')}
+        ${row('サイド', a?.prize ?? '?', b?.prize ?? '?')}
+        ${row('まだ動かない効果', `${ua} 件`, `${ub} 件`)}
       </tbody>
     </table>
-  `;
-  document.getElementById('popup').classList.remove('hidden');
-  document.getElementById('popup').classList.add('fade-in');
-  document.getElementById('overlay').classList.remove('hidden');
+    <p class="text-xs text-slate-500 mt-3">シミュレーターの計算で、実際の勝率とはずれることがある。動かない効果の中身は、ランキングからデッキを押すと出る。</p>`;
+  openPopup();
 }
 
+function openPopup() {
+  $('popup').classList.remove('hidden');
+  $('popup').classList.add('fade-in');
+  $('overlay').classList.remove('hidden');
+}
 function closePopup() {
-  document.getElementById('popup').classList.add('hidden');
-  document.getElementById('overlay').classList.add('hidden');
+  $('popup').classList.add('hidden');
+  $('overlay').classList.add('hidden');
 }
 
-
-// =========================================================================
-// Deck Code Analysis
-// =========================================================================
-
-async function fetchDeckFromCode(code) {
-  const url = `https://www.pokemon-card.com/deck/confirm.html/deckID/${code}/`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const html = await res.text();
-
-  // Parse hidden inputs for card IDs and counts
-  const categories = {};
-  const hiddenFields = {
-    deck_pke: 'pokemon', deck_gds: 'goods', deck_tool: 'tool',
-    deck_sup: 'supporter', deck_sta: 'stadium', deck_ene: 'energy',
-  };
-  for (const [field, cat] of Object.entries(hiddenFields)) {
-    const match = html.match(new RegExp(`name="${field}"[^>]*value="([^"]*)"`));
-    if (match && match[1]) {
-      categories[cat] = match[1].split('-').filter(Boolean).map(entry => {
-        const [id, count] = entry.split('_');
-        return { id, count: parseInt(count) || 1 };
-      });
+function populateSelects() {
+  for (const selectId of ['meta-deck-select', 'deck-a-select', 'deck-b-select']) {
+    const select = $(selectId);
+    for (const id of DATA.deckIds) {
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.textContent = deckName(id);
+      select.appendChild(opt);
     }
-  }
-
-  // Parse card names from inline JS
-  const cardNames = {};
-  const nameRegex = /PCGDECK\.searchItemName\[(\d+)\]='([^']+)'/g;
-  let m;
-  while ((m = nameRegex.exec(html)) !== null) {
-    cardNames[m[1]] = m[2].replace(/\(.*\)$/, '').trim();
-  }
-
-  // Build card list
-  const cards = [];
-  for (const [cat, entries] of Object.entries(categories)) {
-    for (const entry of entries) {
-      cards.push({
-        id: entry.id,
-        name: cardNames[entry.id] || `card_${entry.id}`,
-        count: entry.count,
-        category: cat,
-      });
-    }
-  }
-  return cards;
-}
-
-function buildProfileFromCards(cards) {
-  const db = DATA.cardDatabase || {};
-  const pokemon = cards.filter(c => c.category === 'pokemon');
-  const bossCount = cards.filter(c => c.name === 'ボスの指令').reduce((s, c) => s + c.count, 0);
-  const beltCount = cards.filter(c => c.name?.includes('マキシマムベルト')).reduce((s, c) => s + c.count, 0);
-
-  // 60枚のcards配列を構築（cardDatabaseから実データ取得）
-  const deckCards = [];
-  let deckWeakness = '';
-  let hasExAttacker = false;
-  let hasEvolution = false;
-
-  for (const poke of pokemon) {
-    const info = db[poke.name];
-    for (let i = 0; i < poke.count; i++) {
-      if (info) {
-        const attacks = (info.attacks || []).map(a => ({
-          damage: a.damage || 0, energy_count: a.energy_count || 0,
-          damage_type: a.damage_type || 'fixed',
-          bonus_condition: a.bonus_condition || '',
-          bonus_amount: a.bonus_amount || 0,
-          bonus_multiplier: a.bonus_multiplier || 0,
-          effect: a.effect || '', effect_value: 0,
-          bench_snipe: a.bench_damage_all || 0,
-          energy_accel_from_trash: 0, bench_damage_multiplier: 0, bench_damage_base: 0,
-          energy_cost: a.energy_cost || [],  // タイプ別コスト
-          scatter_per_hit: a.scatter_per_hit || 0,
-          scatter_hit_count: a.scatter_hit_count || 0,
-        }));
-        const bestDmg = Math.max(...(info.attacks || []).map(a => (a.damage || 0) + (a.scatter_per_hit || 0) * (a.scatter_hit_count || 0)), 0);
-        if (info.weakness && bestDmg > 0) deckWeakness = deckWeakness || info.weakness;
-        if (info.is_ex && bestDmg > 0) hasExAttacker = true;
-        if (info.stage >= 1) hasEvolution = true;
-        // 特性名→Rust AbilityType文字列
-        const ABILITY_MAP = {
-          'レジストヴェール': 'resist_veil', 'ベンチバリア': 'bench_barrier',
-          'みどりのまい': 'midori_mai', 'ひっさつしゅりけん': 'hissatsu_shuriken',
-          'おつかいダッシュ': 'otsugai_dash', 'カースドボム': 'cursed_bomb',
-          'がんばりハート': 'survive_once', 'アビスシーク': 'abyss_seek',
-          'サイコエンブレイス': 'psycho_embrace',
-          // 環境特性30個
-          'さかてにとる': 'sakateni_toru', 'おくのてキャッチ': 'okunote_catch',
-          'はなのカーテン': 'hana_no_curtain', 'フェアリーゾーン': 'fairy_zone',
-          'スカイライン': 'skyline', 'しめりけ': 'shimerike',
-          'アドレナブレイン': 'adrena_brain', 'ふみん': 'fumin',
-          'ほうせきさがし': 'houseki_sagashi', 'ていさつしれい': 'teisatsu_shirei',
-          'ラピッドバーニア': 'rapid_burner', 'おいしげる': 'oishigeru',
-          'おうじゃのよびごえ': 'ouja_no_yobigoe', 'おまつりおんど': 'omatsuri_ondo',
-          'きゃくよせ': 'kyaku_yose', 'しんかのみちびき': 'shinka_no_michibiki',
-          'しんぴのいしやど': 'shinpi_no_ishiyado', 'とりひき': 'torihiki',
-          'どすこいキャッチャー': 'doskoi_catcher', 'にげあしドロー': 'nigeashi_draw',
-          'ろうれんのわざ': 'rouren_no_waza', 'グローリーエール': 'glory_ale',
-          'サイコドロー': 'psycho_draw', 'スカイキャリー': 'sky_carry',
-          'チャージアップ': 'charge_up', 'ドンドンだいこ': 'dondon_daiko',
-          'パワーセーバー': 'power_saver', 'ファンコール': 'fan_call',
-          'ルナサイクル': 'luna_cycle', 'アドレナフェロモン': 'adrena_feromone',
-        };
-        const abilityStr = ABILITY_MAP[info.ability_name] || '';
-        deckCards.push({
-          kind: 'pokemon', name: poke.name, hp: info.hp || 70,
-          prize_cost: info.prize_cost || (info.is_ex ? 2 : 1),
-          attacks, attack_type: info.type || '', weakness: info.weakness || '',
-          is_ex: info.is_ex || false, has_immunity: false, ability: abilityStr,
-          stage: 0, effect_id: 0, effect_value: 0,
-        });
-      } else {
-        // DBにないカード（新弾等）→HP70のシステムポケモン
-        deckCards.push({
-          kind: 'pokemon', name: poke.name, hp: 70, prize_cost: 1,
-          attacks: [], attack_type: '', weakness: '',
-          is_ex: false, has_immunity: false, ability: '', stage: 0,
-          effect_id: 0, effect_value: 0,
-        });
-      }
-    }
-  }
-
-  // サポート
-  for (const card of cards.filter(c => c.category === 'supporter')) {
-    const isBoss = card.name === 'ボスの指令';
-    for (let i = 0; i < card.count; i++) {
-      deckCards.push({ kind: 'supporter', hp: 0, prize_cost: 0, attacks: [],
-        attack_type: '', weakness: '', is_ex: false, has_immunity: false,
-        ability: '', stage: 0, effect_id: isBoss ? 1 : 2, effect_value: isBoss ? 0 : 5 });
-    }
-  }
-
-  // グッズ・どうぐ
-  for (const card of cards.filter(c => c.category === 'goods' || c.category === 'tool')) {
-    const isBelt = card.name?.includes('マキシマムベルト');
-    const isUnfairStamp = card.name?.includes('アンフェアスタンプ');
-    const isRareCandy = card.name === 'ふしぎなアメ';
-    const isPofin = card.name === 'なかよしポフィン';
-    const isPokepad = card.name === 'ポケパッド';
-    const isMushitori = card.name === 'むしとりセット';
-    const isPowerProtein = card.name === 'パワープロテイン';
-    for (let i = 0; i < card.count; i++) {
-      deckCards.push({ kind: isBelt ? 'tool' : 'item', hp: 0, prize_cost: 0, attacks: [],
-        attack_type: '', weakness: '', is_ex: false, has_immunity: false,
-        ability: '', stage: 0,
-        effect_id: isBelt ? 4 : isUnfairStamp ? 5 : isRareCandy ? 6 : isPofin ? 7 : isPokepad ? 8 : isMushitori ? 9 : isPowerProtein ? 12 : 3,
-        effect_value: isBelt ? 30 : 0 });
-    }
-  }
-
-  // スタジアム
-  for (const card of cards.filter(c => c.category === 'stadium')) {
-    const isVitalityForest = card.name === '活力の森';
-    const isZeroHollow = card.name === 'ゼロの大空洞';
-    for (let i = 0; i < card.count; i++) {
-      deckCards.push({ kind: 'stadium', hp: 0, prize_cost: 0, attacks: [],
-        attack_type: '', weakness: '', is_ex: false, has_immunity: false,
-        ability: '', stage: 0, effect_id: isVitalityForest ? 10 : isZeroHollow ? 11 : 0, effect_value: 0 });
-    }
-  }
-
-  // デッキ内アタッカーが必要とするエネルギータイプを収集
-  const neededTypes = new Set();
-  for (const c of deckCards) {
-    if (c.kind === 'pokemon') {
-      for (const a of (c.attacks || [])) {
-        for (const ec of (a.energy_cost || [])) {
-          const t = ETYPE_MAP[ec.type] ?? 0;
-          if (t > 0) neededTypes.add(t);
-        }
-      }
-    }
-  }
-
-  for (const card of cards.filter(c => c.category === 'energy')) {
-    let eTypeId = 0;
-    // 基本エネルギー
-    for (const [key, id] of Object.entries(ENERGY_SINGLE_MAP)) {
-      if (card.name?.includes(key)) { eTypeId = id; break; }
-    }
-    // 特殊エネルギー: 提供可能タイプのうちデッキが必要とするタイプに設定
-    if (eTypeId === 0) {
-      for (const [key, typeIds] of Object.entries(ENERGY_MULTI_MAP)) {
-        if (card.name?.includes(key)) {
-          for (const t of typeIds) {
-            if (neededTypes.has(t)) { eTypeId = t; break; }
-          }
-          if (eTypeId === 0 && typeIds.length > 0) eTypeId = typeIds[0];
-          break;
-        }
-      }
-    }
-    for (let i = 0; i < card.count; i++) {
-      deckCards.push({ kind: 'energy', hp: 0, prize_cost: 0, attacks: [],
-        attack_type: '', weakness: '', is_ex: false, has_immunity: false,
-        ability: '', stage: 0, effect_id: 0, effect_value: 0,
-        name: card.name, energy_type_id: eTypeId });
-    }
-  }
-
-  while (deckCards.length < 60) {
-    deckCards.push({ kind: 'energy', hp: 0, prize_cost: 0, attacks: [],
-      attack_type: '', weakness: '', is_ex: false, has_immunity: false,
-      ability: '', stage: 0, effect_id: 0, effect_value: 0 });
-  }
-
-  return {
-    name: 'カスタムデッキ',
-    cards: deckCards.slice(0, 60),
-    setup_turns: (() => {
-      // メインアタッカー（最大ダメージ）が進化ポケモンかで判定
-      const mainAttacker = deckCards
-        .filter(c => c.kind === 'pokemon' && c.attacks?.some(a => a.damage > 0))
-        .reduce((best, c) => {
-          const d = Math.max(...c.attacks.map(a => a.damage || 0));
-          return d > (best?.maxDmg || 0) ? { card: c, maxDmg: d } : best;
-        }, null);
-      if (!mainAttacker) return 0;
-      const info = db[mainAttacker.card.name];
-      // stage 0=即攻撃, stage 1=2T(基本→進化→攻撃), stage 2=2T(ふしぎなアメ考慮)
-      return info && info.stage >= 1 ? 2 : 0;
-    })(),
-    energy_accel: (() => {
-      // みどりのまい/サイコエンブレイス等のエネ加速特性を検出
-      let accel = 0;
-      for (const c of deckCards) {
-        if (c.kind !== 'pokemon') continue;
-        const info = db[c.name];
-        if (!info) continue;
-        if (info.ability_name === 'みどりのまい') accel += 1;
-        if (info.ability_name === 'サイコエンブレイス') accel += 1;
-      }
-      // みどりのまいは1ターン1回、複数枚あっても期待値は使える枚数に依存
-      // 4枚入っていても場に出るのは2枚程度 → min(accel/2, 2)で近似
-      return Math.min(Math.ceil(accel / 2), 3);
-    })(),
-    weakness: deckWeakness,
-    boss_count: bossCount,
-    belt_count: beltCount,
-    bench_size: 5,
-  };
-}
-
-async function analyzeFromCode() {
-  const code = document.getElementById('deck-code-input').value.trim();
-  if (!/^[A-Za-z0-9]{6}-[A-Za-z0-9]{6}-[A-Za-z0-9]{6}$/.test(code)) {
-    showStatus('デッキコードの形式が正しくありません（XXXXXX-XXXXXX-XXXXXX）', 'error');
-    return;
-  }
-
-  const btn = document.getElementById('analyze-btn');
-  btn.disabled = true;
-  showStatus('デッキ情報を取得中...', 'loading');
-
-  try {
-    const cards = await fetchDeckFromCode(code);
-    if (cards.length === 0) throw new Error('カードリストの取得に失敗しました');
-
-    showStatus(`${cards.reduce((s,c) => s+c.count, 0)}枚のデッキを取得しました。分析中...`, 'loading');
-
-    const profile = buildProfileFromCards(cards);
-    await runAnalysis(profile);
-  } catch (e) {
-    showStatus(`エラー: ${e.message}`, 'error');
-  } finally {
-    btn.disabled = false;
   }
 }
 
-function selectMetaDeck() {
-  const id = document.getElementById('meta-deck-select').value;
-  if (!id) return;
-
-  // メタデッキ同士は事前計算勝率を使う
-  const precomputed = DATA.winrateMatrix[id];
-  if (precomputed) {
-    const results = DATA.deckIds
-      .filter(did => did !== id)
-      .map(did => ({ id: did, winrate: precomputed[did] ?? 0.5 }));
-
-    showStatus(`事前計算済み勝率を表示中（${DATA.metadata.engine}エンジン, trials=${DATA.metadata.trials}）`, 'success');
-    const deckData = buildMetaDeck(id);
-    renderAnalysisResults(deckData, results);
-    return;
-  }
-
-  // 事前計算がなければWasmで計算
-  const deckData = buildMetaDeck(id);
-  if (deckData) {
-    runAnalysis(deckData);
-  }
-}
-
-// メタデッキをcardDatabaseから構築
-function buildMetaDeck(deckId) {
-  const cardList = DATA.deckCardLists?.[deckId];
-  if (cardList) {
-    return buildProfileFromCards(cardList);
-  }
-  return { name: DATA.deckInfo[deckId]?.name || deckId, cards: [] };
-}
-
-async function runAnalysis(deckData) {
-  if (!WASM_READY) {
-    showStatus('Wasmエンジンが利用できません。事前計算データのみ表示中。', 'error');
-    return;
-  }
-
-  const trials = 5000;
-  showStatus(`Wasmエンジンで${DATA.deckIds.length}デッキとの勝率を計算中（${trials}trials/pair）...`, 'loading');
-
-  // Run in next frame to allow UI update
-  await new Promise(r => setTimeout(r, 10));
-
-  try {
-    // メタデッキ: cardDatabaseから統一構築
-    const metaEntries = DATA.deckIds.map(id => {
-      const entry = { id };
-      const built = buildMetaDeck(id);
-      if (built?.cards) {
-        entry.deck = built;
-      }
-      return entry;
-    });
-
-    const myJson = JSON.stringify(deckData);
-    const metaJson = JSON.stringify(metaEntries);
-    const start = performance.now();
-    const resultsJson = analyze_vs_meta(myJson, metaJson, trials);
-    const elapsed = performance.now() - start;
-
-    const results = JSON.parse(resultsJson);
-    showStatus(`完了 (${elapsed.toFixed(0)}ms, ${metaEntries.length * trials}ゲーム)`, 'success');
-    renderAnalysisResults(deckData, results);
-  } catch (e) {
-    showStatus(`シミュレーションエラー: ${e}`, 'error');
-  }
-}
-
-function showStatus(msg, type) {
-  const el = document.getElementById('analysis-status');
-  el.classList.remove('hidden');
-  const colors = { loading: 'text-slate-400', error: 'text-red-400', success: 'text-emerald-400' };
-  el.className = `text-sm ${colors[type] || 'text-slate-400'}`;
-  el.textContent = msg;
-}
-
-// =========================================================================
-// マッチアップ理由生成
-// =========================================================================
-
-const TYPE_NAMES = {fire:'炎',water:'水',grass:'草',lightning:'雷',psychic:'超',fighting:'闘',dark:'悪',steel:'鋼',dragon:'龍',colorless:'無'};
-const ETYPE_MAP = {fire:1,water:2,grass:3,lightning:4,electric:4,psychic:5,fighting:6,dark:7,steel:8,dragon:9,colorless:0};
-const ENERGY_SINGLE_MAP = {
-  '草': 3, '炎': 1, '水': 2, '雷': 4, '超': 5, '闘': 6, '悪': 7, '鋼': 8, '龍': 9,
-  'grass': 3, 'fire': 1, 'water': 2, 'lightning': 4, 'psychic': 5, 'fighting': 6,
-  'dark': 7, 'steel': 8, 'dragon': 9, 'イグニッション': 1,
-};
-const ENERGY_MULTI_MAP = {
-  'ロケット団エネルギー': [5, 7],  // 超 or 悪
-  'レガシーエネルギー': [5, 7],
-};
-
-function analyzeMatchupReason(myDeck, oppId) {
-  const oppDeck = buildMetaDeck(oppId);
-  if (!oppDeck?.cards) return '';
-
-  const reasons = [];
-  const estimateEffDmg = (atk) => {
-    let d = atk.damage || 0;
-    const cond = atk.bonus_condition || '';
-    const mult = atk.bonus_multiplier || 0;
-    const amt = atk.bonus_amount || 0;
-    if (cond === 'own_field_pokemon') d = mult * 5; // 場5体想定
-    else if (cond === 'own_field_energy') d = mult * 4;
-    else if (cond === 'attached_energy') d += mult * 3; // エネ3個想定
-    else if (cond === 'trash_bench_energy') d += mult * 1.5; // 平均1.5枚トラッシュ
-    else if (cond === 'opponent_prizes_taken') d += amt * 2; // サイド2枚想定
-    else if (cond === 'vs_ex') d += amt * 0.6; // 60%の確率でex相手
-    else if (cond === 'always') d += amt;
-    else if (cond === 'bench_count') d += amt * 3;
-    else if (cond === 'self_damage_counters') d += amt * 3;
-    return d;
-  };
-  // デッキ内のエネルギータイプを収集（特殊エネルギーの複数タイプも含む）
-  const getDeckEnergyTypes = (deck) => {
-    const types = new Set();
-    for (const c of (deck.cards || [])) {
-      if (c.kind === 'energy') {
-        const eid = c.energy_type_id || 0;
-        types.add(eid);
-        // 特殊エネルギーの複数タイプを追加
-        const eName = c.name || '';
-        for (const [key, typeIds] of Object.entries(ENERGY_MULTI_MAP)) {
-          if (eName.includes(key)) {
-            for (const t of typeIds) types.add(t);
-          }
-        }
-      }
-    }
-    return types;
-  };
-  const canUseInDeck = (atk, deckEnergyTypes) => {
-    const costs = atk.energy_cost || [];
-    if (costs.length === 0) return true;
-    for (const ec of costs) {
-      const t = ETYPE_MAP[ec.type] ?? 0;
-      if (t === 0) continue; // 無色コストは任意で満たせる
-      if (!deckEnergyTypes.has(t)) return false;
-    }
-    return true;
-  };
-  const getAttackers = (deck) => {
-    const deckEnergy = getDeckEnergyTypes(deck);
-    const seen = new Map();
-    for (const c of (deck.cards || [])) {
-      if (c.kind !== 'pokemon') continue;
-      // このデッキのエネルギーで使えるワザのみ考慮
-      const usableAtks = (c.attacks || []).filter(a => canUseInDeck(a, deckEnergy));
-      const bestDmg = Math.max(...usableAtks.map(a => estimateEffDmg(a)), 0);
-      if (bestDmg <= 0) continue;
-      const key = c.name || `${c.hp}_${bestDmg}`;
-      if (!seen.has(key) || bestDmg > Math.max(...(seen.get(key).attacks || []).filter(a => canUseInDeck(a, deckEnergy)).map(a => estimateEffDmg(a)), 0)) {
-        seen.set(key, c);
-      }
-    }
-    return [...seen.values()].sort((a, b) => {
-      const usableA = (a.attacks || []).filter(x => canUseInDeck(x, deckEnergy));
-      const usableB = (b.attacks || []).filter(x => canUseInDeck(x, deckEnergy));
-      const da = Math.max(...usableA.map(x => estimateEffDmg(x)), 0);
-      const db = Math.max(...usableB.map(x => estimateEffDmg(x)), 0);
-      return db - da;
-    });
-  };
-
-  const myAtks = getAttackers(myDeck);
-  const oppAtks = getAttackers(oppDeck);
-  if (!myAtks.length || !oppAtks.length) return '';
-
-  const myMain = myAtks[0];
-  const oppMain = oppAtks[0];
-  const myName = myMain.name || '?';
-  const oppName = oppMain.name || '?';
-  const myDmg = Math.max(...myMain.attacks.map(a => estimateEffDmg(a)));
-  const oppDmg = Math.max(...oppMain.attacks.map(a => estimateEffDmg(a)));
-  const myType = myMain.attack_type || '';
-  const oppWeak = oppMain.weakness || '';
-  const oppType = oppMain.attack_type || '';
-  const myWeak = myMain.weakness || '';
-
-  // タイプ相性
-  if (myType && myType === oppWeak) {
-    reasons.push(`弱点: ${myName}(${TYPE_NAMES[myType]||myType})→${oppName}に×2`);
-  }
-  if (oppType && oppType === myWeak) {
-    reasons.push(`弱点被り: ${oppName}(${TYPE_NAMES[oppType]||oppType})→${myName}に×2`);
-  }
-
-  // KO効率（メインアタッカー）
-  const myEffDmg = (myType && myType === oppWeak) ? myDmg * 2 : myDmg;
-  const oppEffDmg = (oppType && oppType === myWeak) ? oppDmg * 2 : oppDmg;
-  const hitsToKo = Math.ceil(oppMain.hp / Math.max(myEffDmg, 1));
-  const hitsToKoMe = Math.ceil(myMain.hp / Math.max(oppEffDmg, 1));
-  reasons.push(`${myName}(${myEffDmg}dmg)→${oppName}(HP${oppMain.hp}): ${hitsToKo}発KO`);
-  if (hitsToKoMe <= 2) {
-    reasons.push(`${oppName}(${oppEffDmg}dmg)→${myName}(HP${myMain.hp}): ${hitsToKoMe}発KO`);
-  }
-
-  // サイドレース（カード名付き）
-  const myPrize = myMain.prize_cost || 2;
-  const oppPrize = oppMain.prize_cost || 2;
-  const needKOs = Math.ceil(6 / oppPrize);
-  const theyNeedKOs = Math.ceil(6 / myPrize);
-  if (needKOs !== theyNeedKOs) {
-    reasons.push(`サイド: ${oppName}(${oppPrize}枚)を${needKOs}体 vs ${myName}(${myPrize}枚)を${theyNeedKOs}体`);
-  }
-
-  // サブアタッカー（メイン以外で重要なもの）
-  if (myAtks.length > 1) {
-    const sub = myAtks[1];
-    const subDmg = Math.max(...sub.attacks.map(a => a.damage || 0));
-    if (subDmg >= 30) {
-      reasons.push(`サブ: ${sub.name || '?'}(${subDmg}dmg/HP${sub.hp})`);
-    }
-  }
-
-  // setup差
-  const mySetup = myDeck.setup_turns || 0;
-  const oppSetup = oppDeck.setup_turns || 0;
-  if (mySetup !== oppSetup) {
-    reasons.push(`setup: ${mySetup}T vs ${oppSetup}T`);
-  }
-
-  // 特殊効果
-  if (myMain.has_immunity) reasons.push(`${myName}: ex無効`);
-
-  return reasons.slice(0, 4).join(' / ');
-}
-
-function renderAnalysisResults(deckData, results) {
-  const container = document.getElementById('analysis-results');
-  const barsContainer = document.getElementById('matchup-bars');
-  container.classList.remove('hidden');
-
-  results.sort((a, b) => b.winrate - a.winrate);
-
-  let barsHtml = '';
-  let totalWeightedWr = 0;
-  let totalWeight = 0;
-
-  for (const r of results) {
-    const name = DATA.deckInfo[r.id]?.name || r.id;
-    const pct = (r.winrate * 100).toFixed(1);
-    const barWidth = Math.max(r.winrate * 100, 2);
-    const share = DATA.metaShares?.[r.id] || 0;
-    totalWeightedWr += r.winrate * share;
-    totalWeight += share;
-
-    let barColor, textColor;
-    if (r.winrate > 0.55) { barColor = 'bg-emerald-500'; textColor = 'text-emerald-400'; }
-    else if (r.winrate < 0.45) { barColor = 'bg-red-500'; textColor = 'text-red-400'; }
-    else { barColor = 'bg-amber-500'; textColor = 'text-amber-400'; }
-
-    const reason = analyzeMatchupReason(deckData, r.id);
-
-    barsHtml += `
-      <div class="mb-2">
-        <div class="flex items-center gap-2">
-          <span class="text-xs text-slate-400 w-24 truncate text-right">${name}</span>
-          <div class="flex-1 h-5 bg-slate-700/50 rounded overflow-hidden">
-            <div class="h-full ${barColor}/30 bar-chart-bar rounded" style="width:${barWidth}%"></div>
-          </div>
-          <span class="text-xs font-semibold w-14 text-right ${textColor}">${pct}%</span>
-        </div>
-        ${reason ? `<div class="ml-28 text-[10px] text-slate-500 mt-0.5">${reason}</div>` : ''}
-      </div>
-    `;
-  }
-
-  barsContainer.innerHTML = barsHtml;
-
-  const fitness = totalWeight > 0 ? totalWeightedWr / totalWeight : 0;
-  document.getElementById('fitness-score').textContent = `${(fitness * 100).toFixed(1)}%`;
-}
-
-// =========================================================================
-// Tab switching
-// =========================================================================
-
-function switchTab(tab) {
-  document.getElementById('panel-meta').classList.toggle('hidden', tab !== 'meta');
-  document.getElementById('panel-1v1').classList.toggle('hidden', tab !== '1v1');
-  document.getElementById('tab-meta').classList.toggle('border-primary', tab === 'meta');
-  document.getElementById('tab-meta').classList.toggle('text-primary', tab === 'meta');
-  document.getElementById('tab-meta').classList.toggle('border-transparent', tab !== 'meta');
-  document.getElementById('tab-meta').classList.toggle('text-slate-400', tab !== 'meta');
-  document.getElementById('tab-1v1').classList.toggle('border-primary', tab === '1v1');
-  document.getElementById('tab-1v1').classList.toggle('text-primary', tab === '1v1');
-  document.getElementById('tab-1v1').classList.toggle('border-transparent', tab !== '1v1');
-  document.getElementById('tab-1v1').classList.toggle('text-slate-400', tab !== '1v1');
-}
-// =========================================================================
-// 1v1 Analysis
-// =========================================================================
-
-async function analyze1v1() {
-  const btn = document.getElementById('analyze-1v1-btn');
-  btn.disabled = true;
-
-  try {
-    const deckA = await resolveDeck('a');
-    const deckB = await resolveDeck('b');
-    if (!deckA || !deckB) return;
-
-    if (!WASM_READY) {
-      show1v1Status('Wasmエンジンが利用できません', 'error');
-      return;
-    }
-
-    show1v1Status('シミュレーション中...', 'loading');
-    await new Promise(r => setTimeout(r, 10));
-
-    const trials = 10000;
-    const start = performance.now();
-    const wr = analyze_matchup(JSON.stringify(deckA.data), JSON.stringify(deckB.data), trials);
-    const elapsed = performance.now() - start;
-
-    const wrPct = (wr * 100).toFixed(1);
-    const wrBPct = ((1 - wr) * 100).toFixed(1);
-    show1v1Status(`完了 (${elapsed.toFixed(0)}ms, ${trials}ゲーム)`, 'success');
-
-    // 理由生成
-    const reasons1v1 = analyze1v1Reasons(deckA.data, deckB.data);
-
-    const winColor = wr > 0.5 ? 'text-emerald-400' : 'text-red-400';
-    document.getElementById('result-1v1').classList.remove('hidden');
-    document.getElementById('result-1v1').innerHTML = `
-      <div class="text-center">
-        <div class="flex justify-center items-center gap-4 mb-2">
-          <span class="text-sm font-semibold">${deckA.name}</span>
-          <span class="text-slate-500">vs</span>
-          <span class="text-sm font-semibold">${deckB.name}</span>
-        </div>
-        <div class="text-4xl font-bold ${winColor} my-3">
-          ${wrPct}% <span class="text-slate-500 text-2xl">-</span> ${wrBPct}%
-        </div>
-        <div class="text-xs text-slate-500 mt-2">${trials}回シミュレーション</div>
-        ${reasons1v1 ? `<div class="mt-3 p-3 bg-deep/40 rounded-lg text-left text-xs text-slate-400 space-y-1">${reasons1v1}</div>` : ''}
-      </div>
-    `;
-  } catch (e) {
-    show1v1Status(`エラー: ${e.message || e}`, 'error');
-  } finally {
-    btn.disabled = false;
-  }
-}
-async function resolveDeck(side) {
-  const codeEl = document.getElementById(`deck-${side}-code`);
-  const selectEl = document.getElementById(`deck-${side}-select`);
-  const code = codeEl.value.trim();
-  const selectId = selectEl.value;
-
-  if (code && /^[A-Za-z0-9]{6}-[A-Za-z0-9]{6}-[A-Za-z0-9]{6}$/.test(code)) {
-    show1v1Status(`デッキ${side.toUpperCase()}を取得中...`, 'loading');
-    const cards = await fetchDeckFromCode(code);
-    const profile = buildProfileFromCards(cards);
-    return { name: `カスタム(${code.substring(0,6)})`, data: profile };
-  } else if (selectId && DATA.deckFullConfigs?.[selectId]) {
-    return { name: DATA.deckInfo[selectId]?.name || selectId, data: DATA.deckFullConfigs[selectId] };
-  } else {
-    show1v1Status(`デッキ${side.toUpperCase()}: コードまたは環境デッキを指定してください`, 'error');
-    return null;
-  }
-}
-
-function analyze1v1Reasons(deckA, deckB) {
-  const getMain = (deck) => {
-    const pokes = (deck.cards || []).filter(c => c.kind === 'pokemon' && c.attacks?.some(a => a.damage > 0));
-    return pokes.reduce((best, c) => (!best || (c.attacks[0]?.damage||0) > (best.attacks[0]?.damage||0)) ? c : best, null);
-  };
-  const a = getMain(deckA);
-  const b = getMain(deckB);
-  if (!a || !b) return '';
-
-  const lines = [];
-  const aDmg = a.attacks[0]?.damage || 0;
-  const bDmg = b.attacks[0]?.damage || 0;
-
-  // 弱点
-  if (a.attack_type && a.attack_type === b.weakness) lines.push(`<div>A側有利: ${TYPE_NAMES[a.attack_type]||a.attack_type}攻撃がB側の弱点(x2ダメージ)</div>`);
-  if (b.attack_type && b.attack_type === a.weakness) lines.push(`<div>B側有利: ${TYPE_NAMES[b.attack_type]||b.attack_type}攻撃がA側の弱点(x2ダメージ)</div>`);
-
-  // KO効率
-  const aEff = (a.attack_type && a.attack_type === b.weakness) ? aDmg*2 : aDmg;
-  const bEff = (b.attack_type && b.attack_type === a.weakness) ? bDmg*2 : bDmg;
-  lines.push(`<div>A→B: ${aEff}dmg, ${Math.ceil(b.hp/Math.max(aEff,1))}発KO (HP${b.hp})</div>`);
-  lines.push(`<div>B→A: ${bEff}dmg, ${Math.ceil(a.hp/Math.max(bEff,1))}発KO (HP${a.hp})</div>`);
-
-  // サイドレース
-  const aNeeds = Math.ceil(6 / (b.prize_cost||2));
-  const bNeeds = Math.ceil(6 / (a.prize_cost||2));
-  if (aNeeds !== bNeeds) lines.push(`<div>サイドレース: A側${aNeeds}体KO必要, B側${bNeeds}体</div>`);
-
-  // setup
-  const aSetup = deckA.setup_turns || 0;
-  const bSetup = deckB.setup_turns || 0;
-  if (aSetup !== bSetup) lines.push(`<div>セットアップ: A=${aSetup}T, B=${bSetup}T</div>`);
-
-  return lines.join('');
-}
-
-function show1v1Status(msg, type) {
-  const el = document.getElementById('status-1v1');
+// ---- 自分のデッキ vs 環境 ----
+function showStatus(el, msg, type) {
   el.classList.remove('hidden');
   const colors = { loading: 'text-slate-400', error: 'text-red-400', success: 'text-emerald-400' };
   el.className = `text-sm mt-2 ${colors[type] || 'text-slate-400'}`;
   el.textContent = msg;
 }
 
-function populateMetaDeckSelect() {
-  for (const selectId of ['meta-deck-select', 'deck-a-select', 'deck-b-select']) {
-    const select = document.getElementById(selectId);
-    if (!select) continue;
-    DATA.deckIds.forEach(id => {
-      const opt = document.createElement('option');
-      opt.value = id;
-      opt.textContent = DATA.deckInfo[id]?.name || id;
-      select.appendChild(opt);
+async function analyzeFromCode() {
+  const code = $('deck-code-input').value.trim();
+  const status = $('analysis-status');
+  if (!DECK_CODE_RE.test(code)) {
+    showStatus(status, 'デッキコードの形式が違います（XXXXXX-XXXXXX-XXXXXX）', 'error');
+    return;
+  }
+  const btn = $('analyze-btn');
+  btn.disabled = true;
+  $('analysis-warnings').innerHTML = '';
+  try {
+    showStatus(status, 'デッキを公式サイトから取っています...', 'loading');
+    const cards = await fetchDeck(code);
+    const built = buildDeck(cards, { cards: DATA.cards, byName: BY_NAME }, { name: code });
+    $('analysis-warnings').innerHTML = warningsHtml(built);
+    const opponents = DATA.deckIds.map(id => ({ id, deck: BUILT[id].deck }));
+    const t0 = performance.now();
+    const results = await ask({ type: 'versus', my: built.deck, opponents, trials: CUSTOM_TRIALS }, p => {
+      showStatus(status, `計算中 ${p.done}/${p.total}（vs ${deckName(p.id)} ${pct(p.winrate)}）`, 'loading');
     });
+    showStatus(status, `完了（${((performance.now() - t0) / 1000).toFixed(1)} 秒、1デッキあたり ${CUSTOM_TRIALS.toLocaleString()} 回）`, 'success');
+    renderAnalysisResults(`デッキコード ${code} の、環境の各デッキとの勝率`, results);
+  } catch (e) {
+    showStatus(status, `エラー: ${e.message}`, 'error');
+  } finally {
+    btn.disabled = false;
   }
 }
 
+function selectMetaDeck() {
+  const id = $('meta-deck-select').value;
+  if (!id) return;
+  const wr = DATA.winrateMatrix[id] || {};
+  const results = DATA.deckIds.filter(o => o !== id && wr[o] !== undefined).map(o => ({ id: o, winrate: wr[o] }));
+  showStatus($('analysis-status'), `計算済みの勝率（1組 ${DATA.metadata.trials?.toLocaleString() ?? '?'} 回）`, 'success');
+  $('analysis-warnings').innerHTML = warningsHtml(BUILT[id]);
+  renderAnalysisResults(`${deckName(id)} の、環境の各デッキとの勝率`, results);
+}
+
+function renderAnalysisResults(title, results) {
+  $('analysis-results').classList.remove('hidden');
+  $('analysis-title').textContent = title;
+  const sh = shares();
+  let w = 0;
+  let t = 0;
+  const rows = [...results].sort((a, b) => b.winrate - a.winrate).map(r => {
+    const s = sh[r.id] || 0;
+    w += r.winrate * s;
+    t += s;
+    const color = r.winrate > 0.55 ? ['bg-emerald-500', 'text-emerald-400'] : r.winrate < 0.45 ? ['bg-red-500', 'text-red-400'] : ['bg-amber-500', 'text-amber-400'];
+    return `
+      <div class="mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-400 w-28 truncate text-right">${esc(deckName(r.id))}</span>
+          <div class="flex-1 h-5 bg-slate-700/50 rounded overflow-hidden">
+            <div class="h-full ${color[0]}/30 bar-chart-bar rounded" style="width:${Math.max(r.winrate * 100, 2)}%"></div>
+          </div>
+          <span class="text-xs font-semibold w-14 text-right ${color[1]}">${pct(r.winrate)}</span>
+        </div>
+      </div>`;
+  });
+  $('matchup-bars').innerHTML = rows.join('');
+  $('fitness-score').textContent = t > 0 ? pct(w / t) : '-';
+}
+
+// ---- 1v1 ----
+async function resolveDeck(side) {
+  const code = $(`deck-${side}-code`).value.trim();
+  const selectId = $(`deck-${side}-select`).value;
+  const label = side.toUpperCase();
+  if (code) {
+    if (!DECK_CODE_RE.test(code)) throw new Error(`デッキ${label}: デッキコードの形式が違います`);
+    const cards = await fetchDeck(code);
+    const built = buildDeck(cards, { cards: DATA.cards, byName: BY_NAME }, { name: code });
+    return { name: `デッキコード ${code}`, built };
+  }
+  if (selectId) return { name: deckName(selectId), built: BUILT[selectId] };
+  throw new Error(`デッキ${label}: デッキコードを入れるか、環境デッキを選んでください`);
+}
+
+async function analyze1v1() {
+  const btn = $('analyze-1v1-btn');
+  const status = $('status-1v1');
+  btn.disabled = true;
+  $('warnings-1v1').innerHTML = '';
+  try {
+    showStatus(status, 'デッキを用意しています...', 'loading');
+    const A = await resolveDeck('a');
+    const B = await resolveDeck('b');
+    $('warnings-1v1').innerHTML = warningsHtml(A.built, 'デッキA') + warningsHtml(B.built, 'デッキB');
+    showStatus(status, '計算中...', 'loading');
+    const t0 = performance.now();
+    const [r] = await ask({ type: 'versus', my: A.built.deck, opponents: [{ id: 'B', deck: B.built.deck }], trials: ONE_V_ONE_TRIALS });
+    showStatus(status, `完了（${((performance.now() - t0) / 1000).toFixed(1)} 秒、${ONE_V_ONE_TRIALS.toLocaleString()} 回）`, 'success');
+    const wr = r.winrate;
+    const out = $('result-1v1');
+    out.classList.remove('hidden');
+    out.innerHTML = `
+      <div class="text-center">
+        <div class="flex justify-center items-center gap-4 mb-2 flex-wrap">
+          <span class="text-sm font-semibold">${esc(A.name)}</span><span class="text-slate-500">vs</span><span class="text-sm font-semibold">${esc(B.name)}</span>
+        </div>
+        <div class="text-4xl font-bold ${wr > 0.5 ? 'text-emerald-400' : 'text-red-400'} my-3">${pct(wr)} <span class="text-slate-500 text-2xl">-</span> ${pct(1 - wr)}</div>
+        <div class="text-xs text-slate-500 mt-2">${ONE_V_ONE_TRIALS.toLocaleString()} 回の対戦（先攻・後攻は1戦ごとにコインで決める）</div>
+      </div>`;
+  } catch (e) {
+    showStatus(status, `エラー: ${e.message}`, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ---- タブ・イベント ----
+function switchTab(tab) {
+  $('panel-meta').classList.toggle('hidden', tab !== 'meta');
+  $('panel-1v1').classList.toggle('hidden', tab !== '1v1');
+  for (const [name, el] of [['meta', $('tab-meta')], ['1v1', $('tab-1v1')]]) {
+    const on = name === tab;
+    el.classList.toggle('border-primary', on);
+    el.classList.toggle('text-primary', on);
+    el.classList.toggle('border-transparent', !on);
+    el.classList.toggle('text-slate-400', !on);
+  }
+}
+
+$('tab-meta').onclick = () => switchTab('meta');
+$('tab-1v1').onclick = () => switchTab('1v1');
+$('analyze-btn').onclick = analyzeFromCode;
+$('deck-code-input').addEventListener('keydown', e => { if (e.key === 'Enter') analyzeFromCode(); });
+$('meta-deck-select').onchange = selectMetaDeck;
+$('deck-a-select').onchange = () => { $('deck-a-code').value = ''; };
+$('deck-b-select').onchange = () => { $('deck-b-code').value = ''; };
+$('analyze-1v1-btn').onclick = analyze1v1;
+$('overlay').onclick = closePopup;
+$('popup-close').onclick = closePopup;
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
-main();
+main().catch(e => {
+  $('env-line').textContent = `データを読み込めませんでした: ${e.message}`;
+});
 </script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+{
+  "type": "module",
+  "private": true,
+  "description": "公開ページと、勝率表を作るスクリプトが共有する部品。node からも ES モジュールとして読めるように type を指定している"
+}
