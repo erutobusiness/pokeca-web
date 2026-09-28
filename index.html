@@ -151,8 +151,9 @@
 import { fetchDeck, DECK_CODE_RE } from './lib/deck-code.js';
 import { buildDeck, indexByName, computeRanking } from './lib/deck-profile.js';
 
-// 自分のデッキを環境の各デッキと戦わせるときの試行回数（1組あたり）。勝率表そのものは data.json の trials 回
-const CUSTOM_TRIALS = 3000;
+// 自分のデッキを環境の各デッキと戦わせるときの試行回数（1組あたり）。勝率表そのものは data.json の trials 回。
+// 1000 回で勝率のぶれは ±1.6pp ほど。エンジンの判断が細かくなって1戦が重くなったので、待ち時間を数秒に収める
+const CUSTOM_TRIALS = 1000;
 const ONE_V_ONE_TRIALS = 10000;
 
 let DATA = null;
