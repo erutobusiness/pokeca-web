@@ -65,6 +65,88 @@ export function engine_version() {
     }
 }
 
+/**
+ * 観察用: trials 回 simulate_game_with_reason を実行し勝因種別ごと集計を JSON で返す
+ * 戻り値 JSON: {"a_wins":N,"b_wins":N,"by_reason":{"0":[a,b],...},"avg_turn":f,"avg_prize_a":f,"avg_prize_b":f}
+ * @param {string} deck_a_json
+ * @param {string} deck_b_json
+ * @param {number} trials
+ * @returns {string}
+ */
+export function observe_matchup_reasons(deck_a_json, deck_b_json, trials) {
+    let deferred4_0;
+    let deferred4_1;
+    try {
+        const ptr0 = passStringToWasm0(deck_a_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(deck_b_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.observe_matchup_reasons(ptr0, len0, ptr1, len1, trials);
+        var ptr3 = ret[0];
+        var len3 = ret[1];
+        if (ret[3]) {
+            ptr3 = 0; len3 = 0;
+            throw takeFromExternrefTable0(ret[2]);
+        }
+        deferred4_0 = ptr3;
+        deferred4_1 = len3;
+        return getStringFromWasm0(ptr3, len3);
+    } finally {
+        wasm.__wbindgen_free(deferred4_0, deferred4_1, 1);
+    }
+}
+
+/**
+ * AI強度ハーネス: A=policy_a, B=policy_b で trials 回対戦し A の勝率を返す。
+ * policy: 0=Greedy, 1=RandomAttach。同一デッキ同士に当てればポリシー単体の強さを計測できる。
+ * @param {string} deck_a_json
+ * @param {string} deck_b_json
+ * @param {number} policy_a
+ * @param {number} policy_b
+ * @param {number} trials
+ * @returns {number}
+ */
+export function policy_match(deck_a_json, deck_b_json, policy_a, policy_b, trials) {
+    const ptr0 = passStringToWasm0(deck_a_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(deck_b_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ret = wasm.policy_match(ptr0, len0, ptr1, len1, policy_a, policy_b, trials);
+    if (ret[2]) {
+        throw takeFromExternrefTable0(ret[1]);
+    }
+    return ret[0];
+}
+
+/**
+ * 1ゲームの詳細トレース（デバッグ用）
+ * @param {string} deck_a_json
+ * @param {string} deck_b_json
+ * @returns {string}
+ */
+export function trace_game(deck_a_json, deck_b_json) {
+    let deferred4_0;
+    let deferred4_1;
+    try {
+        const ptr0 = passStringToWasm0(deck_a_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(deck_b_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.trace_game(ptr0, len0, ptr1, len1);
+        var ptr3 = ret[0];
+        var len3 = ret[1];
+        if (ret[3]) {
+            ptr3 = 0; len3 = 0;
+            throw takeFromExternrefTable0(ret[2]);
+        }
+        deferred4_0 = ptr3;
+        deferred4_1 = len3;
+        return getStringFromWasm0(ptr3, len3);
+    } finally {
+        wasm.__wbindgen_free(deferred4_0, deferred4_1, 1);
+    }
+}
+
 function __wbg_get_imports() {
     const import0 = {
         __proto__: null,

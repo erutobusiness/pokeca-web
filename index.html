@@ -404,8 +404,10 @@ function buildProfileFromCards(cards) {
           bench_snipe: a.bench_damage_all || 0,
           energy_accel_from_trash: 0, bench_damage_multiplier: 0, bench_damage_base: 0,
           energy_cost: a.energy_cost || [],  // タイプ別コスト
+          scatter_per_hit: a.scatter_per_hit || 0,
+          scatter_hit_count: a.scatter_hit_count || 0,
         }));
-        const bestDmg = Math.max(...(info.attacks || []).map(a => a.damage || 0), 0);
+        const bestDmg = Math.max(...(info.attacks || []).map(a => (a.damage || 0) + (a.scatter_per_hit || 0) * (a.scatter_hit_count || 0)), 0);
         if (info.weakness && bestDmg > 0) deckWeakness = deckWeakness || info.weakness;
         if (info.is_ex && bestDmg > 0) hasExAttacker = true;
         if (info.stage >= 1) hasEvolution = true;
@@ -466,19 +468,29 @@ function buildProfileFromCards(cards) {
   // グッズ・どうぐ
   for (const card of cards.filter(c => c.category === 'goods' || c.category === 'tool')) {
     const isBelt = card.name?.includes('マキシマムベルト');
+    const isUnfairStamp = card.name?.includes('アンフェアスタンプ');
+    const isRareCandy = card.name === 'ふしぎなアメ';
+    const isPofin = card.name === 'なかよしポフィン';
+    const isPokepad = card.name === 'ポケパッド';
+    const isMushitori = card.name === 'むしとりセット';
+    const isPowerProtein = card.name === 'パワープロテイン';
     for (let i = 0; i < card.count; i++) {
       deckCards.push({ kind: isBelt ? 'tool' : 'item', hp: 0, prize_cost: 0, attacks: [],
         attack_type: '', weakness: '', is_ex: false, has_immunity: false,
-        ability: '', stage: 0, effect_id: isBelt ? 4 : 3, effect_value: isBelt ? 30 : 0 });
+        ability: '', stage: 0,
+        effect_id: isBelt ? 4 : isUnfairStamp ? 5 : isRareCandy ? 6 : isPofin ? 7 : isPokepad ? 8 : isMushitori ? 9 : isPowerProtein ? 12 : 3,
+        effect_value: isBelt ? 30 : 0 });
     }
   }
 
   // スタジアム
   for (const card of cards.filter(c => c.category === 'stadium')) {
+    const isVitalityForest = card.name === '活力の森';
+    const isZeroHollow = card.name === 'ゼロの大空洞';
     for (let i = 0; i < card.count; i++) {
       deckCards.push({ kind: 'stadium', hp: 0, prize_cost: 0, attacks: [],
         attack_type: '', weakness: '', is_ex: false, has_immunity: false,
-        ability: '', stage: 0, effect_id: 0, effect_value: 0 });
+        ability: '', stage: 0, effect_id: isVitalityForest ? 10 : isZeroHollow ? 11 : 0, effect_value: 0 });
     }
   }
 
