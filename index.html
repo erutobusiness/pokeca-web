@@ -5,21 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>デッキ強度分析 - ポケカ環境デッキの勝率シミュレーター</title>
 <meta name="description" content="ポケモンカードの環境デッキどうしの勝率を、対戦シミュレーターで計算する非公式ツール。自分のデッキコードを入れて、環境の各デッキとの勝率も計算できる。">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        primary: '#e94560',
-        surface: '#16213e',
-        deep: '#0f3460',
-        bg: '#1a1a2e',
-      }
-    }
-  }
-}
-</script>
+<meta property="og:type" content="website">
+<meta property="og:title" content="デッキ強度分析 - ポケカ環境デッキの勝率シミュレーター">
+<meta property="og:description" content="環境デッキどうしの勝率を対戦シミュレーターで計算。自分のデッキコードでも計算できる（非公式ツール）">
+<meta property="og:url" content="https://erutobusiness.github.io/pokeca-web/">
+<meta name="twitter:card" content="summary">
+<!-- 見た目は Tailwind で前もって作った CSS（作り方は tailwind.config.cjs の先頭） -->
+<link rel="stylesheet" href="lib/site.css">
 <style>
   .matchup-table th { position: sticky; top: 0; z-index: 1; }
   .fade-in { animation: fadeIn 0.2s ease-out; }
@@ -35,7 +27,7 @@ tailwind.config = {
   <header class="mb-6">
     <h1 class="text-3xl font-bold text-primary">デッキ強度分析</h1>
     <p class="text-slate-400 text-sm mt-1">ポケカの環境デッキどうしの勝率を、対戦シミュレーターで計算する</p>
-    <p class="text-slate-400 text-xs mt-2" id="env-line"></p>
+    <p class="text-slate-400 text-xs mt-2" id="env-line">データを読み込んでいます...</p>
     <p class="text-slate-500 text-xs mt-1" id="calc-line"></p>
   </header>
 
@@ -316,9 +308,28 @@ function showDeckDetail(id) {
       <div class="flex gap-3 flex-wrap mb-4">${atk}</div>
       <div class="mb-3">${chips}</div>
       ${warningsHtml(built)}
+      ${recipeHtml(id)}
     </div>`;
   detail.classList.remove('hidden');
   detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// 計算に使ったレシピ（60枚）を種類ごとに出す
+const CATEGORY_LABEL = { pokemon: 'ポケモン', goods: 'グッズ', tool: 'ポケモンのどうぐ', supporter: 'サポート', stadium: 'スタジアム', energy: 'エネルギー' };
+function recipeHtml(id) {
+  const list = DATA.deckCardLists[id] || [];
+  const groups = {};
+  for (const e of list) {
+    const key = e.category in CATEGORY_LABEL ? e.category : 'goods';
+    const g = groups[key] || (groups[key] = new Map());
+    g.set(e.name, (g.get(e.name) || 0) + e.count);
+  }
+  const blocks = Object.keys(CATEGORY_LABEL).filter(k => groups[k]).map(k => {
+    const items = [...groups[k].entries()].map(([n, c]) => `<li>${esc(n)} ×${c}</li>`).join('');
+    const total = [...groups[k].values()].reduce((s, c) => s + c, 0);
+    return `<div><div class="text-slate-300 font-semibold mb-1">${CATEGORY_LABEL[k]}（${total}）</div><ul class="text-slate-400 space-y-0.5">${items}</ul></div>`;
+  }).join('');
+  return `<details class="text-xs mt-3"><summary class="text-slate-400">計算に使ったレシピ（60枚）</summary><div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-2">${blocks}</div></details>`;
 }
 
 // ---- 勝率表 ----
@@ -457,13 +468,14 @@ function renderAnalysisResults(title, results) {
     const s = sh[r.id] || 0;
     w += r.winrate * s;
     t += s;
-    const color = r.winrate > 0.55 ? ['bg-emerald-500', 'text-emerald-400'] : r.winrate < 0.45 ? ['bg-red-500', 'text-red-400'] : ['bg-amber-500', 'text-amber-400'];
+    // クラス名は文字をつながず、そのまま書く（CSS を前もって作るとき、つないだ名前は拾われない）
+    const color = r.winrate > 0.55 ? ['bg-emerald-500/30', 'text-emerald-400'] : r.winrate < 0.45 ? ['bg-red-500/30', 'text-red-400'] : ['bg-amber-500/30', 'text-amber-400'];
     return `
       <div class="mb-2">
         <div class="flex items-center gap-2">
           <span class="text-xs text-slate-400 w-28 truncate text-right">${esc(deckName(r.id))}</span>
           <div class="flex-1 h-5 bg-slate-700/50 rounded overflow-hidden">
-            <div class="h-full ${color[0]}/30 bar-chart-bar rounded" style="width:${Math.max(r.winrate * 100, 2)}%"></div>
+            <div class="h-full ${color[0]} bar-chart-bar rounded" style="width:${Math.max(r.winrate * 100, 2)}%"></div>
           </div>
           <span class="text-xs font-semibold w-14 text-right ${color[1]}">${pct(r.winrate)}</span>
         </div>

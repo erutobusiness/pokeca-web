@@ -24,6 +24,7 @@ https://erutobusiness.github.io/pokeca-web/
 | `lib/deck-code.js` | デッキコードから、公式のデッキ構築サイトのカード一覧を取る |
 | `lib/deck-profile.js` | カード一覧を、シミュレーターに渡すデッキの形に組み立てる。勝率表を作るときも同じものを使う |
 | `lib/sim-worker.js` | 画面を止めないよう、シミュレーターの計算を裏で回す |
+| `lib/site.css` | 見た目。`tailwind.config.cjs` と `lib/tailwind-input.css` から、Tailwind CSS で前もって作る（`index.html` を直したら作り直す。コマンドは `tailwind.config.cjs` の先頭） |
 | `pkg/` | シミュレーター本体（Rust から作った WebAssembly） |
 
 `data.json` と `pkg/` は、作者の手元にあるスクリプトとシミュレーターのソースから作っています（ここには入っていません）。
