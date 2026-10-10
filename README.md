@@ -1,6 +1,6 @@
 # デッキ強度分析（ポケカ環境デッキの勝率シミュレーター）
 
-https://erutobusiness.github.io/pokeca-web/
+https://eruto-games.github.io/pokeca-web/
 
 ポケモンカードの環境デッキどうしの勝率を、対戦シミュレーターで計算して表にしたページです。
 自分のデッキコードを入れると、環境の各デッキとの勝率もその場で計算できます。
